@@ -2,7 +2,6 @@ import ParallaxScrollView from "@/components/parallax-scroll-view";
 import {Image} from "expo-image";
 import {StyleSheet} from "react-native";
 import React from "react";
-import {HelloWave} from "@/components/hello-wave";
 import {ThemedText} from "@/components/themed-text";
 import {ThemedView} from "@/components/themed-view";
 
