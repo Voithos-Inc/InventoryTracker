@@ -1,6 +1,5 @@
-import { InventoryData } from '../types/inventory';
+import { InventoryData } from '@/types/inventory';
 import {
-  IconChocolate,
   IconSparkles,
   IconCookie,
   IconCandy,
@@ -20,7 +19,6 @@ import {
   IconGlass,
   IconGlassFull,
   IconCircleFilled,
-  IconStraw,
   IconHandStop,
   IconSpray,
   IconPaperBag,
@@ -28,7 +26,6 @@ import {
 
 export const INVENTORY_DATA: InventoryData = {
   toppings: [
-    { id: 1, name: 'Chocolate Chips', icon: IconChocolate, quantity: 0, unit: 'oz' },
     { id: 2, name: 'Sprinkles', icon: IconSparkles, quantity: 0, unit: 'oz' },
     { id: 3, name: 'Crushed Oreos', icon: IconCookie, quantity: 0, unit: 'oz' },
     { id: 4, name: 'Gummy Bears', icon: IconCandy, quantity: 0, unit: 'oz' },
@@ -40,7 +37,6 @@ export const INVENTORY_DATA: InventoryData = {
   ],
   flavors: [
     { id: 10, name: 'Vanilla', icon: IconIceCream, quantity: 0, unit: 'gallons' },
-    { id: 11, name: 'Chocolate', icon: IconChocolate, quantity: 0, unit: 'gallons' },
     { id: 12, name: 'Strawberry', icon: IconCherry, quantity: 0, unit: 'gallons' },
     { id: 13, name: 'Mint Chip', icon: IconIceCream2, quantity: 0, unit: 'gallons' },
     { id: 14, name: 'Cookie Dough', icon: IconCookie, quantity: 0, unit: 'gallons' },
@@ -63,7 +59,6 @@ export const INVENTORY_DATA: InventoryData = {
     { id: 27, name: 'Cups (Small)', icon: IconGlass, quantity: 0, unit: 'count' },
     { id: 28, name: 'Cups (Large)', icon: IconGlassFull, quantity: 0, unit: 'count' },
     { id: 29, name: 'Lids', icon: IconCircleFilled, quantity: 0, unit: 'count' },
-    { id: 30, name: 'Straws', icon: IconStraw, quantity: 0, unit: 'count' },
     { id: 31, name: 'Gloves', icon: IconHandStop, quantity: 0, unit: 'boxes' },
     { id: 32, name: 'Cleaning Spray', icon: IconSpray, quantity: 0, unit: 'bottles' },
     { id: 33, name: 'Paper Towels', icon: IconPaperBag, quantity: 0, unit: 'rolls' },

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/colors';
+import { COLORS } from '@/constants/styles';
 import { InventoryItem } from '../types/inventory';
 
 interface ItemModalProps {
@@ -11,6 +11,8 @@ interface ItemModalProps {
 
 export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
   if (!item) return null;
+
+  const Icon = item.icon
   
   return (
     <Modal
@@ -29,7 +31,7 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
           onPress={(e) => e.stopPropagation()}
         >
           <View style={styles.modalContent}>
-            <Text style={styles.modalIcon}>{item.icon}</Text>
+            <Icon size={96} color={'black'}/>
             <Text style={styles.modalTitle}>{item.name}</Text>
             <Text style={styles.modalSubtext}>
               Quantity: {item.quantity} {item.unit}
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 32,
     fontWeight: '700',
-    color: COLORS.text,
+    color: COLORS.textonbg,
     marginBottom: 12,
     textAlign: 'center',
   },
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   modalButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.header_bg,
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 10,

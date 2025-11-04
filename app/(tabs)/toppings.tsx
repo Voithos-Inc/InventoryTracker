@@ -3,10 +3,11 @@ import InventoryGrid from '@/components/InventoryGrid';
 import { INVENTORY_DATA } from '@/constants/dummy_data';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import {STYLES} from "@/constants/styles";
 
 export default function ToppingsTab() {
   return (
-    <View style={styles.container}>
+    <View style={STYLES.container}>
       <Header />
       <InventoryGrid 
         items={INVENTORY_DATA.toppings} 
@@ -15,9 +16,3 @@ export default function ToppingsTab() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

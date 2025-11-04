@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import InventoryCard from './InventoryCard';
 import ItemModal from './ItemModal';
-import { COLORS } from '@/constants/colors';
 import { InventoryItem } from '@/types/inventory';
+import {STYLES} from "@/constants/styles";
 
 interface InventoryGridProps {
   items: InventoryItem[];
@@ -25,16 +25,16 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>{sectionTitle}</Text>
+    <View style={STYLES.container}>
+      <View style={STYLES.sectionHeader}>
+        <Text style={STYLES.sectionTitle}>{sectionTitle}</Text>
       </View>
 
       <ScrollView 
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
+        style={STYLES.scrollView}
+        contentContainerStyle={STYLES.scrollContent}
       >
-        <View style={styles.grid}>
+        <View style={STYLES.grid}>
           {items.map(item => (
             <InventoryCard 
               key={item.id} 
@@ -53,35 +53,3 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.secondary,
-  },
-  sectionHeader: {
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-  },
-  sectionTitle: {
-    fontSize: 36,
-    fontWeight: '400',
-    color: '#FFFFFF',
-    textShadowColor: 'rgba(0, 0, 0, 0.15)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,
-    letterSpacing: 0.5,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-});

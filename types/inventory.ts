@@ -1,7 +1,10 @@
+import type { IconProps } from '@tabler/icons-react-native';
+import type { ComponentType } from 'react';
+
 export interface InventoryItem {
   id: number;
   name: string;
-  icon: string;
+  icon: ComponentType<IconProps>;
   quantity: number;
   unit: string;
 }
