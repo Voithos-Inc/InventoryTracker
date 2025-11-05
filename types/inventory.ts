@@ -1,19 +1,17 @@
-import type { IconProps } from '@tabler/icons-react-native';
 import type { ComponentType } from 'react';
+import {LucideIcon} from "lucide-react-native";
 
 export interface InventoryItem {
   id: number;
   name: string;
-  icon: ComponentType<IconProps>;
+  icon: LucideIcon;
   quantity: number;
   unit: string;
 }
 
-export type InventoryCategory = 'toppings' | 'flavors' | 'cones' | 'supplies';
-
 export interface InventoryData {
   toppings: InventoryItem[];
   flavors: InventoryItem[];
-  cones: InventoryItem[];
+  // cones: InventoryItem[];
   supplies: InventoryItem[];
 }

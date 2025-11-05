@@ -8,7 +8,8 @@ export default function Index() {
   // inventory to the end user
 
   useEffect(() => {
-    router.replace('toppings');
+    router.replace('/toppings');
+    return
   }, [router]);
 
   return null;

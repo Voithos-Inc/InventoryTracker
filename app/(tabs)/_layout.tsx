@@ -17,8 +17,6 @@ export default function TabLayout() {
             borderTopColor: '#000',
             position: 'absolute',
             bottom: -12,
-            // left: 12,
-            // right: 12,
             overflow: 'hidden',
             paddingVertical: 12,
             height: 100,
@@ -27,67 +25,53 @@ export default function TabLayout() {
           tabBarActiveBackgroundColor: COLORS.tabBarActive,
           tabBarItemStyle: {
             borderColor: '#000',
-            borderRadius: 12,
+            borderRadius: 16,
             marginHorizontal: 0,
           },
           tabBarShowLabel: true,
           tabBarLabelStyle: {
             fontSize: 16,
           },
-          tabBarIcon: ({ color }) => {
-            switch (route.name) {
-              case 'toppings':
-                return <Droplet size={32} color={color} strokeWidth={2} />;
-              case 'flavors':
-                return <IceCream size={32} color={color} strokeWidth={2} />;
-              case 'supplies':
-                return <Utensils size={32} color={color} strokeWidth={2} />;
-              case 'settings':
-                return <Settings size={32} color={color} strokeWidth={2} />;
-              default:
-                return null;
-            }
-          },
           tabBarLabel:
             route.name.charAt(0).toUpperCase() + route.name.slice(1),
         })}
       >
-        {/*<Tabs.Screen*/}
-        {/*  name="toppings"*/}
-        {/*  options={{*/}
-        {/*    title: 'Toppings',*/}
-        {/*    tabBarIcon: ({ color }) => (*/}
-        {/*      <Droplet size={32} color={color} strokeWidth={2} />*/}
-        {/*    ),*/}
-        {/*  }}*/}
-        {/*/>*/}
-        {/*<Tabs.Screen*/}
-        {/*  name="flavors"*/}
-        {/*  options={{*/}
-        {/*    title: 'Flavors',*/}
-        {/*    tabBarIcon: ({ color }) => (*/}
-        {/*      <IceCream size={32} color={color} strokeWidth={2} />*/}
-        {/*    ),*/}
-        {/*  }}*/}
-        {/*/>*/}
-        {/*<Tabs.Screen*/}
-        {/*  name="supplies"*/}
-        {/*  options={{*/}
-        {/*    title: 'Supplies',*/}
-        {/*    tabBarIcon: ({ color }) => (*/}
-        {/*      <Utensils size={32} color={color} strokeWidth={2} />*/}
-        {/*    ),*/}
-        {/*  }}*/}
-        {/*/>*/}
-        {/*<Tabs.Screen*/}
-        {/*  name="settings"*/}
-        {/*  options={{*/}
-        {/*    title: 'Settings',*/}
-        {/*    tabBarIcon: ({ color }) => (*/}
-        {/*      <Settings size={32} color={color} strokeWidth={2} />*/}
-        {/*    ),*/}
-        {/*  }}*/}
-        {/*/>*/}
+        <Tabs.Screen
+          name="toppings"
+          options={{
+            title: 'Toppings',
+            tabBarIcon: ({ color }) => (
+              <Droplet size={32} color={color} strokeWidth={2} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="flavors"
+          options={{
+            title: 'Flavors',
+            tabBarIcon: ({ color }) => (
+              <IceCream size={32} color={color} strokeWidth={2} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="supplies"
+          options={{
+            title: 'Supplies',
+            tabBarIcon: ({ color }) => (
+              <Utensils size={32} color={color} strokeWidth={2} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="settings"
+          options={{
+            title: 'Settings',
+            tabBarIcon: ({ color }) => (
+              <Settings size={32} color={color} strokeWidth={2} />
+            ),
+          }}
+        />
       </Tabs>
     </SafeAreaView>
   );

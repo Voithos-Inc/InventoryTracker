@@ -4,10 +4,13 @@ export const COLORS = {
   header_bg: '#6097AD',
   main_bg: '#A1D7E9',
   cardBg: '#f2eee6',
-  textonbg: '#eee',
-  textoncontrast: '#111',
+  textonbg: '#eeeeee',
+  textoncontrast: '#111111',
+  textgray: "#676767",
   tabBarBg: '#0c575b',
   tabBarActive: '#6097AD',
+  deny: '#d40006',
+  confirm: '#0c575b'
 };
 
 export const STYLES = StyleSheet.create({
@@ -27,7 +30,7 @@ export const STYLES = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 48,
-    fontWeight: '750',
+    fontWeight: '700',
     color: '#FFFFFF',
     textShadowColor: 'rgba(0, 0, 0, .8)',
     textShadowOffset: { width: 2, height: 2 },
@@ -41,11 +44,11 @@ export const STYLES = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 32,
-    fontWeight: '650',
+    fontWeight: '600',
     color: COLORS.textonbg,
-    textShadowColor: 'rgba(0, 0, 0, .75)',
+    textShadowColor: 'rgba(0, 0, 0, .6)',
     textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 2,
+    textShadowRadius: 1,
     letterSpacing: 0.5,
   },
   scrollView: {
@@ -86,4 +89,79 @@ export const STYLES = StyleSheet.create({
     color: COLORS.textoncontrast,
     flex: 1,
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: COLORS.cardBg,
+    borderRadius: 20,
+    padding: 40,
+    alignItems: 'center',
+    minWidth: 400,
+    maxWidth: 500,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  modalIcon: {
+    fontSize: 80,
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: COLORS.textoncontrast,
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  modalSubtext: {
+    fontSize: 18,
+    color: COLORS.textgray,
+    marginBottom: 8,
+  },
+  modalButton: {
+    backgroundColor: COLORS.header_bg,
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    minWidth: 150,
+  },
+  modalButtonText: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: COLORS.textonbg,
+    textAlign: 'center',
+  },
+  settingsContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    flexGrow: 1,
+    // justifyContent: 'center',
+    alignItems: 'center',
+  },
+  settingsButton: {
+    // flex: 1,
+    flexDirection: 'row',
+    borderRadius: 12,
+    borderWidth: 3,
+    borderStyle: "solid",
+    height: 75,
+    width: 343,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 15
+  },
+  settingsButtonText: {
+    fontSize: 24,
+    fontWeight: '400',
+    textShadowColor: 'rgba(255, 255, 255, .6)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 1,
+    marginLeft: 20
+  }
 });

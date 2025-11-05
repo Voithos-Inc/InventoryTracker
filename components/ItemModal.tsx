@@ -1,7 +1,8 @@
-import React from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { COLORS } from '@/constants/styles';
+import React, {useEffect, useState} from 'react';
+import {Modal, View, Text, TouchableOpacity, StyleSheet, Button, Pressable} from 'react-native';
+import {COLORS, STYLES} from '@/constants/styles';
 import { InventoryItem } from '../types/inventory';
+import {CircleMinus, CirclePlus} from "lucide-react-native";
 
 interface ItemModalProps {
   visible: boolean;
@@ -10,10 +11,23 @@ interface ItemModalProps {
 }
 
 export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
-  if (!item) return null;
+  const [count, setCount] = useState<number>(0)
 
+  useEffect(() => {
+    // TODO: load the number from db (pass in w `item`?)
+    if (item) {
+      setCount(item.quantity);
+    }
+  }, [item]);
+
+  if (!item) return null;
   const Icon = item.icon
-  
+
+  // TODO proto for now
+  // TODO change onClose to "sync" data with db
+  const handleAddButton = (curVal: number) => { setCount(count + 1) }
+  const handleRemoveButton = (curVal: number) => { if (count > 0) setCount(count - 1) }
+
   return (
     <Modal
       visible={visible}
@@ -22,7 +36,7 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
       onRequestClose={onClose}
     >
       <TouchableOpacity 
-        style={styles.modalOverlay}
+        style={STYLES.modalOverlay}
         activeOpacity={1}
         onPress={onClose}
       >
@@ -30,18 +44,44 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
           activeOpacity={1}
           onPress={(e) => e.stopPropagation()}
         >
-          <View style={styles.modalContent}>
+          <View style={STYLES.modalContent}>
             <Icon size={96} color={'black'}/>
-            <Text style={styles.modalTitle}>{item.name}</Text>
-            <Text style={styles.modalSubtext}>
-              Quantity: {item.quantity} {item.unit}
+            <Text style={STYLES.modalTitle}>{item.name}</Text>
+            <Text style={STYLES.modalSubtext}>
+              Quantity: {count} {item.unit}
             </Text>
-            <Text style={styles.modalLabel}>Item Details</Text>
-            <TouchableOpacity 
-              style={styles.modalButton}
+
+            <View
+             style={{ marginBottom: 20, flex: 1, flexDirection: "row", justifyContent: "space-between", width: "60%" }}
+            >
+              <Pressable
+                onPress={() => handleRemoveButton(count)}
+                style={({ pressed }) => [{
+                  color: pressed ? `${COLORS.deny}aa` : `${COLORS.deny}ff`,
+                  borderRadius: 32,
+                  borderColor: '#fff'
+                }]}
+              >
+                <CircleMinus size={64}/>
+              </Pressable>
+
+              <Pressable
+                onPress={() => handleAddButton(count)}
+                style={({ pressed }) => [{
+                  color: pressed ? `${COLORS.confirm}aa` : `${COLORS.confirm}ff`,
+                  borderRadius: 32,
+                  borderColor: '#fff'
+                }]}
+              >
+                <CirclePlus size={64}/>
+              </Pressable>
+            </View>
+
+            <TouchableOpacity
+              style={STYLES.modalButton}
               onPress={onClose}
             >
-              <Text style={styles.modalButtonText}>Close</Text>
+              <Text style={STYLES.modalButtonText}>Close</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -49,59 +89,3 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: COLORS.cardBg,
-    borderRadius: 20,
-    padding: 40,
-    alignItems: 'center',
-    minWidth: 400,
-    maxWidth: 500,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  modalIcon: {
-    fontSize: 80,
-    marginBottom: 20,
-  },
-  modalTitle: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: COLORS.textonbg,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  modalSubtext: {
-    fontSize: 18,
-    color: '#666',
-    marginBottom: 8,
-  },
-  modalLabel: {
-    fontSize: 16,
-    color: '#999',
-    marginBottom: 32,
-  },
-  modalButton: {
-    backgroundColor: COLORS.header_bg,
-    paddingVertical: 14,
-    paddingHorizontal: 40,
-    borderRadius: 10,
-    minWidth: 150,
-  },
-  modalButtonText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-});
