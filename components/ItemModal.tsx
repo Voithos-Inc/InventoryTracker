@@ -45,14 +45,14 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
           onPress={(e) => e.stopPropagation()}
         >
           <View style={STYLES.modalContent}>
-            <Icon size={96} color={'black'}/>
+            <Icon size={128} color={'black'}/>
             <Text style={STYLES.modalTitle}>{item.name}</Text>
             <Text style={STYLES.modalSubtext}>
               Quantity: {count} {item.unit}
             </Text>
 
             <View
-             style={{ marginBottom: 20, flex: 1, flexDirection: "row", justifyContent: "space-between", width: "60%" }}
+             style={STYLES.modalButtonsContainer}
             >
               <Pressable
                 onPress={() => handleRemoveButton(count)}
@@ -62,7 +62,7 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
                   borderColor: '#fff'
                 }]}
               >
-                <CircleMinus size={64}/>
+                <CircleMinus size={80}/>
               </Pressable>
 
               <Pressable
@@ -73,7 +73,7 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
                   borderColor: '#fff'
                 }]}
               >
-                <CirclePlus size={64}/>
+                <CirclePlus size={80}/>
               </Pressable>
             </View>
 

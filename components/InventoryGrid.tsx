@@ -25,7 +25,7 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
   };
 
   return (
-    <View style={STYLES.container}>
+    <View style={STYLES.scrollContainer}>
       <View style={STYLES.sectionHeader}>
         <Text style={STYLES.sectionTitle}>{sectionTitle}</Text>
       </View>

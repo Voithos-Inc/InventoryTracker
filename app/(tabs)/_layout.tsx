@@ -30,7 +30,10 @@ export default function TabLayout() {
           },
           tabBarShowLabel: true,
           tabBarLabelStyle: {
-            fontSize: 16,
+            fontSize: 26,
+            fontWeight: '400',
+            overflow: 'visible',
+            marginBottom: 6
           },
           tabBarLabel:
             route.name.charAt(0).toUpperCase() + route.name.slice(1),
@@ -41,7 +44,7 @@ export default function TabLayout() {
           options={{
             title: 'Toppings',
             tabBarIcon: ({ color }) => (
-              <Droplet size={32} color={color} strokeWidth={2} />
+              <Droplet size={32} color={color} strokeWidth={3} />
             ),
           }}
         />
@@ -50,7 +53,7 @@ export default function TabLayout() {
           options={{
             title: 'Flavors',
             tabBarIcon: ({ color }) => (
-              <IceCream size={32} color={color} strokeWidth={2} />
+              <IceCream size={32} color={color} strokeWidth={3} />
             ),
           }}
         />
@@ -59,7 +62,7 @@ export default function TabLayout() {
           options={{
             title: 'Supplies',
             tabBarIcon: ({ color }) => (
-              <Utensils size={32} color={color} strokeWidth={2} />
+              <Utensils size={32} color={color} strokeWidth={3} />
             ),
           }}
         />
@@ -68,7 +71,7 @@ export default function TabLayout() {
           options={{
             title: 'Settings',
             tabBarIcon: ({ color }) => (
-              <Settings size={32} color={color} strokeWidth={2} />
+              <Settings size={32} color={color} strokeWidth={3} />
             ),
           }}
         />

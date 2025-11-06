@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 export const COLORS = {
   header_bg: '#6097AD',
@@ -12,6 +12,9 @@ export const COLORS = {
   deny: '#d40006',
   confirm: '#0c575b'
 };
+
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height
 
 export const STYLES = StyleSheet.create({
   container: {
@@ -44,26 +47,34 @@ export const STYLES = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 32,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.textonbg,
-    textShadowColor: 'rgba(0, 0, 0, .6)',
+    textShadowColor: 'rgba(0, 0, 0, .75)',
     textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 1,
+    textShadowRadius: 2,
     letterSpacing: 0.5,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    paddingBottom: 100,
+  },
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: COLORS.main_bg
   },
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    width: screenWidth * 0.9,
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: 32,
+    marginBottom: 30
   },
   card: {
-    width: '28%',
     aspectRatio: 2.2,
     backgroundColor: COLORS.cardBg,
     borderRadius: 12,
@@ -76,16 +87,15 @@ export const STYLES = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 3,
-    marginBottom: 16,
   },
   cardIcon: {
     fontSize: 40,
     marginRight: 16,
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: 28,
     fontWeight: '600',
-    paddingLeft: 16,
+    paddingLeft: 24,
     color: COLORS.textoncontrast,
     flex: 1,
   },
@@ -100,39 +110,45 @@ export const STYLES = StyleSheet.create({
     borderRadius: 20,
     padding: 40,
     alignItems: 'center',
-    minWidth: 400,
-    maxWidth: 500,
+    minWidth: .4 * screenWidth,
+    maxWidth: .5 * screenHeight,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
   },
-  modalIcon: {
-    fontSize: 80,
-    marginBottom: 20,
-  },
   modalTitle: {
     fontSize: 32,
     fontWeight: '700',
     color: COLORS.textoncontrast,
+    marginTop: 12,
     marginBottom: 12,
     textAlign: 'center',
   },
   modalSubtext: {
-    fontSize: 18,
+    fontSize: 32,
+    fontWeight: '550',
     color: COLORS.textgray,
-    marginBottom: 8,
+    marginBottom: 14,
+  },
+  modalButtonsContainer: {
+    marginTop: 20,
+    marginBottom: 40,
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "60%"
   },
   modalButton: {
     backgroundColor: COLORS.header_bg,
-    paddingVertical: 14,
-    paddingHorizontal: 40,
+    paddingVertical: 18,
+    paddingHorizontal: 50,
     borderRadius: 10,
     minWidth: 150,
   },
   modalButtonText: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '600',
     color: COLORS.textonbg,
     textAlign: 'center',
@@ -141,11 +157,9 @@ export const STYLES = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     flexGrow: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
   },
   settingsButton: {
-    // flex: 1,
     flexDirection: 'row',
     borderRadius: 12,
     borderWidth: 3,

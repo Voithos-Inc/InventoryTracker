@@ -12,12 +12,11 @@ export default function InventoryCard({ item, onPress }: InventoryCardProps) {
   const Icon = item.icon
 
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={STYLES.card}
       onPress={() => onPress(item)}
       activeOpacity={0.7}
     >
-
       <Icon size={48} color={'black'}/>
       <Text style={STYLES.cardTitle}>{item.name}</Text>
     </TouchableOpacity>

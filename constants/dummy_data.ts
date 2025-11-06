@@ -49,5 +49,7 @@ export const INVENTORY_DATA: InventoryData = {
     { id: 31, name: 'Gloves', icon: Hand, quantity: 0, unit: '' },
     { id: 32, name: 'Cleaning Spray', icon: SprayCan, quantity: 0, unit: '' },
     { id: 33, name: 'Paper Towels', icon: Package, quantity: 0, unit: '' },
+    { id: 34, name: 'Paper Towels', icon: Package, quantity: 0, unit: '' },
+    { id: 35, name: 'Paper Towels', icon: Package, quantity: 0, unit: '' },
   ],
 };
