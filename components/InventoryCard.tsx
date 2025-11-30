@@ -1,6 +1,6 @@
-import {COLORS, STYLES} from '@/constants/styles';
+import {STYLES} from '@/constants/styles';
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import { InventoryItem } from '@/types/inventory';
 
 interface InventoryCardProps {

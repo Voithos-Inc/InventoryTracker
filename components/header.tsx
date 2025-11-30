@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {View, Text} from 'react-native';
 import {STYLES} from '@/constants/styles';
 
 export default function Header() {

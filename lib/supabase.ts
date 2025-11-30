@@ -8,6 +8,9 @@ function checkResponse(response: Response) {
   }
 }
 
+/**
+ * Retrieve the data from the database as an {@linkcode InventoryItem}[]
+ */
 export async function getInventory(): Promise<InventoryItem[]> {
   const response = await fetch(API_ROUTE)
   checkResponse(response)
@@ -16,6 +19,12 @@ export async function getInventory(): Promise<InventoryItem[]> {
   return data as InventoryItem[]
 }
 
+/**
+ * Insert an {@linkcode InventoryItem} into the database. Can
+ * be used for updating a row as well, as it does UPSERT.
+ *
+ * @param item
+ */
 export async function insertItem(item: InventoryItem): Promise<void> {
   const response: Response = await fetch(API_ROUTE, {
     method: 'POST',

@@ -15,6 +15,7 @@ export default function RootLayout() {
   const loadInv = useInventory((state) => state.loadInv)
 
   useEffect(() => {
+    // noinspection JSIgnoredPromiseFromCall
     loadInv()
   }, [loadInv]);
 
