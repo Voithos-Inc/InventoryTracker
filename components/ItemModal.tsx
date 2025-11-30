@@ -15,13 +15,13 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
 
   useEffect(() => {
     // TODO: load the number from db (pass in w `item`?)
-    if (item) {
-      setCount(item.quantity);
-    }
+    // if (item) {
+    //   setCount(item.quantity);
+    // }
   }, [item]);
 
   if (!item) return null;
-  const Icon = item.icon
+  // const Icon = item.icon
 
   // TODO proto for now
   // TODO change onClose to "sync" data with db
@@ -45,10 +45,10 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
           onPress={(e) => e.stopPropagation()}
         >
           <View style={STYLES.modalContent}>
-            <Icon size={128} color={'black'}/>
+            {/*<Icon size={128} color={'black'}/>*/}
             <Text style={STYLES.modalTitle}>{item.name}</Text>
             <Text style={STYLES.modalSubtext}>
-              Quantity: {count} {item.unit}
+              Quantity: {count} {item.units}
             </Text>
 
             <View

@@ -1,17 +1,17 @@
 import Header from '@/components/header';
-import InventoryGrid from '@/components/InventoryGrid';
 import React from 'react';
 import {View} from 'react-native';
+import InventoryGrid from '../../components/InventoryGrid';
 import {STYLES} from "@/constants/styles";
 import {inv} from "@/app/_layout";
 
-export default function ToppingsTab() {
+export default function DairyTab() {
   return (
     <View style={STYLES.container}>
       <Header />
       <InventoryGrid 
-        items={inv!.filter(i => i.category === "TOPPINGS")}
-        sectionTitle="Toppings"
+        items={inv!.filter(i => i.category === "DAIRY")}
+        sectionTitle="Flavors"
       />
     </View>
   );

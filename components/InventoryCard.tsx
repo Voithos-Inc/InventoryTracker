@@ -1,7 +1,7 @@
 import {COLORS, STYLES} from '@/constants/styles';
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import { InventoryItem } from '../types/inventory';
+import { InventoryItem } from '@/types/inventory';
 
 interface InventoryCardProps {
   item: InventoryItem;
@@ -9,7 +9,7 @@ interface InventoryCardProps {
 }
 
 export default function InventoryCard({ item, onPress }: InventoryCardProps) {
-  const Icon = item.icon
+  // const Icon = item.icon
 
   return (
     <TouchableOpacity
@@ -17,7 +17,7 @@ export default function InventoryCard({ item, onPress }: InventoryCardProps) {
       onPress={() => onPress(item)}
       activeOpacity={0.7}
     >
-      <Icon size={48} color={'black'}/>
+      {/*<Icon size={48} color={'black'}/>*/}
       <Text style={STYLES.cardTitle}>{item.name}</Text>
     </TouchableOpacity>
   );

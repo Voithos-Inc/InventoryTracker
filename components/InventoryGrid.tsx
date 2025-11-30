@@ -36,11 +36,12 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
       >
         <View style={STYLES.grid}>
           {items.map(item => (
-            <InventoryCard 
-              key={item.id} 
-              item={item}
-              onPress={handleCardPress}
-            />
+            <View key={item.id} style={STYLES.gridItem}>
+              <InventoryCard
+                item={item}
+                onPress={handleCardPress}
+              />
+            </View>
           ))}
         </View>
       </ScrollView>

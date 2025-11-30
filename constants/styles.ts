@@ -69,10 +69,14 @@ export const STYLES = StyleSheet.create({
   },
   grid: {
     width: screenWidth * 0.9,
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: 32,
-    marginBottom: 30
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginBottom: 30,
+  },
+  gridItem: {
+    width: (screenWidth * 0.9 - 2 * 32) / 3, // 3 columns, same gap
+    marginBottom: 32,
   },
   card: {
     aspectRatio: 2.2,
@@ -128,7 +132,7 @@ export const STYLES = StyleSheet.create({
   },
   modalSubtext: {
     fontSize: 32,
-    fontWeight: '550',
+    fontWeight: '500',
     color: COLORS.textgray,
     marginBottom: 14,
   },

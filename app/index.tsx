@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
-import { useRouter } from 'expo-router';
+import {Stack, useRouter} from 'expo-router';
+import {STYLES} from "@/constants/styles";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 export default function Index() {
   const router = useRouter();
 
-  // TODO: here we should setup the db connection before showing the
-  // inventory to the end user
-
   useEffect(() => {
-    router.replace('/toppings');
+    router.replace('/beverages');
     return
   }, [router]);
 
-  return null;
+  return (
+    <SafeAreaView style={STYLES.container}>
+      <Stack screenOptions={{ headerShown: false }} />
+    </SafeAreaView>
+  );
 }
