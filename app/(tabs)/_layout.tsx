@@ -1,5 +1,12 @@
-import { Tabs } from 'expo-router';
-import { IceCream, Droplet, Utensils, Settings } from 'lucide-react-native';
+import {Tabs} from 'expo-router';
+import {
+  Settings,
+  CupSoda,
+  Milk,
+  Refrigerator,
+  Snowflake,
+  ClipboardList, Droplets, Sparkles
+} from 'lucide-react-native';
 import { COLORS, STYLES } from '@/constants/styles';
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -40,29 +47,65 @@ export default function TabLayout() {
         })}
       >
         <Tabs.Screen
+          name="beverages"
+          options={{
+            title: 'Beverages',
+            tabBarIcon: ({ color }) => (
+              <CupSoda size={32} color={color} strokeWidth={3} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="dairy"
+          options={{
+            title: 'Dairy',
+            tabBarIcon: ({ color }) => (
+              <Milk size={32} color={color} strokeWidth={3} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="frozen"
+          options={{
+            title: 'Frozen',
+            tabBarIcon: ({ color }) => (
+              <Snowflake size={32} color={color} strokeWidth={3} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="ingredients"
+          options={{
+            title: 'Ingredients',
+            tabBarIcon: ({ color }) => (
+              <ClipboardList size={32} color={color} strokeWidth={3} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="refrigerated"
+          options={{
+            title: 'Refrigerated',
+            tabBarIcon: ({ color }) => (
+              <Refrigerator size={32} color={color} strokeWidth={3} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="sauces"
+          options={{
+            title: 'Sauces',
+            tabBarIcon: ({ color }) => (
+              <Droplets size={32} color={color} strokeWidth={3} />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="toppings"
           options={{
             title: 'Toppings',
             tabBarIcon: ({ color }) => (
-              <Droplet size={32} color={color} strokeWidth={3} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="flavors"
-          options={{
-            title: 'Flavors',
-            tabBarIcon: ({ color }) => (
-              <IceCream size={32} color={color} strokeWidth={3} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="supplies"
-          options={{
-            title: 'Supplies',
-            tabBarIcon: ({ color }) => (
-              <Utensils size={32} color={color} strokeWidth={3} />
+              <Sparkles size={32} color={color} strokeWidth={3} />
             ),
           }}
         />

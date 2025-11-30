@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Modal, View, Text, TouchableOpacity, StyleSheet, Button, Pressable} from 'react-native';
+import {Modal, View, Text, TouchableOpacity, Pressable} from 'react-native';
 import {COLORS, STYLES} from '@/constants/styles';
-import { InventoryItem } from '../types/inventory';
+import { InventoryItem } from '@/types/inventory';
 import {CircleMinus, CirclePlus} from "lucide-react-native";
+import {insertItem} from "@/lib/supabase";
 
 interface ItemModalProps {
   visible: boolean;
@@ -11,22 +12,42 @@ interface ItemModalProps {
 }
 
 export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
-  const [count, setCount] = useState<number>(0)
+  const [fohCount, setFOHCount] = useState<number>(0)
+  const [bohCount, setBOHCount] = useState<number>(0)
 
   useEffect(() => {
-    // TODO: load the number from db (pass in w `item`?)
+    // TODO: seperate foh and boh @arjun
     if (item) {
-      setCount(item.quantity);
+      setFOHCount(item.foh_quantity);
     }
   }, [item]);
 
   if (!item) return null;
-  const Icon = item.icon
+  // const Icon = item.icon
 
-  // TODO proto for now
-  // TODO change onClose to "sync" data with db
-  const handleAddButton = (curVal: number) => { setCount(count + 1) }
-  const handleRemoveButton = (curVal: number) => { if (count > 0) setCount(count - 1) }
+  const handleFOHAddButton = (curVal: number) => {
+    item.foh_quantity++
+    update(item)
+  }
+  const handleFOHRemoveButton = (curVal: number) => {
+    if (fohCount > 0) item.foh_quantity--
+    update(item)
+  }
+  const handleBOHAddButton = (curVal: number) => {
+    item.boh_quantity++
+    update(item)
+  }
+  const handleBOHRemoveButton = (curVal: number) => {
+    if (bohCount > 0) item.boh_quantity--
+    update(item)
+  }
+
+  function update(item: InventoryItem) {
+    setFOHCount(item.foh_quantity)
+    setBOHCount(item.boh_quantity)
+    insertItem(item)
+  }
+
 
   return (
     <Modal
@@ -45,17 +66,21 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
           onPress={(e) => e.stopPropagation()}
         >
           <View style={STYLES.modalContent}>
-            <Icon size={128} color={'black'}/>
+            {/*<Icon size={128} color={'black'}/>*/}
             <Text style={STYLES.modalTitle}>{item.name}</Text>
             <Text style={STYLES.modalSubtext}>
-              Quantity: {count} {item.unit}
+              FOH Quantity: {fohCount} {item.units}
             </Text>
+            <Text style={STYLES.modalSubtext}>
+              BOH Quantity: {bohCount} {item.units}
+            </Text>
+
 
             <View
              style={STYLES.modalButtonsContainer}
             >
               <Pressable
-                onPress={() => handleRemoveButton(count)}
+                onPress={() => handleFOHRemoveButton(fohCount)}
                 style={({ pressed }) => [{
                   color: pressed ? `${COLORS.deny}aa` : `${COLORS.deny}ff`,
                   borderRadius: 32,
@@ -66,7 +91,7 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
               </Pressable>
 
               <Pressable
-                onPress={() => handleAddButton(count)}
+                onPress={() => handleFOHAddButton(fohCount)}
                 style={({ pressed }) => [{
                   color: pressed ? `${COLORS.confirm}aa` : `${COLORS.confirm}ff`,
                   borderRadius: 32,
