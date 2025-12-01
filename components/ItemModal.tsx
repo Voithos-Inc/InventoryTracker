@@ -30,7 +30,7 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
     update(item)
   }
   const handleFOHRemoveButton = (curVal: number) => {
-    if (fohCount > 0) item.foh_quantity--
+    item.foh_quantity = Math.max(0, item.foh_quantity - 1)
     update(item)
   }
   const handleBOHAddButton = (curVal: number) => {
@@ -38,7 +38,7 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
     update(item)
   }
   const handleBOHRemoveButton = (curVal: number) => {
-    if (bohCount > 0) item.boh_quantity--
+    item.boh_quantity = Math.max(0, item.boh_quantity - 1)
     update(item)
   }
 
