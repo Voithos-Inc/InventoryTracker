@@ -4,16 +4,9 @@ export interface InventoryItem {
   id: number;
   created_at: string;
   name: string;
-  foh_quantity: 0;
-  boh_quantity: 0;
+  foh_quantity: number;
+  boh_quantity: number;
   units: string;
   image_link: string;
   category: CATEGORY
-}
-
-export interface InventoryData {
-  toppings: InventoryItem[];
-  flavors: InventoryItem[];
-  // cones: InventoryItem[];
-  supplies: InventoryItem[];
 }
