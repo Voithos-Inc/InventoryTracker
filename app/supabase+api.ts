@@ -27,3 +27,15 @@ export async function DELETE(request: Request) {
   const { data } = await supabase.from('inventory').delete().eq('id', id);
   return Response.json({ data });
 }
+
+export async function POST_UPLOAD(request: Request) {
+  const formData = await request.formData();
+  const file = formData.get('file');
+
+  // Upload to Supabase Storage
+  const { data, error } = await supabase.storage
+      .from('inventory-images')
+      .upload(fileName, file);
+
+  return Response.json({ publicUrl: data.publicUrl });
+}
