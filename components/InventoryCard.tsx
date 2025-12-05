@@ -1,18 +1,33 @@
 import { STYLES, COLORS } from '@/constants/styles';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Text, TouchableOpacity, View, Image } from 'react-native';
 import { InventoryItem } from '@/types/inventory';
 import { Check, AlertTriangle } from 'lucide-react-native';
+import ItemModal from "@/components/ItemModal";
 
 interface InventoryCardProps {
   item: InventoryItem;
-  onPress: (item: InventoryItem) => void;
 }
 
-export default function InventoryCard({ item, onPress }: InventoryCardProps) {
+export default function InventoryCard({ item }: InventoryCardProps) {
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  let [isCompleted, setIsCompleted] = useState<boolean>(false);
+
+  useEffect(() => {
+    // if isCompleted is true from local, load it
+    isCompleted = false
+  }, []);
+
+  const handleCardPress = (): void => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = (): void => {
+    setModalVisible(false);
+  };
+
   const totalQuantity = item.foh_quantity + item.boh_quantity;
   const isLowStock = totalQuantity <= (item.low_stock_threshold || 1);
-  const isCompleted = item.is_completed || false;
 
   return (
       <TouchableOpacity
@@ -26,7 +41,7 @@ export default function InventoryCard({ item, onPress }: InventoryCardProps) {
               minHeight: 160
             }
           ]}
-          onPress={() => onPress(item)}
+          onPress={() => handleCardPress()}
           activeOpacity={0.7}
       >
         {/* Completion Checkmark Overlay */}
@@ -103,24 +118,6 @@ export default function InventoryCard({ item, onPress }: InventoryCardProps) {
           {item.name}
         </Text>
 
-        {/* Seasonal Badge */}
-        {item.is_seasonal && (
-            <View
-                style={{
-                  backgroundColor: '#FFA500',
-                  paddingHorizontal: 6,
-                  paddingVertical: 2,
-                  borderRadius: 4,
-                  marginBottom: 8,
-                  alignSelf: 'center'
-                }}
-            >
-              <Text style={{ color: 'white', fontSize: 10, fontWeight: '600' }}>
-                SEASONAL
-              </Text>
-            </View>
-        )}
-
         {/* FOH/BOH Quantities */}
         <View style={{ width: '100%', marginTop: 'auto' }}>
           <View
@@ -178,6 +175,13 @@ export default function InventoryCard({ item, onPress }: InventoryCardProps) {
             {item.units}
           </Text>
         </View>
+        <ItemModal
+          visible={modalVisible}
+          item={item}
+          onClose={handleCloseModal}
+          completed={isCompleted}
+          toggleCompleted={() => setIsCompleted(!isCompleted)}
+        />
       </TouchableOpacity>
   );
 }

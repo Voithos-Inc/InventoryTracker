@@ -24,27 +24,21 @@ interface ItemModalProps {
   visible: boolean;
   item: InventoryItem | null;
   onClose: () => void;
+  completed: boolean;
+  toggleCompleted: () => void
 }
 
-export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
+export default function ItemModal({ visible, item, onClose, completed, toggleCompleted }: ItemModalProps) {
   const [fohCount, setFOHCount] = useState<number>(0);
   const [bohCount, setBOHCount] = useState<number>(0);
-  const [fohInput, setFOHInput] = useState<string>('');
-  const [bohInput, setBOHInput] = useState<string>('');
-  const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [threshold, setThreshold] = useState<number>(1);
   const [editingThreshold, setEditingThreshold] = useState<boolean>(false);
-  const [thresholdInput, setThresholdInput] = useState<string>('');
 
   useEffect(() => {
     if (item) {
       setFOHCount(item.foh_quantity);
       setBOHCount(item.boh_quantity);
-      setFOHInput(item.foh_quantity.toString());
-      setBOHInput(item.boh_quantity.toString());
-      setIsCompleted(item.is_completed || false);
       setThreshold(item.low_stock_threshold || 1);
-      setThresholdInput((item.low_stock_threshold || 1).toString());
     }
   }, [item]);
 
@@ -77,20 +71,31 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
     }
   };
 
+  const stringIsNumeric = (s: string): boolean => { return /^\d*[.,]?\d*$/.test(s) }
+
   const handleFOHInputChange = (text: string) => {
-    setFOHInput(text);
-    const num = parseInt(text);
-    if (!isNaN(num) && num >= 0) {
-      updateQuantity('foh', num);
-    }
+    text = text.replace(',', '.');
+
+    if (!stringIsNumeric(text)) return;
+
+    const num = parseFloat(text);
+    if (num < 0) return
+
+    if (!isNaN(num)) updateQuantity('foh', num)
+    else if (text === "" || text === ".") updateQuantity('foh', 0)
+
   };
 
   const handleBOHInputChange = (text: string) => {
-    setBOHInput(text);
-    const num = parseInt(text);
-    if (!isNaN(num) && num >= 0) {
-      updateQuantity('boh', num);
-    }
+    text = text.replace(',', '.');
+
+    if (!stringIsNumeric(text)) return
+
+    const num = parseFloat(text);
+    if (num < 0) return
+
+    if (!isNaN(num)) updateQuantity('boh', num)
+    else if (text === "" || text === ".") updateQuantity('boh', 0)
   };
 
   const updateQuantity = (type: 'foh' | 'boh', value: number) => {
@@ -105,26 +110,27 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
   };
 
   const handleCompleteToggle = () => {
-    const newCompleted = !isCompleted;
-    setIsCompleted(newCompleted);
-    item.is_completed = newCompleted;
-    if (newCompleted) {
-      item.completed_at = new Date().toISOString();
-      // TODO: Add user tracking when auth is implemented
-      item.completed_by = 'Current User';
-    }
+    toggleCompleted()
     saveItem(item);
   };
 
-  const handleThresholdSave = () => {
-    const num = parseInt(thresholdInput);
+  const handleThresholdSave = (text: string) => {
+    text = text.replace(',', '.');
+
+    if (text === "" || text === ".") {
+      setThreshold(0)
+      item.low_stock_threshold = 0
+      saveItem(item)
+    }
+
+    if (!stringIsNumeric(text)) return
+
+    const num = parseFloat(text);
+
     if (!isNaN(num) && num >= 0) {
       setThreshold(num);
       item.low_stock_threshold = num;
       saveItem(item);
-      setEditingThreshold(false);
-    } else {
-      Alert.alert('Invalid Input', 'Please enter a valid number');
     }
   };
 
@@ -177,27 +183,10 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
                   </View>
               )}
 
-              {/* Item Name with Seasonal Badge */}
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
                 <Text style={STYLES.modalTitle}>{item.name}</Text>
-                {item.is_seasonal && (
-                    <View
-                        style={{
-                          backgroundColor: '#FFA500',
-                          paddingHorizontal: 8,
-                          paddingVertical: 4,
-                          borderRadius: 8,
-                          marginLeft: 12
-                        }}
-                    >
-                      <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}>
-                        Seasonal
-                      </Text>
-                    </View>
-                )}
               </View>
 
-              {/* Low Stock Warning */}
               {isLowStock && (
                   <View
                       style={{
@@ -247,9 +236,9 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
                         minWidth: 100,
                         backgroundColor: 'white'
                       }}
-                      value={fohInput}
+                      value={fohCount.toString()}
                       onChangeText={handleFOHInputChange}
-                      keyboardType="number-pad"
+                      keyboardType="decimal-pad"
                   />
 
                   <Pressable onPress={handleFOHAddButton}>
@@ -283,7 +272,7 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
                         minWidth: 100,
                         backgroundColor: 'white'
                       }}
-                      value={bohInput}
+                      value={bohCount.toString()}
                       onChangeText={handleBOHInputChange}
                       keyboardType="number-pad"
                   />
@@ -306,7 +295,7 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
               <View style={{ marginBottom: 20, width: '100%' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                   <Text style={{ fontSize: 18, marginRight: 8 }}>Low Stock Alert at:</Text>
-                  {editingThreshold ? (
+                  {
                       <>
                         <TextInput
                             style={{
@@ -320,33 +309,12 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
                               textAlign: 'center',
                               backgroundColor: 'white'
                             }}
-                            value={thresholdInput}
-                            onChangeText={setThresholdInput}
+                            value={threshold.toString()}
+                            onChangeText={handleThresholdSave}
                             keyboardType="number-pad"
                         />
-                        <TouchableOpacity
-                            onPress={handleThresholdSave}
-                            style={{
-                              marginLeft: 8,
-                              backgroundColor: COLORS.confirm,
-                              padding: 8,
-                              borderRadius: 8
-                            }}
-                        >
-                          <Check size={20} color="white" />
-                        </TouchableOpacity>
                       </>
-                  ) : (
-                      <>
-                        <Text style={{ fontSize: 20, fontWeight: '600' }}>{threshold}</Text>
-                        <TouchableOpacity
-                            onPress={() => setEditingThreshold(true)}
-                            style={{ marginLeft: 8 }}
-                        >
-                          <Pencil size={20} color={COLORS.header_bg} />
-                        </TouchableOpacity>
-                      </>
-                  )}
+                  }
                 </View>
               </View>
 
@@ -356,12 +324,12 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    backgroundColor: isCompleted ? '#D4EDDA' : '#F8F9FA',
+                    backgroundColor: completed ? '#D4EDDA' : '#F8F9FA',
                     padding: 16,
                     borderRadius: 12,
                     marginBottom: 20,
                     borderWidth: 2,
-                    borderColor: isCompleted ? '#28A745' : '#CCC'
+                    borderColor: completed ? '#28A745' : '#CCC'
                   }}
               >
                 <View
@@ -370,17 +338,17 @@ export default function ItemModal({ visible, item, onClose }: ItemModalProps) {
                       height: 32,
                       borderRadius: 8,
                       borderWidth: 3,
-                      borderColor: isCompleted ? '#28A745' : '#CCC',
-                      backgroundColor: isCompleted ? '#28A745' : 'white',
+                      borderColor: completed ? '#28A745' : '#CCC',
+                      backgroundColor: completed ? '#28A745' : 'white',
                       justifyContent: 'center',
                       alignItems: 'center',
                       marginRight: 12
                     }}
                 >
-                  {isCompleted && <Check size={24} color="white" strokeWidth={3} />}
+                  {completed && <Check size={24} color="white" strokeWidth={3} />}
                 </View>
                 <Text style={{ fontSize: 20, fontWeight: '600' }}>
-                  {isCompleted ? 'Count Completed ✓' : 'Mark as Counted'}
+                  {completed ? 'Count Completed ✓' : 'Mark as Counted'}
                 </Text>
               </TouchableOpacity>
 

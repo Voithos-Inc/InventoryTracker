@@ -12,25 +12,14 @@ export interface InventoryItem {
   created_at: string;
   updated_at?: string;
   name: string;
-  foh_quantity: number;  // Front of House
-  boh_quantity: number;  // Back of House
-  units: string;  // e.g., "quart container", "topping container", "jar"
-  image_url: string | null;  // URL to Supabase Storage
+  foh_quantity: number;
+  boh_quantity: number;
+  units: string;
+  image_url: string;
   category: CATEGORY;
+  low_stock_threshold: number;
 
-  // Completion tracking
-  is_completed: boolean;
-  completed_at?: string;
-  completed_by?: string;
-
-  // Low stock alerts
-  low_stock_threshold: number;  // Alert when quantity <= this value
-
-  // Seasonal management
-  is_seasonal: boolean;
-
-  // Display order
-  display_order: number;
+  // is_completed: boolean;
 }
 
 export interface Category {
@@ -42,24 +31,6 @@ export interface Category {
   created_at: string;
 }
 
-export interface InventoryExport {
-  id: number;
-  export_date: string;
-  exported_by: string;
-  file_url?: string;  // Google Drive link or local file path
-  category_filter?: CATEGORY;  // If exporting specific category
-  total_items: number;
-  created_at: string;
-}
-
-export interface ExcelRowData {
-  name: string;
-  category: CATEGORY;
-  units: string;
-  foh_quantity?: number;
-  boh_quantity?: number;
-  low_stock_threshold?: number;
-}
 
 // Utility types for forms
 export interface AddItemFormData {
@@ -71,9 +42,4 @@ export interface AddItemFormData {
   low_stock_threshold: number;
   is_seasonal: boolean;
   image?: File | null;
-}
-
-export interface EditItemFormData extends AddItemFormData {
-  id: number;
-  image_url?: string | null;
 }
