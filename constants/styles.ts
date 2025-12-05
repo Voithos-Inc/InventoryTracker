@@ -10,7 +10,8 @@ export const COLORS = {
   tabBarBg: '#0c575b',
   tabBarActive: '#6097AD',
   deny: '#d40006',
-  confirm: '#0c575b'
+  confirm: '#0c575b',
+  tintedGreen: '#a5d5a7'
 };
 
 const screenWidth = Dimensions.get('window').width;

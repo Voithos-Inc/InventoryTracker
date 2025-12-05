@@ -33,9 +33,10 @@ export default function InventoryCard({ item }: InventoryCardProps) {
       <TouchableOpacity
           style={[
             {
+              ...STYLES.card,
               borderWidth: 3,
-              borderColor: isLowStock ? '#FF6B00' : (isCompleted ? '#28A745' : 'transparent'),
-              backgroundColor: isCompleted ? '#E8F5E9' : COLORS.cardBg,
+              borderColor: isLowStock ? '#FF6B00' : 'transparent',
+              backgroundColor: isCompleted ? COLORS.tintedGreen : COLORS.cardBg,
               position: 'relative',
               flexDirection: 'column',
               alignItems: 'center',
