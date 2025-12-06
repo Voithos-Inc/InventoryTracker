@@ -155,40 +155,53 @@ export default function ItemModal({ visible, item, onClose, completed, toggleCom
               onPress={(e) => e.stopPropagation()}
           >
             <View style={STYLES.modalContent}>
-              {/* Image */}
-              {item.image_url ? (
-                  <Image
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  gap: 50
+                }}
+                >
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "column",
+                    justifyContent: "center"
+                  }}
+                >
+                  {item.image_url ? (
+                    <Image
                       source={{ uri: item.image_url }}
                       style={{
-                        width: 150,
-                        height: 150,
+                        width: 300,
                         borderRadius: 12,
                         marginBottom: 16
                       }}
                       resizeMode="cover"
-                  />
-              ) : (
-                  <View
+                    />
+                  ) : (
+                    <View
                       style={{
-                        width: 150,
-                        height: 150,
+                        width: 300,
+                        height: 300,
                         borderRadius: 12,
                         backgroundColor: '#e0e0e0',
                         justifyContent: 'center',
                         alignItems: 'center',
                         marginBottom: 16
                       }}
-                  >
-                    <Text style={{ color: '#666', fontSize: 16 }}>No Image</Text>
+                    >
+                      <Text style={{ color: '#666', fontSize: 16 }}>No Image</Text>
+                    </View>
+                  )}
+                </View>
+                <View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+                    <Text style={STYLES.modalTitle}>{item.name}</Text>
                   </View>
-              )}
 
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
-                <Text style={STYLES.modalTitle}>{item.name}</Text>
-              </View>
-
-              {isLowStock && (
-                  <View
+                  {isLowStock && (
+                    <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -199,105 +212,105 @@ export default function ItemModal({ visible, item, onClose, completed, toggleCom
                         borderWidth: 2,
                         borderColor: '#FFC107'
                       }}
-                  >
-                    <AlertTriangle size={24} color="#FF6B00" />
-                    <Text
+                    >
+                      <AlertTriangle size={24} color="#FF6B00" />
+                      <Text
                         style={{
                           marginLeft: 8,
                           fontSize: 18,
                           fontWeight: '600',
                           color: '#FF6B00'
                         }}
-                    >
-                      Low Stock Alert!
+                      >
+                        Low Stock Alert!
+                      </Text>
+                    </View>
+                  )}
+
+                  {/* FOH Section */}
+                  <View style={{ marginBottom: 20, width: '100%' }}>
+                    <Text style={STYLES.modalSubtext}>Front of House (FOH)</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <Pressable onPress={handleFOHRemoveButton}>
+                        <CircleMinus size={60} color={COLORS.deny} />
+                      </Pressable>
+
+                      <TextInput
+                        style={{
+                          fontSize: 32,
+                          fontWeight: '600',
+                          textAlign: 'center',
+                          borderWidth: 2,
+                          borderColor: COLORS.header_bg,
+                          borderRadius: 8,
+                          paddingHorizontal: 20,
+                          paddingVertical: 10,
+                          marginHorizontal: 20,
+                          minWidth: 100,
+                          backgroundColor: 'white'
+                        }}
+                        value={fohCount.toString()}
+                        onChangeText={handleFOHInputChange}
+                        keyboardType="decimal-pad"
+                      />
+
+                      <Pressable onPress={handleFOHAddButton}>
+                        <CirclePlus size={60} color={COLORS.confirm} />
+                      </Pressable>
+                    </View>
+                    <Text style={{ textAlign: 'center', marginTop: 8, fontSize: 16, color: COLORS.textgray }}>
+                      {item.units}
                     </Text>
                   </View>
-              )}
 
-              {/* FOH Section */}
-              <View style={{ marginBottom: 20, width: '100%' }}>
-                <Text style={STYLES.modalSubtext}>Front of House (FOH)</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                  <Pressable onPress={handleFOHRemoveButton}>
-                    <CircleMinus size={60} color={COLORS.deny} />
-                  </Pressable>
+                  {/* BOH Section */}
+                  <View style={{ marginBottom: 20, width: '100%' }}>
+                    <Text style={STYLES.modalSubtext}>Back of House (BOH)</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <Pressable onPress={handleBOHRemoveButton}>
+                        <CircleMinus size={60} color={COLORS.deny} />
+                      </Pressable>
 
-                  <TextInput
-                      style={{
-                        fontSize: 32,
-                        fontWeight: '600',
-                        textAlign: 'center',
-                        borderWidth: 2,
-                        borderColor: COLORS.header_bg,
-                        borderRadius: 8,
-                        paddingHorizontal: 20,
-                        paddingVertical: 10,
-                        marginHorizontal: 20,
-                        minWidth: 100,
-                        backgroundColor: 'white'
-                      }}
-                      value={fohCount.toString()}
-                      onChangeText={handleFOHInputChange}
-                      keyboardType="decimal-pad"
-                  />
+                      <TextInput
+                        style={{
+                          fontSize: 32,
+                          fontWeight: '600',
+                          textAlign: 'center',
+                          borderWidth: 2,
+                          borderColor: COLORS.header_bg,
+                          borderRadius: 8,
+                          paddingHorizontal: 20,
+                          paddingVertical: 10,
+                          marginHorizontal: 20,
+                          minWidth: 100,
+                          backgroundColor: 'white'
+                        }}
+                        value={bohCount.toString()}
+                        onChangeText={handleBOHInputChange}
+                        keyboardType="number-pad"
+                      />
 
-                  <Pressable onPress={handleFOHAddButton}>
-                    <CirclePlus size={60} color={COLORS.confirm} />
-                  </Pressable>
-                </View>
-                <Text style={{ textAlign: 'center', marginTop: 8, fontSize: 16, color: COLORS.textgray }}>
-                  {item.units}
-                </Text>
-              </View>
+                      <Pressable onPress={handleBOHAddButton}>
+                        <CirclePlus size={60} color={COLORS.confirm} />
+                      </Pressable>
+                    </View>
+                    <Text style={{ textAlign: 'center', marginTop: 8, fontSize: 16, color: COLORS.textgray }}>
+                      {item.units}
+                    </Text>
+                  </View>
 
-              {/* BOH Section */}
-              <View style={{ marginBottom: 20, width: '100%' }}>
-                <Text style={STYLES.modalSubtext}>Back of House (BOH)</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                  <Pressable onPress={handleBOHRemoveButton}>
-                    <CircleMinus size={60} color={COLORS.deny} />
-                  </Pressable>
+                  {/* Total */}
+                  <Text style={{ fontSize: 24, fontWeight: '600', marginBottom: 16 }}>
+                    Total: {totalQuantity} {item.units}
+                  </Text>
 
-                  <TextInput
-                      style={{
-                        fontSize: 32,
-                        fontWeight: '600',
-                        textAlign: 'center',
-                        borderWidth: 2,
-                        borderColor: COLORS.header_bg,
-                        borderRadius: 8,
-                        paddingHorizontal: 20,
-                        paddingVertical: 10,
-                        marginHorizontal: 20,
-                        minWidth: 100,
-                        backgroundColor: 'white'
-                      }}
-                      value={bohCount.toString()}
-                      onChangeText={handleBOHInputChange}
-                      keyboardType="number-pad"
-                  />
-
-                  <Pressable onPress={handleBOHAddButton}>
-                    <CirclePlus size={60} color={COLORS.confirm} />
-                  </Pressable>
-                </View>
-                <Text style={{ textAlign: 'center', marginTop: 8, fontSize: 16, color: COLORS.textgray }}>
-                  {item.units}
-                </Text>
-              </View>
-
-              {/* Total */}
-              <Text style={{ fontSize: 24, fontWeight: '600', marginBottom: 16 }}>
-                Total: {totalQuantity} {item.units}
-              </Text>
-
-              {/* Threshold Editor */}
-              <View style={{ marginBottom: 20, width: '100%' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ fontSize: 18, marginRight: 8 }}>Low Stock Alert at:</Text>
-                  {
-                      <>
-                        <TextInput
+                  {/* Threshold Editor */}
+                  <View style={{ marginBottom: 20, width: '100%' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                      <Text style={{ fontSize: 18, marginRight: 8 }}>Low Stock Alert at:</Text>
+                      {
+                        <>
+                          <TextInput
                             style={{
                               fontSize: 20,
                               borderWidth: 2,
@@ -312,50 +325,53 @@ export default function ItemModal({ visible, item, onClose, completed, toggleCom
                             value={threshold.toString()}
                             onChangeText={handleThresholdSave}
                             keyboardType="number-pad"
-                        />
-                      </>
-                  }
+                          />
+                        </>
+                      }
+                    </View>
+                  </View>
+
+                  {/* Completion Checkbox */}
+                  <TouchableOpacity
+                    onPress={handleCompleteToggle}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      backgroundColor: completed ? '#D4EDDA' : '#F8F9FA',
+                      padding: 16,
+                      borderRadius: 12,
+                      marginBottom: 20,
+                      borderWidth: 2,
+                      borderColor: completed ? COLORS.green : '#CCC'
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: 8,
+                        borderWidth: 3,
+                        borderColor: completed ? COLORS.green : '#CCC',
+                        backgroundColor: completed ? COLORS.green : 'white',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginRight: 12,
+                        alignContent: "center",
+                      }}
+                    >
+                      {completed && <Check size={24} color="white" strokeWidth={3} />}
+                    </View>
+                    <Text style={{ fontSize: 20, fontWeight: '600' }}>
+                      {completed ? 'Count Completed ✓' : 'Mark as Counted'}
+                    </Text>
+                  </TouchableOpacity>
+
+                  {/* Close Button */}
+                  <TouchableOpacity style={STYLES.modalButton} onPress={onClose}>
+                    <Text style={STYLES.modalButtonText}>Close</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-
-              {/* Completion Checkbox */}
-              <TouchableOpacity
-                  onPress={handleCompleteToggle}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    backgroundColor: completed ? '#D4EDDA' : '#F8F9FA',
-                    padding: 16,
-                    borderRadius: 12,
-                    marginBottom: 20,
-                    borderWidth: 2,
-                    borderColor: completed ? '#28A745' : '#CCC'
-                  }}
-              >
-                <View
-                    style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 8,
-                      borderWidth: 3,
-                      borderColor: completed ? '#28A745' : '#CCC',
-                      backgroundColor: completed ? '#28A745' : 'white',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginRight: 12
-                    }}
-                >
-                  {completed && <Check size={24} color="white" strokeWidth={3} />}
-                </View>
-                <Text style={{ fontSize: 20, fontWeight: '600' }}>
-                  {completed ? 'Count Completed ✓' : 'Mark as Counted'}
-                </Text>
-              </TouchableOpacity>
-
-              {/* Close Button */}
-              <TouchableOpacity style={STYLES.modalButton} onPress={onClose}>
-                <Text style={STYLES.modalButtonText}>Close</Text>
-              </TouchableOpacity>
             </View>
           </TouchableOpacity>
         </TouchableOpacity>
