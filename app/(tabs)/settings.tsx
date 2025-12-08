@@ -1,8 +1,11 @@
+// app/(tabs)/settings.tsx - Enhanced settings page with grid layout and functionality
+
 import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView, Alert } from 'react-native';
 import { COLORS, STYLES } from '@/constants/styles';
 import Header from '@/components/header';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import {
     BadgePlus,
     LogOut,
@@ -10,51 +13,44 @@ import {
     Edit3,
     FolderOpen,
     RotateCcw,
-    Settings as SettingsIcon
+    Settings as SettingsIcon,
+    AlertTriangle
 } from 'lucide-react-native';
-// eslint-disable-next-line import/no-unresolved
 import AddItemForm from '@/components/AddItemForm';
 import { useInventory } from '@/store/inventory';
+import { saveAndShareCSV, generateSummaryReport, generateLowStockReport } from '@/lib/exportUtils';
+import { insertItem } from '@/lib/supabase';
 
 export default function SettingsTab() {
+    const router = useRouter();
     const [showAddItem, setShowAddItem] = useState(false);
     const loadInv = useInventory((state) => state.loadInv);
+    const inv = useInventory((state) => state.inv);
 
-    const handleExportInventory = () => {
-        Alert.alert(
-            'Export Inventory',
-            'Choose export format:',
-            [
-                {
-                    text: 'CSV (Simple)',
-                    onPress: () => exportToCSV()
-                },
-                {
-                    text: 'Google Sheets',
-                    onPress: () => exportToGoogleSheets()
-                },
-                {
-                    text: 'Cancel',
-                    style: 'cancel'
-                }
-            ]
-        );
+    const handleAddNewItem = () => {
+        setShowAddItem(true);
     };
 
-    const exportToCSV = () => {
-        // TODO: Implement CSV export
-        Alert.alert('Coming Soon', 'CSV export will be implemented in the next phase');
+    const handleEditItems = () => {
+        router.push('/manage-items' as any);
     };
 
-    const exportToGoogleSheets = () => {
-        // TODO: Implement Google Sheets export
-        Alert.alert('Coming Soon', 'Google Sheets export will be implemented in the next phase');
+    const handleManageCategories = () => {
+        Alert.alert('Coming Soon', 'Category management will be available in the next update.');
     };
 
-    const handleResetInventory = () => {
+    const handleViewProgress = () => {
+        router.push('/completion-progress' as any);
+    };
+
+    const handleViewLowStock = () => {
+        router.push('/low-stock' as any);
+    };
+
+    const handleResetCount = async () => {
         Alert.alert(
             'Reset Inventory Count',
-            'This will clear all completion checkmarks and start a new count. Are you sure?',
+            'This will uncheck all completed items and start a fresh count. Are you sure?',
             [
                 {
                     text: 'Cancel',
@@ -63,21 +59,81 @@ export default function SettingsTab() {
                 {
                     text: 'Reset',
                     style: 'destructive',
-                    onPress: () => {
-                        // TODO: Implement reset logic
-                        Alert.alert('Success', 'Inventory count has been reset');
+                    onPress: async () => {
+                        try {
+                            if (!inv) return;
+
+                            // Reset all items to not completed
+                            for (const item of inv) {
+                                await insertItem({
+                                    ...item,
+                                    is_completed: false,
+                                    completed_at: undefined,
+                                    completed_by: undefined
+                                });
+                            }
+
+                            // Reload inventory
+                            await loadInv();
+
+                            Alert.alert('Success', 'All completion checkmarks have been reset!');
+                        } catch (error) {
+                            console.error('Reset error:', error);
+                            Alert.alert('Error', 'Failed to reset count. Please try again.');
+                        }
                     }
                 }
             ]
         );
     };
 
-    const handleManageItems = () => {
-        Alert.alert('Coming Soon', 'Item management interface will be available soon');
+    const handleExportInventory = () => {
+        if (!inv) {
+            Alert.alert('Error', 'No inventory data to export');
+            return;
+        }
+
+        Alert.alert(
+            'Export Inventory',
+            'Choose export format:',
+            [
+                {
+                    text: 'CSV Export',
+                    onPress: async () => {
+                        try {
+                            await saveAndShareCSV(inv);
+                        } catch (error) {
+                            console.error('Export error:', error);
+                            Alert.alert('Export Failed', 'Could not export inventory. Check console for details.');
+                        }
+                    }
+                },
+                {
+                    text: 'Summary Report',
+                    onPress: () => {
+                        const report = generateSummaryReport(inv);
+                        console.log(report);
+                        Alert.alert('Summary Report', 'Report generated! Check console for details.\n\nIn the next update, this will be saved as a file.');
+                    }
+                },
+                {
+                    text: 'Low Stock Report',
+                    onPress: () => {
+                        const report = generateLowStockReport(inv);
+                        console.log(report);
+                        Alert.alert('Low Stock Report', 'Report generated! Check console for details.\n\nIn the next update, this will be saved as a file.');
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel'
+                }
+            ]
+        );
     };
 
-    const handleManageCategories = () => {
-        Alert.alert('Coming Soon', 'Category management will be available soon');
+    const handlePreferences = () => {
+        Alert.alert('Coming Soon', 'App preferences will be available in the next update.');
     };
 
     const handleSignOut = () => {
@@ -93,8 +149,7 @@ export default function SettingsTab() {
                     text: 'Sign Out',
                     style: 'destructive',
                     onPress: () => {
-                        // TODO: Implement sign out
-                        Alert.alert('Signed Out', 'You have been signed out');
+                        Alert.alert('Signed Out', 'You have been signed out.\n\n(Authentication will be added in a future update)');
                     }
                 }
             ]
@@ -111,148 +166,125 @@ export default function SettingsTab() {
 
             <ScrollView
                 style={{ flex: 1 }}
-                contentContainerStyle={STYLES.settingsContainer}
+                contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
                 showsVerticalScrollIndicator={false}
             >
                 {/* Inventory Management Section */}
-                <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 20 }}>
-                    <Text
-                        style={{
-                            fontSize: 20,
-                            fontWeight: '700',
-                            marginBottom: 16,
-                            color: COLORS.textoncontrast
-                        }}
-                    >
-                        Inventory Management
-                    </Text>
+                <View style={{ marginBottom: 30 }}>
+                    <Text style={styles.sectionTitle}>Inventory Management</Text>
 
-                    <Pressable
-                        style={{
-                            ...STYLES.settingsButton,
-                            borderColor: COLORS.confirm,
-                            backgroundColor: COLORS.confirm
-                        }}
-                        onPress={() => setShowAddItem(true)}
-                    >
-                        <BadgePlus size={28} color="white" strokeWidth={2.5} />
-                        <Text style={{ ...STYLES.settingsButtonText, color: 'white' }}>
-                            Add New Item
-                        </Text>
-                    </Pressable>
+                    <View style={styles.buttonRow}>
+                        <Pressable
+                            style={[styles.gridButton, { backgroundColor: COLORS.confirm, flex: 1 }]}
+                            onPress={handleAddNewItem}
+                        >
+                            <BadgePlus size={32} color="white" strokeWidth={2.5} />
+                            <Text style={[styles.buttonText, { color: 'white' }]}>Add New Item</Text>
+                        </Pressable>
+                    </View>
 
-                    <Pressable
-                        style={{ ...STYLES.settingsButton, borderColor: COLORS.header_bg }}
-                        onPress={handleManageItems}
-                    >
-                        <Edit3 size={24} color={COLORS.header_bg} />
-                        <Text style={STYLES.settingsButtonText}>Edit Items</Text>
-                    </Pressable>
+                    <View style={styles.buttonRow}>
+                        <Pressable
+                            style={[styles.gridButton, { borderColor: COLORS.header_bg, flex: 1 }]}
+                            onPress={handleEditItems}
+                        >
+                            <Edit3 size={28} color={COLORS.header_bg} />
+                            <Text style={styles.buttonText}>Edit Items</Text>
+                        </Pressable>
 
-                    <Pressable
-                        style={{ ...STYLES.settingsButton, borderColor: COLORS.header_bg }}
-                        onPress={handleManageCategories}
-                    >
-                        <FolderOpen size={24} color={COLORS.header_bg} />
-                        <Text style={STYLES.settingsButtonText}>Manage Categories</Text>
-                    </Pressable>
+                        <Pressable
+                            style={[styles.gridButton, { borderColor: COLORS.header_bg, flex: 1 }]}
+                            onPress={handleManageCategories}
+                        >
+                            <FolderOpen size={28} color={COLORS.header_bg} />
+                            <Text style={styles.buttonText}>Manage Categories</Text>
+                        </Pressable>
+                    </View>
                 </View>
 
                 {/* Count Management Section */}
-                <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 20 }}>
-                    <Text
-                        style={{
-                            fontSize: 20,
-                            fontWeight: '700',
-                            marginBottom: 16,
-                            color: COLORS.textoncontrast
-                        }}
-                    >
-                        Count Management
-                    </Text>
+                <View style={{ marginBottom: 30 }}>
+                    <Text style={styles.sectionTitle}>Count Management</Text>
 
-                    <Pressable
-                        style={{ ...STYLES.settingsButton, borderColor: '#FFA500' }}
-                        onPress={handleResetInventory}
-                    >
-                        <RotateCcw size={24} color="#FFA500" />
-                        <Text style={STYLES.settingsButtonText}>Reset Count</Text>
-                    </Pressable>
+                    <View style={styles.buttonRow}>
+                        <Pressable
+                            style={[styles.gridButton, { borderColor: COLORS.header_bg, flex: 1 }]}
+                            onPress={handleViewProgress}
+                        >
+                            <FileSpreadsheet size={28} color={COLORS.header_bg} />
+                            <Text style={styles.buttonText}>View Progress</Text>
+                        </Pressable>
+
+                        <Pressable
+                            style={[styles.gridButton, { borderColor: '#FFA500', flex: 1 }]}
+                            onPress={handleResetCount}
+                        >
+                            <RotateCcw size={28} color="#FFA500" />
+                            <Text style={styles.buttonText}>Reset Count</Text>
+                        </Pressable>
+                    </View>
                 </View>
 
-                {/* Export Section */}
-                <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 20 }}>
-                    <Text
-                        style={{
-                            fontSize: 20,
-                            fontWeight: '700',
-                            marginBottom: 16,
-                            color: COLORS.textoncontrast
-                        }}
-                    >
-                        Export & Reports
-                    </Text>
+                {/* Export & Reports Section */}
+                <View style={{ marginBottom: 30 }}>
+                    <Text style={styles.sectionTitle}>Export & Reports</Text>
 
-                    <Pressable
-                        style={{ ...STYLES.settingsButton, borderColor: '#28A745' }}
-                        onPress={handleExportInventory}
-                    >
-                        <FileSpreadsheet size={24} color="#28A745" />
-                        <Text style={STYLES.settingsButtonText}>Export Inventory</Text>
-                    </Pressable>
+                    <View style={styles.buttonRow}>
+                        <Pressable
+                            style={[styles.gridButton, { borderColor: '#FF6B00', flex: 1 }]}
+                            onPress={handleViewLowStock}
+                        >
+                            <AlertTriangle size={28} color="#FF6B00" />
+                            <Text style={styles.buttonText}>Low Stock</Text>
+                        </Pressable>
+
+                        <Pressable
+                            style={[styles.gridButton, { borderColor: '#28A745', flex: 1 }]}
+                            onPress={handleExportInventory}
+                        >
+                            <FileSpreadsheet size={28} color="#28A745" />
+                            <Text style={styles.buttonText}>Export Data</Text>
+                        </Pressable>
+                    </View>
                 </View>
 
                 {/* App Settings Section */}
-                <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 20 }}>
-                    <Text
-                        style={{
-                            fontSize: 20,
-                            fontWeight: '700',
-                            marginBottom: 16,
-                            color: COLORS.textoncontrast
-                        }}
-                    >
-                        App Settings
-                    </Text>
+                <View style={{ marginBottom: 30 }}>
+                    <Text style={styles.sectionTitle}>App Settings</Text>
 
-                    <Pressable
-                        style={{ ...STYLES.settingsButton, borderColor: COLORS.header_bg }}
-                        onPress={() => Alert.alert('Coming Soon', 'App preferences coming soon')}
-                    >
-                        <SettingsIcon size={24} color={COLORS.header_bg} />
-                        <Text style={STYLES.settingsButtonText}>Preferences</Text>
-                    </Pressable>
+                    <View style={styles.buttonRow}>
+                        <Pressable
+                            style={[styles.gridButton, { borderColor: COLORS.header_bg, flex: 1 }]}
+                            onPress={handlePreferences}
+                        >
+                            <SettingsIcon size={28} color={COLORS.header_bg} />
+                            <Text style={styles.buttonText}>Preferences</Text>
+                        </Pressable>
+                    </View>
                 </View>
 
                 {/* Account Section */}
-                <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 40 }}>
-                    <Text
-                        style={{
-                            fontSize: 20,
-                            fontWeight: '700',
-                            marginBottom: 16,
-                            color: COLORS.textoncontrast
-                        }}
-                    >
-                        Account
-                    </Text>
+                <View style={{ marginBottom: 30 }}>
+                    <Text style={styles.sectionTitle}>Account</Text>
 
-                    <Pressable
-                        style={{ ...STYLES.settingsButton, borderColor: COLORS.deny }}
-                        onPress={handleSignOut}
-                    >
-                        <LogOut size={24} color={COLORS.deny} />
-                        <Text style={STYLES.settingsButtonText}>Sign Out</Text>
-                    </Pressable>
+                    <View style={styles.buttonRow}>
+                        <Pressable
+                            style={[styles.gridButton, { borderColor: COLORS.deny, flex: 1 }]}
+                            onPress={handleSignOut}
+                        >
+                            <LogOut size={28} color={COLORS.deny} />
+                            <Text style={styles.buttonText}>Sign Out</Text>
+                        </Pressable>
+                    </View>
                 </View>
 
                 {/* App Info */}
-                <View style={{ alignItems: 'center', paddingBottom: 40 }}>
+                <View style={{ alignItems: 'center', marginTop: 20 }}>
                     <Text style={{ color: COLORS.textgray, fontSize: 14 }}>
                         Inventory Tracker v1.0.0
                     </Text>
                     <Text style={{ color: COLORS.textgray, fontSize: 12, marginTop: 4 }}>
-                        Max&#39;s Best Ice Cream
+                        Max&apos;s Best Ice Cream
                     </Text>
                 </View>
             </ScrollView>
@@ -262,10 +294,40 @@ export default function SettingsTab() {
                 visible={showAddItem}
                 onClose={() => setShowAddItem(false)}
                 onSuccess={() => {
-                    // Reload inventory after adding new item
                     loadInv();
                 }}
             />
         </SafeAreaView>
     );
 }
+
+const styles = {
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: '700' as const,
+        marginBottom: 16,
+        color: COLORS.textoncontrast
+    },
+    buttonRow: {
+        flexDirection: 'row' as const,
+        gap: 12,
+        marginBottom: 12
+    },
+    gridButton: {
+        flexDirection: 'column' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        borderRadius: 12,
+        borderWidth: 3,
+        borderStyle: 'solid' as const,
+        padding: 20,
+        minHeight: 120,
+        gap: 8
+    },
+    buttonText: {
+        fontSize: 18,
+        fontWeight: '600' as const,
+        textAlign: 'center' as const,
+        color: COLORS.textoncontrast
+    }
+};
