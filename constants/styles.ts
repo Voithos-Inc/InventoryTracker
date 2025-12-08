@@ -11,7 +11,8 @@ export const COLORS = {
   tabBarActive: '#6097AD',
   deny: '#d40006',
   confirm: '#0c575b',
-  tintedGreen: '#a5d5a7'
+  tintedGreen: '#a5d5a7',
+  green: '#28A745'
 };
 
 const screenWidth = Dimensions.get('window').width;
@@ -115,13 +116,13 @@ export const STYLES = StyleSheet.create({
     borderRadius: 20,
     padding: 40,
     alignItems: 'center',
-    minWidth: .4 * screenWidth,
-    maxWidth: .5 * screenHeight,
+    minWidth: .75 * screenWidth,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
+    flex: 1
   },
   modalTitle: {
     fontSize: 32,
