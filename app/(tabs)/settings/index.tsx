@@ -1,5 +1,3 @@
-// app/(tabs)/settings.tsx - Enhanced settings page with grid layout and functionality
-
 import React, { useState } from 'react';
 import { View, Text, Pressable, ScrollView, Alert } from 'react-native';
 import { COLORS, STYLES } from '@/constants/styles';
@@ -171,27 +169,26 @@ export default function SettingsTab() {
             >
                 {/* Inventory Management Section */}
                 <View style={{ marginBottom: 30 }}>
-                    <Text style={styles.sectionTitle}>Inventory Management</Text>
+                    <Text style={STYLES.settingsSectionTitle}>Inventory Management</Text>
 
-                    <View style={styles.buttonRow}>
+                    <View style={STYLES.settingsContainer}>
                         <Pressable
-                            style={[styles.gridButton, { backgroundColor: COLORS.confirm, flex: 1 }]}
-                            onPress={handleAddNewItem}
+                          style={[STYLES.settingsButton, { backgroundColor: COLORS.confirm, flex: 1 }]}
+                          onPress={handleAddNewItem}
                         >
                             <BadgePlus size={32} color="white" strokeWidth={2.5} />
-                            <Text style={[styles.buttonText, { color: 'white' }]}>Add New Item</Text>
+                            <Text style={[STYLES.settingsButtonText, { color: 'white' }]}>Add New Item</Text>
                         </Pressable>
-                    </View>
 
-                    <View style={styles.buttonRow}>
                         <Pressable
-                            style={[styles.gridButton, { borderColor: COLORS.header_bg, flex: 1 }]}
+                            style={[STYLES.settingsButton, { borderColor: COLORS.header_bg, flex: 1 }]}
                             onPress={handleEditItems}
                         >
                             <Edit3 size={28} color={COLORS.header_bg} />
-                            <Text style={styles.buttonText}>Edit Items</Text>
+                            <Text style={STYLES.settingsButtonText}>Edit Items</Text>
                         </Pressable>
 
+                        {/*
                         <Pressable
                             style={[styles.gridButton, { borderColor: COLORS.header_bg, flex: 1 }]}
                             onPress={handleManageCategories}
@@ -199,93 +196,31 @@ export default function SettingsTab() {
                             <FolderOpen size={28} color={COLORS.header_bg} />
                             <Text style={styles.buttonText}>Manage Categories</Text>
                         </Pressable>
-                    </View>
-                </View>
-
-                {/* Count Management Section */}
-                <View style={{ marginBottom: 30 }}>
-                    <Text style={styles.sectionTitle}>Count Management</Text>
-
-                    <View style={styles.buttonRow}>
-                        <Pressable
-                            style={[styles.gridButton, { borderColor: COLORS.header_bg, flex: 1 }]}
-                            onPress={handleViewProgress}
-                        >
-                            <FileSpreadsheet size={28} color={COLORS.header_bg} />
-                            <Text style={styles.buttonText}>View Progress</Text>
-                        </Pressable>
-
-                        <Pressable
-                            style={[styles.gridButton, { borderColor: '#FFA500', flex: 1 }]}
-                            onPress={handleResetCount}
-                        >
-                            <RotateCcw size={28} color="#FFA500" />
-                            <Text style={styles.buttonText}>Reset Count</Text>
-                        </Pressable>
+                        */}
                     </View>
                 </View>
 
                 {/* Export & Reports Section */}
                 <View style={{ marginBottom: 30 }}>
-                    <Text style={styles.sectionTitle}>Export & Reports</Text>
+                    <Text style={STYLES.settingsSectionTitle}>Export & Reports</Text>
 
-                    <View style={styles.buttonRow}>
+                    <View style={STYLES.settingsContainer}>
                         <Pressable
-                            style={[styles.gridButton, { borderColor: '#FF6B00', flex: 1 }]}
-                            onPress={handleViewLowStock}
+                          style={[STYLES.settingsButton, { borderColor: '#FFA500', flex: 1 }]}
+                          onPress={handleResetCount}
                         >
-                            <AlertTriangle size={28} color="#FF6B00" />
-                            <Text style={styles.buttonText}>Low Stock</Text>
+                            <RotateCcw size={28} color="#FFA500" />
+                            <Text style={STYLES.settingsButtonText}>Reset Count</Text>
                         </Pressable>
 
                         <Pressable
-                            style={[styles.gridButton, { borderColor: '#28A745', flex: 1 }]}
+                            style={[STYLES.settingsButton, { borderColor: '#28A745', flex: 1 }]}
                             onPress={handleExportInventory}
                         >
                             <FileSpreadsheet size={28} color="#28A745" />
-                            <Text style={styles.buttonText}>Export Data</Text>
+                            <Text style={STYLES.settingsButtonText}>Export Data</Text>
                         </Pressable>
                     </View>
-                </View>
-
-                {/* App Settings Section */}
-                <View style={{ marginBottom: 30 }}>
-                    <Text style={styles.sectionTitle}>App Settings</Text>
-
-                    <View style={styles.buttonRow}>
-                        <Pressable
-                            style={[styles.gridButton, { borderColor: COLORS.header_bg, flex: 1 }]}
-                            onPress={handlePreferences}
-                        >
-                            <SettingsIcon size={28} color={COLORS.header_bg} />
-                            <Text style={styles.buttonText}>Preferences</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                {/* Account Section */}
-                <View style={{ marginBottom: 30 }}>
-                    <Text style={styles.sectionTitle}>Account</Text>
-
-                    <View style={styles.buttonRow}>
-                        <Pressable
-                            style={[styles.gridButton, { borderColor: COLORS.deny, flex: 1 }]}
-                            onPress={handleSignOut}
-                        >
-                            <LogOut size={28} color={COLORS.deny} />
-                            <Text style={styles.buttonText}>Sign Out</Text>
-                        </Pressable>
-                    </View>
-                </View>
-
-                {/* App Info */}
-                <View style={{ alignItems: 'center', marginTop: 20 }}>
-                    <Text style={{ color: COLORS.textgray, fontSize: 14 }}>
-                        Inventory Tracker v1.0.0
-                    </Text>
-                    <Text style={{ color: COLORS.textgray, fontSize: 12, marginTop: 4 }}>
-                        Max&apos;s Best Ice Cream
-                    </Text>
                 </View>
             </ScrollView>
 
@@ -300,34 +235,3 @@ export default function SettingsTab() {
         </SafeAreaView>
     );
 }
-
-const styles = {
-    sectionTitle: {
-        fontSize: 20,
-        fontWeight: '700' as const,
-        marginBottom: 16,
-        color: COLORS.textoncontrast
-    },
-    buttonRow: {
-        flexDirection: 'row' as const,
-        gap: 12,
-        marginBottom: 12
-    },
-    gridButton: {
-        flexDirection: 'column' as const,
-        alignItems: 'center' as const,
-        justifyContent: 'center' as const,
-        borderRadius: 12,
-        borderWidth: 3,
-        borderStyle: 'solid' as const,
-        padding: 20,
-        minHeight: 120,
-        gap: 8
-    },
-    buttonText: {
-        fontSize: 18,
-        fontWeight: '600' as const,
-        textAlign: 'center' as const,
-        color: COLORS.textoncontrast
-    }
-};

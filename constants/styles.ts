@@ -160,28 +160,36 @@ export const STYLES = StyleSheet.create({
     textAlign: 'center',
   },
   settingsContainer: {
-    flex: 1,
+    width: '80%',
+    alignSelf: 'center',
     flexDirection: 'column',
-    flexGrow: 1,
-    alignItems: 'center',
+    gap: 12,
+    marginBottom: 12,
+  },
+  settingsSectionTitle: {
+    width: '80%',
+    fontSize: 20,
+    fontWeight: '700' as const,
+    marginBottom: 16,
+    color: COLORS.textoncontrast,
+    alignSelf: "center",
+    marginLeft: -4
   },
   settingsButton: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     borderRadius: 12,
     borderWidth: 3,
-    borderStyle: "solid",
-    height: 75,
-    width: 343,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 15
+    padding: 20,
+    gap: 20,
+    width: '100%',
   },
   settingsButtonText: {
-    fontSize: 24,
-    fontWeight: '400',
-    textShadowColor: 'rgba(255, 255, 255, .6)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 1,
-    marginLeft: 20
+    width: '80%',
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: COLORS.textoncontrast
   }
 });

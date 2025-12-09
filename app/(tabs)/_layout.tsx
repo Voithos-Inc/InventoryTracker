@@ -9,6 +9,7 @@ import {
 } from 'lucide-react-native';
 import { COLORS, STYLES } from '@/constants/styles';
 import { SafeAreaView } from "react-native-safe-area-context";
+import React from 'react';
 
 export default function TabLayout() {
   return (
