@@ -10,7 +10,9 @@ export const COLORS = {
   tabBarBg: '#0c575b',
   tabBarActive: '#6097AD',
   deny: '#d40006',
-  confirm: '#0c575b'
+  confirm: '#0c575b',
+  tintedGreen: '#a5d5a7',
+  green: '#28A745'
 };
 
 const screenWidth = Dimensions.get('window').width;
@@ -114,13 +116,13 @@ export const STYLES = StyleSheet.create({
     borderRadius: 20,
     padding: 40,
     alignItems: 'center',
-    minWidth: .4 * screenWidth,
-    maxWidth: .5 * screenHeight,
+    minWidth: .75 * screenWidth,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
+    flex: 1
   },
   modalTitle: {
     fontSize: 32,
@@ -158,28 +160,36 @@ export const STYLES = StyleSheet.create({
     textAlign: 'center',
   },
   settingsContainer: {
-    flex: 1,
+    width: '80%',
+    alignSelf: 'center',
     flexDirection: 'column',
-    flexGrow: 1,
-    alignItems: 'center',
+    gap: 12,
+    marginBottom: 12,
+  },
+  settingsSectionTitle: {
+    width: '80%',
+    fontSize: 20,
+    fontWeight: '700' as const,
+    marginBottom: 16,
+    color: COLORS.textoncontrast,
+    alignSelf: "center",
+    marginLeft: -4
   },
   settingsButton: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     borderRadius: 12,
     borderWidth: 3,
-    borderStyle: "solid",
-    height: 75,
-    width: 343,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 15
+    padding: 20,
+    gap: 20,
+    width: '100%',
   },
   settingsButtonText: {
-    fontSize: 24,
-    fontWeight: '400',
-    textShadowColor: 'rgba(255, 255, 255, .6)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 1,
-    marginLeft: 20
+    width: '80%',
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: COLORS.textoncontrast
   }
 });
