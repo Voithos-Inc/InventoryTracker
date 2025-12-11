@@ -41,5 +41,4 @@ export interface AddItemFormData {
   foh_quantity: number;
   boh_quantity: number;
   low_stock_threshold: number;
-  image?: File | null;
 }

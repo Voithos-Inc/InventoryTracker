@@ -22,8 +22,6 @@ export async function POST(request: Request) {
 
   let result: PostgrestSingleResponse<InventoryItem[]>
 
-  console.log(payload)
-
   if (upsert) {
     result = await supabase.from('inventory').upsert(rest).select();
   } else {

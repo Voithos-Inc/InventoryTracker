@@ -16,7 +16,6 @@ export async function getInventory(): Promise<InventoryItem[]> {
 }
 
 export async function insertItem(item: InventoryItem, upsert: boolean = true): Promise<void> {
-  console.log('got here!')
   const response: Response = await fetch(API_ROUTE, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -26,7 +25,6 @@ export async function insertItem(item: InventoryItem, upsert: boolean = true): P
       upsert,
     })
   });
-  console.log(response)
   checkResponse(response);
 }
 
