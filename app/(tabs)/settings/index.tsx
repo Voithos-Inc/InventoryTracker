@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, ScrollView, Alert } from 'react-native';
+import { View, Text, Pressable, ScrollView, Alert, Platform} from 'react-native';
 import { COLORS, STYLES } from '@/constants/styles';
 import Header from '@/components/header';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+
 import {
     BadgePlus,
     LogOut,
@@ -18,6 +19,7 @@ import AddItemForm from '@/components/AddItemForm';
 import { useInventory } from '@/store/inventory';
 import { saveAndShareCSV, generateSummaryReport, generateLowStockReport } from '@/lib/exportUtils';
 import { insertItem } from '@/lib/supabase';
+import {InventoryItem} from "@/types/inventory";
 
 export default function SettingsTab() {
     const router = useRouter();
@@ -34,44 +36,46 @@ export default function SettingsTab() {
     };
 
     const handleResetCount = async () => {
-        Alert.alert(
-            'Reset Inventory Count',
-            'This will uncheck all completed items and start a fresh count. Are you sure?',
-            [
-                {
-                    text: 'Cancel',
-                    style: 'cancel'
-                },
-                {
-                    text: 'Reset',
-                    style: 'destructive',
-                    onPress: async () => {
-                        try {
-                            if (!inv) return;
-
-                            // Reset all items to not completed
-                            for (const item of inv) {
-                                await insertItem({
-                                    ...item,
-                                    is_completed: false,
-                                    completed_at: undefined,
-                                    completed_by: undefined
-                                });
-                            }
-
-                            // Reload inventory
-                            await loadInv();
-
-                            Alert.alert('Success', 'All completion checkmarks have been reset!');
-                        } catch (error) {
-                            console.error('Reset error:', error);
-                            Alert.alert('Error', 'Failed to reset count. Please try again.');
-                        }
+        if (Platform.OS === "web") {
+            let confirmed = confirm("Reset Inventory Count\nThis will uncheck all completed items and start a fresh count. Are you sure?")
+            if (confirmed) await onConfirmReset()
+        } else {
+            Alert.alert(
+                'Reset Inventory Count',
+                'This will uncheck all completed items and start a fresh count. Are you sure?',
+                [
+                    {
+                        text: 'Cancel',
+                        style: 'cancel'
+                    },
+                    {
+                        text: 'Reset',
+                        style: 'destructive',
+                        onPress: () => onConfirmReset()
                     }
-                }
-            ]
-        );
+                ]
+            );
+        }
     };
+
+    const onConfirmReset = async () => {
+        try {
+            if (!inv) return;
+
+            // Reset all items to not completed
+            for (const item of inv) {
+                await insertItem({...item, foh_quantity: 0, boh_quantity: 0} as InventoryItem);
+            }
+
+            // Reload inventory
+            await loadInv();
+
+            Alert.alert('Success', 'All completion checkmarks have been reset!');
+        } catch (error) {
+            console.error('Reset error:', error);
+            Alert.alert('Error', 'Failed to reset count. Please try again.');
+        }
+    }
 
     const handleExportInventory = () => {
         if (!inv) {
@@ -118,6 +122,7 @@ export default function SettingsTab() {
         );
     };
 
+
     return (
         <SafeAreaView style={STYLES.container}>
             <Header />
@@ -137,8 +142,8 @@ export default function SettingsTab() {
 
                     <View style={STYLES.settingsContainer}>
                         <Pressable
-                          style={[STYLES.settingsButton, { backgroundColor: COLORS.confirm, flex: 1 }]}
-                          onPress={handleAddNewItem}
+                            style={[STYLES.settingsButton, { backgroundColor: COLORS.confirm, flex: 1 }]}
+                            onPress={handleAddNewItem}
                         >
                             <BadgePlus size={32} color="white" strokeWidth={2.5} />
                             <Text style={[STYLES.settingsButtonText, { color: 'white' }]}>Add New Item</Text>
@@ -151,16 +156,6 @@ export default function SettingsTab() {
                             <Edit3 size={28} color={COLORS.header_bg} />
                             <Text style={STYLES.settingsButtonText}>Edit Items</Text>
                         </Pressable>
-
-                        {/*
-                        <Pressable
-                            style={[styles.gridButton, { borderColor: COLORS.header_bg, flex: 1 }]}
-                            onPress={handleManageCategories}
-                        >
-                            <FolderOpen size={28} color={COLORS.header_bg} />
-                            <Text style={styles.buttonText}>Manage Categories</Text>
-                        </Pressable>
-                        */}
                     </View>
                 </View>
 
@@ -170,8 +165,8 @@ export default function SettingsTab() {
 
                     <View style={STYLES.settingsContainer}>
                         <Pressable
-                          style={[STYLES.settingsButton, { borderColor: '#FFA500', flex: 1 }]}
-                          onPress={handleResetCount}
+                            style={[STYLES.settingsButton, { borderColor: '#FFA500', flex: 1 }]}
+                            onPress={handleResetCount}
                         >
                             <RotateCcw size={28} color="#FFA500" />
                             <Text style={STYLES.settingsButtonText}>Reset Count</Text>

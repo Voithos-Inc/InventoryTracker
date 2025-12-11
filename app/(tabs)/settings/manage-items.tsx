@@ -9,7 +9,7 @@ import {
     Image
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import {Link, useRouter } from 'expo-router';
 import { COLORS, STYLES } from '@/constants/styles';
 import { useInventory } from '@/store/inventory';
 import { InventoryItem, CATEGORY } from '@/types/inventory';
@@ -112,8 +112,10 @@ export default function ManageItemsScreen() {
                     borderBottomColor: '#5A8CA0'
                 }}
             >
-                <Pressable onPress={() => router.back()} style={{ marginRight: 16 }}>
-                    <ArrowLeft size={32} color="white" />
+                <Pressable onPress={() => router.push('/settings')} style={{ marginRight: 16 }}>
+                    <Link href="/settings" asChild>
+                        <ArrowLeft size={32} color="white" />
+                    </Link>
                 </Pressable>
                 <Text
                     style={{
@@ -218,9 +220,9 @@ export default function ManageItemsScreen() {
                             }}
                         >
                             {/* Item Image */}
-                            {item.image_url ? (
+                            {item.image_link ? (
                                 <Image
-                                    source={{ uri: item.image_url }}
+                                    source={{ uri: item.image_link }}
                                     style={{
                                         width: 60,
                                         height: 60,
