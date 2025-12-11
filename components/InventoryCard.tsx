@@ -106,9 +106,9 @@ export default function InventoryCard({ item }: InventoryCardProps) {
             gap: 24
           }}
         >
-          {item.image_url ? (
+          {item.image_link && item.image_link !== "about:blank" ? (
             <Image
-              source={{ uri: item.image_url }}
+              source={{ uri: item.image_link }}
               style={{
                 width: 80,
                 height: 80,

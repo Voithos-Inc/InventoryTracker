@@ -169,11 +169,12 @@ export default function ItemModal({ visible, item, onClose, completed, toggleCom
                     justifyContent: "center"
                   }}
                 >
-                  {item.image_url ? (
+                  {item.image_link && item.image_link !== "about:blank" ? (
                     <Image
-                      source={{ uri: item.image_url }}
+                      source={{ uri: item.image_link }}
                       style={{
                         width: 300,
+                        height: 500,
                         borderRadius: 12,
                         marginBottom: 16
                       }}
