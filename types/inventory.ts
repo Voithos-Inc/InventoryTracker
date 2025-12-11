@@ -17,32 +17,9 @@ export interface InventoryItem {
   foh_quantity: number;  // Front of House
   boh_quantity: number;  // Back of House
   units: string;  // e.g., "quart container", "topping container", "jar"
-  image_url?: string | null;  // URL to Supabase Storage
-  image_link?: string;  // Legacy field
-  category: CATEGORY;
-
-  // Completion tracking
-  is_completed?: boolean;
-  completed_at?: string;
-  completed_by?: string;
-
-  // Low stock alerts
+  image_link?: string;
   low_stock_threshold?: number;  // Alert when quantity <= this value
-
-  // Seasonal management
-  is_seasonal?: boolean;
-
-  // Display order
-  display_order?: number;
-}
-
-export interface Category {
-  id: number;
-  name: string;
-  icon_name: string;  // Lucide icon name
-  display_order: number;
-  is_active: boolean;
-  created_at: string;
+  category: CATEGORY;
 }
 
 export interface InventoryExport {
