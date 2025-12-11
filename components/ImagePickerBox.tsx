@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import * as ImagePicker from 'expo-image-picker';
 import {TouchableOpacity, View, Text, Image, Alert, Platform} from "react-native";
 import {STYLES} from "@/constants/styles";
@@ -11,11 +11,16 @@ export type ImageUploadData = {
 }
 
 interface ImagePickerBoxProps {
-  onChange: (file: ImageUploadData) => void
+  onChange: (file: ImageUploadData | null) => void;
+  initialUri?: string | null;
 }
 
-export default function ImagePickerBox({ onChange } : ImagePickerBoxProps) {
-  const [imageUri, setImageUri] = useState<string | null>(null);
+export default function ImagePickerBox({ onChange, initialUri } : ImagePickerBoxProps) {
+  const [imageUri, setImageUri] = useState<string | null>(initialUri ?? null);
+
+  useEffect(() => {
+    if (initialUri) setImageUri(initialUri);
+  }, [initialUri]);
 
   async function pickImage() {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();

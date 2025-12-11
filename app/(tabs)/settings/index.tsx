@@ -7,19 +7,15 @@ import { useRouter } from 'expo-router';
 
 import {
     BadgePlus,
-    LogOut,
     FileSpreadsheet,
     Edit3,
-    FolderOpen,
-    RotateCcw,
-    Settings as SettingsIcon,
-    AlertTriangle
+    RotateCcw
 } from 'lucide-react-native';
 import AddItemForm from '@/components/AddItemForm';
 import { useInventory } from '@/store/inventory';
-import { saveAndShareCSV, generateSummaryReport, generateLowStockReport } from '@/lib/exportUtils';
 import { insertItem } from '@/lib/supabase';
 import {InventoryItem} from "@/types/inventory";
+import {saveAndShareCSV} from "@/lib/exportUtils";
 
 export default function SettingsTab() {
     const router = useRouter();
@@ -32,7 +28,7 @@ export default function SettingsTab() {
     };
 
     const handleEditItems = () => {
-        router.push('/manage-items' as any);
+        router.push('/settings/manage-items' as any);
     };
 
     const handleResetCount = async () => {
@@ -71,6 +67,7 @@ export default function SettingsTab() {
             await loadInv();
 
             Alert.alert('Success', 'All completion checkmarks have been reset!');
+            window.location.href = "/";
         } catch (error) {
             console.error('Reset error:', error);
             Alert.alert('Error', 'Failed to reset count. Please try again.');
@@ -79,48 +76,54 @@ export default function SettingsTab() {
 
     const handleExportInventory = () => {
         if (!inv) {
-            Alert.alert('Error', 'No inventory data to export');
+            if (Platform.OS === "web") {
+                window.alert("No inventory data to export");
+            } else {
+                Alert.alert("Error", "No inventory data to export");
+            }
             return;
         }
 
+        // --- Web version ---
+        if (Platform.OS === "web") {
+            const confirmed = window.confirm(
+                "Export Inventory\n\nDo you want to export the inventory as a CSV file?"
+            );
+
+            if (confirmed) {
+                saveAndShareCSV(inv).catch((error) => {
+                    console.error("Export error:", error);
+                    window.alert("Export Failed: Could not export inventory.");
+                });
+            }
+
+            return;
+        }
+
+        // --- Mobile version (iOS/Android) ---
         Alert.alert(
-            'Export Inventory',
-            'Choose export format:',
+            "Export Inventory",
+            "Export your full inventory as a CSV file?",
             [
                 {
-                    text: 'CSV Export',
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "Export CSV",
                     onPress: async () => {
                         try {
                             await saveAndShareCSV(inv);
                         } catch (error) {
-                            console.error('Export error:', error);
-                            Alert.alert('Export Failed', 'Could not export inventory. Check console for details.');
+                            console.error("Export error:", error);
+                            Alert.alert("Export Failed", "Could not export inventory.");
                         }
-                    }
+                    },
                 },
-                {
-                    text: 'Summary Report',
-                    onPress: () => {
-                        const report = generateSummaryReport(inv);
-                        console.log(report);
-                        Alert.alert('Summary Report', 'Report generated! Check console for details.\n\nIn the next update, this will be saved as a file.');
-                    }
-                },
-                {
-                    text: 'Low Stock Report',
-                    onPress: () => {
-                        const report = generateLowStockReport(inv);
-                        console.log(report);
-                        Alert.alert('Low Stock Report', 'Report generated! Check console for details.\n\nIn the next update, this will be saved as a file.');
-                    }
-                },
-                {
-                    text: 'Cancel',
-                    style: 'cancel'
-                }
             ]
         );
     };
+
 
 
     return (
@@ -190,6 +193,7 @@ export default function SettingsTab() {
                 onSuccess={() => {
                     loadInv();
                 }}
+                initialData={null}
             />
         </SafeAreaView>
     );
