@@ -1,4 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
+import {createClient, PostgrestSingleResponse} from "@supabase/supabase-js";
+import {InventoryItem} from "@/types/inventory";
 
 const supabaseURL = process.env.EXPO_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -12,8 +13,29 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { data } = await supabase.from('inventory').upsert(body).select();
-  return Response.json({ data });
+  const { upsert, ...rest } = body;
+
+  const payload = upsert ? rest : (() => {
+      const { id, ...noId } = rest;
+      return noId;
+    })();
+
+  let result: PostgrestSingleResponse<InventoryItem[]>
+
+  console.log(payload)
+
+  if (upsert) {
+    result = await supabase.from('inventory').upsert(rest).select();
+  } else {
+    result = await supabase.from('inventory').insert(rest).select();
+  }
+
+  if (result.error) {
+    console.error(result.error);
+    return Response.json({ error: result.error.message }, { status: 400 });
+  }
+
+  return Response.json(result);
 }
 
 export async function PUT(request: Request) {
@@ -26,16 +48,4 @@ export async function DELETE(request: Request) {
   const { id } = await request.json();
   const { data } = await supabase.from('inventory').delete().eq('id', id);
   return Response.json({ data });
-}
-
-export async function POST_UPLOAD(request: Request) {
-  const formData = await request.formData();
-  const file = formData.get('file');
-
-  // Upload to Supabase Storage
-  const { data, error } = await supabase.storage
-      .from('inventory-images')
-      .upload(fileName, file);
-
-  return Response.json({ publicUrl: data.publicUrl });
 }

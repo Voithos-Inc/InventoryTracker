@@ -1,5 +1,3 @@
-// app/manage-items.tsx - Item management screen
-
 import React, { useState, useMemo } from 'react';
 import {
     View,

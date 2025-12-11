@@ -33,18 +33,6 @@ export default function SettingsTab() {
         router.push('/manage-items' as any);
     };
 
-    const handleManageCategories = () => {
-        Alert.alert('Coming Soon', 'Category management will be available in the next update.');
-    };
-
-    const handleViewProgress = () => {
-        router.push('/completion-progress' as any);
-    };
-
-    const handleViewLowStock = () => {
-        router.push('/low-stock' as any);
-    };
-
     const handleResetCount = async () => {
         Alert.alert(
             'Reset Inventory Count',
@@ -125,30 +113,6 @@ export default function SettingsTab() {
                 {
                     text: 'Cancel',
                     style: 'cancel'
-                }
-            ]
-        );
-    };
-
-    const handlePreferences = () => {
-        Alert.alert('Coming Soon', 'App preferences will be available in the next update.');
-    };
-
-    const handleSignOut = () => {
-        Alert.alert(
-            'Sign Out',
-            'Are you sure you want to sign out?',
-            [
-                {
-                    text: 'Cancel',
-                    style: 'cancel'
-                },
-                {
-                    text: 'Sign Out',
-                    style: 'destructive',
-                    onPress: () => {
-                        Alert.alert('Signed Out', 'You have been signed out.\n\n(Authentication will be added in a future update)');
-                    }
                 }
             ]
         );
