@@ -5,18 +5,18 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Switch,
   Alert,
   Modal,
   Pressable, Platform
 } from 'react-native';
-import {COLORS, STYLES} from '@/constants/styles';
+import {COLORS} from '@/constants/styles';
 import {CATEGORY, AddItemFormData, InventoryItem} from '@/types/inventory';
-import {X, Camera, Upload} from 'lucide-react-native';
-import * as ImagePicker from 'expo-image-picker';
+import {X} from 'lucide-react-native';
 import {insertItem} from '@/lib/supabase';
-import {getPositiveFloat, stringIsNumeric} from "@/lib/utils";
+import {getPositiveFloat} from "@/lib/utils";
 import {useInventory} from "@/store/inventory";
+import ImagePickerBox, {ImageUploadData} from './ImagePickerBox';
+import {addImage} from "@/lib/github";
 
 interface AddItemFormProps {
   visible: boolean;
@@ -61,47 +61,8 @@ export default function AddItemForm({visible, onClose, onSuccess}: AddItemFormPr
     image: null
   });
 
-  const [imageUri, setImageUri] = useState<string | null>(null);
+  const [imageData, setImageData] = useState<ImageUploadData | null>(null)
   const [saving, setSaving] = useState(false);
-
-  const handleImagePick = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (!permissionResult.granted) {
-      Alert.alert('Permission Required', 'Please allow access to your photo library');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8
-    });
-
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
-    }
-  };
-
-  const handleTakePhoto = async () => {
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-
-    if (!permissionResult.granted) {
-      Alert.alert('Permission Required', 'Please allow access to your camera');
-      return;
-    }
-
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8
-    });
-
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
-    }
-  };
 
   const handleSave = async () => {
     if (!formData.name.trim()) {
@@ -116,19 +77,26 @@ export default function AddItemForm({visible, onClose, onSuccess}: AddItemFormPr
 
     setSaving(true);
 
+    const image_filename = imageData?.name
+
+    if (imageData) await addImage(imageData)
+
+    const image_uri = image_filename ?
+      `https://cdn.jsdelivr.net/gh/Voithos-Inc/InventoryTracker@main/assets/images/items/${image_filename}` :
+      'about:blank'
+
     try {
       const newItem: InventoryItem = {
-        id: inv[inv.length - 1].id + 2, // skip a few
+        id: inv[inv.length - 1].id + 2,
         name: formData.name.trim(),
         category: formData.category,
         units: formData.units,
         foh_quantity: formData.foh_quantity,
         boh_quantity: formData.boh_quantity,
         low_stock_threshold: formData.low_stock_threshold,
-        image_link: imageUri ?? "about:blank",
+        image_link: image_uri,
         created_at: new Date().toISOString()
       };
-
 
       console.log(newItem)
       await insertItem(newItem, false);
@@ -147,10 +115,10 @@ export default function AddItemForm({visible, onClose, onSuccess}: AddItemFormPr
         low_stock_threshold: 1,
         image: null
       });
-      setImageUri(null);
 
       onSuccess();
       onClose();
+      setImageData(null)
     } catch (error) {
       Alert.alert('Error', 'Failed to add item. Please try again.');
       console.error(error);
@@ -199,49 +167,7 @@ export default function AddItemForm({visible, onClose, onSuccess}: AddItemFormPr
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{marginBottom: 20}}>
-              <Text style={{fontSize: 18, fontWeight: '600', marginBottom: 8}}>
-                Item Image
-              </Text>
-              <View style={{flexDirection: 'row', gap: 12}}>
-                <TouchableOpacity
-                  onPress={handleTakePhoto}
-                  style={{
-                    flex: 1,
-                    backgroundColor: COLORS.header_bg,
-                    padding: 16,
-                    borderRadius: 12,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <Camera size={32} color="white"/>
-                  <Text style={{color: 'white', marginTop: 8, fontWeight: '600'}}>
-                    Take Photo
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={handleImagePick}
-                  style={{
-                    flex: 1,
-                    backgroundColor: COLORS.confirm,
-                    padding: 16,
-                    borderRadius: 12,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  <Upload size={32} color="white"/>
-                  <Text style={{color: 'white', marginTop: 8, fontWeight: '600'}}>
-                    Choose Photo
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              {imageUri && (
-                <Text style={{marginTop: 8, color: COLORS.confirm, fontWeight: '600'}}>
-                  ✓ Image selected
-                </Text>
-              )}
+              <ImagePickerBox onChange={(imageData) => setImageData(imageData)}></ImagePickerBox>
             </View>
 
             <View style={{marginBottom: 20}}>

@@ -191,5 +191,14 @@ export const STYLES = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     color: COLORS.textoncontrast
-  }
+  },
+  imagePickerContainer: { alignItems: 'center' },
+  imagePickerButton: {
+    padding: 12,
+    backgroundColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  imagePickerButtonText: { fontSize: 16 },
+  imagePickerImage: { width: 200, height: 200, borderRadius: 8 },
 });
