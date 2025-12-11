@@ -12,7 +12,7 @@ export const COLORS = {
   deny: '#d40006',
   confirm: '#0c575b',
   tintedGreen: '#a5d5a7',
-  green: '#28A745'
+  green: '#28A745',
 };
 
 const screenWidth = Dimensions.get('window').width;

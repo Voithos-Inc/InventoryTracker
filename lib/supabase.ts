@@ -15,15 +15,18 @@ export async function getInventory(): Promise<InventoryItem[]> {
   return data as InventoryItem[];
 }
 
-export async function insertItem(item: InventoryItem): Promise<void> {
+export async function insertItem(item: InventoryItem, upsert: boolean = true): Promise<void> {
+  console.log('got here!')
   const response: Response = await fetch(API_ROUTE, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       ...item,
-      updated_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      upsert,
     })
   });
+  console.log(response)
   checkResponse(response);
 }
 
@@ -34,9 +37,4 @@ export async function deleteItem(id: number): Promise<void> {
     body: JSON.stringify({ id })
   });
   checkResponse(response);
-}
-
-export async function uploadImage(uri: string, itemName: string): Promise<string> {
-  console.log('Image selected:', uri);
-  return uri;
 }

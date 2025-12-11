@@ -19,6 +19,7 @@ import {
   Pencil
 } from 'lucide-react-native';
 import { insertItem } from '@/lib/supabase';
+import {stringIsNumeric} from "@/lib/utils";
 
 interface ItemModalProps {
   visible: boolean;
@@ -70,8 +71,6 @@ export default function ItemModal({ visible, item, onClose, completed, toggleCom
       updateQuantity('boh', newCount);
     }
   };
-
-  const stringIsNumeric = (s: string): boolean => { return /^\d*[.,]?\d*$/.test(s) }
 
   const handleFOHInputChange = (text: string) => {
     text = text.replace(',', '.');
