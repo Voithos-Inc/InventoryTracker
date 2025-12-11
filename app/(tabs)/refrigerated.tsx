@@ -11,7 +11,7 @@ export default function RefrigeratedTab() {
       <Header />
       <InventoryGrid 
         items={inv!.filter(i => i.category === "REFRIGERATED")}
-        sectionTitle="Flavors"
+        sectionTitle="Refrigerated"
       />
     </View>
   );

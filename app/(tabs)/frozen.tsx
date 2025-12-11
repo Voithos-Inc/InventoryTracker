@@ -11,7 +11,7 @@ export default function FrozenTab() {
       <Header />
       <InventoryGrid 
         items={inv!.filter(i => i.category === "FROZEN")}
-        sectionTitle="Flavors"
+        sectionTitle="Frozen"
       />
     </View>
   );

@@ -11,7 +11,7 @@ export default function SaucesTab() {
       <Header />
       <InventoryGrid 
         items={inv!.filter(i => i.category === "SAUCES")}
-        sectionTitle="Flavors"
+        sectionTitle="Sauces"
       />
     </View>
   );

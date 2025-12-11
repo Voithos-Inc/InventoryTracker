@@ -11,7 +11,7 @@ export default function DairyTab() {
       <Header />
       <InventoryGrid 
         items={inv!.filter(i => i.category === "DAIRY")}
-        sectionTitle="Flavors"
+        sectionTitle="Dairy"
       />
     </View>
   );
