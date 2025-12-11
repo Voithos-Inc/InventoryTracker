@@ -32,7 +32,7 @@ export default function SettingsTab() {
     };
 
     const handleEditItems = () => {
-        router.push('/manage-items' as any);
+        router.push('/settings/manage-items' as any);
     };
 
     const handleResetCount = async () => {
@@ -71,6 +71,7 @@ export default function SettingsTab() {
             await loadInv();
 
             Alert.alert('Success', 'All completion checkmarks have been reset!');
+            window.location.href = "/";
         } catch (error) {
             console.error('Reset error:', error);
             Alert.alert('Error', 'Failed to reset count. Please try again.');
@@ -190,6 +191,7 @@ export default function SettingsTab() {
                 onSuccess={() => {
                     loadInv();
                 }}
+                initialData={null}
             />
         </SafeAreaView>
     );

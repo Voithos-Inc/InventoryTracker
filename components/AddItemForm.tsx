@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,7 @@ interface AddItemFormProps {
   visible: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  initialData: InventoryItem | null;
 }
 
 const CATEGORIES: CATEGORY[] = [
@@ -48,21 +49,49 @@ const COMMON_UNITS = [
   'cup'
 ];
 
-export default function AddItemForm({visible, onClose, onSuccess}: AddItemFormProps) {
+export default function AddItemForm({visible, onClose, onSuccess, initialData}: AddItemFormProps) {
   const inv = useInventory((state) => state.inv)?.sort((a, b) => a.id - b.id) ?? [];
 
   const [formData, setFormData] = useState<AddItemFormData>({
-    name: '',
-    category: 'BEVERAGES',
-    units: 'quart container',
-    foh_quantity: 0,
-    boh_quantity: 0,
-    low_stock_threshold: 1,
-    image: null
+    name: initialData?.name ?? '',
+    category: initialData?.category ?? 'BEVERAGES',
+    units: initialData?.units ?? 'quart container',
+    foh_quantity: initialData?.foh_quantity ?? 0,
+    boh_quantity: initialData?.boh_quantity ?? 0,
+    low_stock_threshold: initialData?.low_stock_threshold ?? 1,
   });
 
   const [imageData, setImageData] = useState<ImageUploadData | null>(null)
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    async function loadExisting() {
+      if (!initialData?.image_link) {
+        setImageData(null);
+        return;
+      }
+
+      try {
+        const res = await fetch(initialData.image_link);
+        const blob = await res.blob();
+
+        const ext = blob.type.split("/")[1] || "jpg";
+        const name = `existing_${Date.now()}.${ext}`;
+
+        setImageData({
+          blob,
+          name,
+          type: blob.type,
+          uri: initialData.image_link,
+        });
+      } catch (err) {
+        console.error("initial image fetch failed", err);
+        setImageData(null);
+      }
+    }
+
+    loadExisting();
+  }, [initialData]);
 
   const handleSave = async () => {
     if (!formData.name.trim()) {
@@ -87,7 +116,7 @@ export default function AddItemForm({visible, onClose, onSuccess}: AddItemFormPr
 
     try {
       const newItem: InventoryItem = {
-        id: inv[inv.length - 1].id + 2,
+        id: initialData?.id ?? inv[inv.length - 1].id + 2,
         name: formData.name.trim(),
         category: formData.category,
         units: formData.units,
@@ -99,7 +128,7 @@ export default function AddItemForm({visible, onClose, onSuccess}: AddItemFormPr
       };
 
       console.log(newItem)
-      await insertItem(newItem, false);
+      await insertItem(newItem, initialData !== null);
       if (Platform.OS === 'web') {
         alert('Item added successfully!')
       } else {
@@ -113,7 +142,6 @@ export default function AddItemForm({visible, onClose, onSuccess}: AddItemFormPr
         foh_quantity: 0,
         boh_quantity: 0,
         low_stock_threshold: 1,
-        image: null
       });
 
       onSuccess();
@@ -167,7 +195,10 @@ export default function AddItemForm({visible, onClose, onSuccess}: AddItemFormPr
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={{marginBottom: 20}}>
-              <ImagePickerBox onChange={(imageData) => setImageData(imageData)}></ImagePickerBox>
+              <ImagePickerBox
+                initialUri={imageData?.uri ?? null}
+                onChange={setImageData}
+              />
             </View>
 
             <View style={{marginBottom: 20}}>
