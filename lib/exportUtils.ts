@@ -19,15 +19,11 @@ export async function exportToCSV(
     options: ExportOptions = {}
 ): Promise<string> {
     const {
-        includeCompleted = true,
         categoryFilter
     } = options;
 
     // Filter items
     let filteredItems = items;
-    if (!includeCompleted) {
-        filteredItems = filteredItems.filter(item => !item.is_completed);
-    }
     if (categoryFilter) {
         filteredItems = filteredItems.filter(item => item.category === categoryFilter);
     }
@@ -49,11 +45,6 @@ export async function exportToCSV(
     // Generate CSV rows
     const rows = filteredItems.map(item => {
         const totalQty = item.foh_quantity + item.boh_quantity;
-        const isLowStock = totalQty <= (item.low_stock_threshold || 1);
-        const status = item.is_completed
-            ? 'Completed'
-            : (isLowStock ? 'Low Stock' : 'In Stock');
-
         return [
             item.category,
             `"${item.name}"`, // Escape name in quotes
@@ -62,9 +53,6 @@ export async function exportToCSV(
             totalQty,
             item.units,
             item.low_stock_threshold || 1,
-            status,
-            item.is_seasonal ? 'Yes' : 'No',
-            item.updated_at || item.created_at
         ];
     });
 
@@ -153,8 +141,6 @@ export function generateSummaryReport(items: InventoryItem[]): string {
 
         const cat = categoryCounts[item.category];
         cat.total++;
-        if (item.is_completed) cat.completed++;
-
         const totalQty = item.foh_quantity + item.boh_quantity;
         cat.totalQty += totalQty;
         if (totalQty <= (item.low_stock_threshold || 1)) {
@@ -169,9 +155,7 @@ Generated: ${new Date().toLocaleString()}
     report += `OVERALL STATISTICS
 -----------------
 Total Items: ${items.length}
-Completed: ${items.filter(i => i.is_completed).length}
-Low Stock: ${items.filter(i => (i.foh_quantity + i.boh_quantity) <= (i.low_stock_threshold || 1)).length}
-Seasonal Items: ${items.filter(i => i.is_seasonal).length}\n\n`;
+Low Stock: ${items.filter(i => (i.foh_quantity + i.boh_quantity) <= (i.low_stock_threshold || 1)).length}`;
 
     report += `CATEGORY BREAKDOWN
 -----------------\n`;
@@ -206,88 +190,6 @@ export async function exportForGoogleSheets(
     const csvContent = await exportToCSV(sortedItems, {});
 
     return csvContent;
-}
-
-/**
- * Generate low stock report
- */
-export function generateLowStockReport(items: InventoryItem[]): string {
-    const lowStockItems = items.filter(item => {
-        const totalQty = item.foh_quantity + item.boh_quantity;
-        return totalQty <= (item.low_stock_threshold || 1);
-    }).sort((a, b) => {
-        const totalA = a.foh_quantity + a.boh_quantity;
-        const totalB = b.foh_quantity + b.boh_quantity;
-        return totalA - totalB; // Sort by quantity ascending (most critical first)
-    });
-
-    if (lowStockItems.length === 0) {
-        return 'No items are currently low in stock!';
-    }
-
-    let report = `LOW STOCK ALERT REPORT
-Generated: ${new Date().toLocaleString()}
-========================================\n\n`;
-
-    report += `CRITICAL: ${lowStockItems.filter(i => (i.foh_quantity + i.boh_quantity) === 0).length} items OUT OF STOCK\n`;
-    report += `WARNING: ${lowStockItems.length} items below threshold\n\n`;
-
-    report += `ITEMS NEEDING ATTENTION:\n`;
-    report += `${'='.repeat(80)}\n\n`;
-
-    lowStockItems.forEach(item => {
-        const totalQty = item.foh_quantity + item.boh_quantity;
-        const status = totalQty === 0 ? '🔴 OUT OF STOCK' : '⚠️  LOW STOCK';
-
-        report += `${status} - ${item.name}
-  Category: ${item.category}
-  FOH: ${item.foh_quantity} ${item.units} | BOH: ${item.boh_quantity} ${item.units}
-  Total: ${totalQty} ${item.units} (Threshold: ${item.low_stock_threshold})
-  ${'-'.repeat(80)}\n\n`;
-    });
-
-    return report;
-}
-
-/**
- * Export completion tracking report
- */
-export function generateCompletionReport(items: InventoryItem[]): string {
-    const completed = items.filter(i => i.is_completed);
-    const pending = items.filter(i => !i.is_completed);
-    const completionPct = ((completed.length / items.length) * 100).toFixed(1);
-
-    let report = `INVENTORY COUNT PROGRESS REPORT
-Generated: ${new Date().toLocaleString()}
-========================================\n\n`;
-
-    report += `PROGRESS: ${completed.length}/${items.length} items counted (${completionPct}%)\n\n`;
-
-    if (pending.length > 0) {
-        report += `PENDING ITEMS (${pending.length}):\n`;
-        report += `${'='.repeat(80)}\n\n`;
-
-        // Group pending by category
-        const pendingByCategory: Record<string, InventoryItem[]> = {};
-        pending.forEach(item => {
-            if (!pendingByCategory[item.category]) {
-                pendingByCategory[item.category] = [];
-            }
-            pendingByCategory[item.category].push(item);
-        });
-
-        Object.entries(pendingByCategory).forEach(([category, categoryItems]) => {
-            report += `${category} (${categoryItems.length}):\n`;
-            categoryItems.forEach(item => {
-                report += `  - ${item.name}\n`;
-            });
-            report += '\n';
-        });
-    } else {
-        report += '✅ ALL ITEMS HAVE BEEN COUNTED!\n\n';
-    }
-
-    return report;
 }
 
 /**
