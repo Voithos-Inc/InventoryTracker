@@ -211,7 +211,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                   borderRadius: 12,
                   padding: 14,
                   fontSize: 16,
-                  color: COLORS.textgray
+                  color: formData.name === "" ? COLORS.textgray : COLORS.textoncontrast
                 }}
                 value={formData.name}
                 onChangeText={(text) => setFormData({...formData, name: text})}

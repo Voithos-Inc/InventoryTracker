@@ -300,7 +300,7 @@ export default function ManageItemsScreen() {
       {selectedItem && (
         <AddItemForm
           visible={showAddItem}
-          onClose={() => setShowEditItem(false)}
+          onClose={() => {setShowEditItem(false); setSelectedItem(null)}}
           onSuccess={() => {
             loadInv();
           }}
