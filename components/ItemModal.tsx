@@ -185,13 +185,13 @@ export default function ItemModal({ visible, item, onClose, completed, toggleCom
                         width: 300,
                         height: 300,
                         borderRadius: 12,
-                        backgroundColor: '#e0e0e0',
+                        backgroundColor: COLORS.textonbg,
                         justifyContent: 'center',
                         alignItems: 'center',
                         marginBottom: 16
                       }}
                     >
-                      <Text style={{ color: '#666', fontSize: 16 }}>No Image</Text>
+                      <Text style={{ color: COLORS.textgray, fontSize: 16 }}>No Image</Text>
                     </View>
                   )}
                 </View>
@@ -205,21 +205,21 @@ export default function ItemModal({ visible, item, onClose, completed, toggleCom
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        backgroundColor: '#FFF3CD',
+                        backgroundColor: COLORS.cardBg,
                         padding: 12,
                         borderRadius: 8,
                         marginBottom: 12,
                         borderWidth: 2,
-                        borderColor: '#FFC107'
+                        borderColor: COLORS.warn
                       }}
                     >
-                      <AlertTriangle size={24} color="#FF6B00" />
+                      <AlertTriangle size={24} color={COLORS.warn} />
                       <Text
                         style={{
                           marginLeft: 8,
                           fontSize: 18,
                           fontWeight: '600',
-                          color: '#FF6B00'
+                          color: COLORS.warn
                         }}
                       >
                         Low Stock Alert!
@@ -337,12 +337,12 @@ export default function ItemModal({ visible, item, onClose, completed, toggleCom
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
-                      backgroundColor: completed ? '#D4EDDA' : '#F8F9FA',
+                      backgroundColor: completed ? COLORS.tintedGreen : COLORS.cardBg,
                       padding: 16,
                       borderRadius: 12,
                       marginBottom: 20,
                       borderWidth: 2,
-                      borderColor: completed ? COLORS.green : '#CCC'
+                      borderColor: completed ? COLORS.green : COLORS.textgray
                     }}
                   >
                     <View
@@ -351,7 +351,7 @@ export default function ItemModal({ visible, item, onClose, completed, toggleCom
                         height: 32,
                         borderRadius: 8,
                         borderWidth: 3,
-                        borderColor: completed ? COLORS.green : '#CCC',
+                        borderColor: completed ? COLORS.green : COLORS.textgray,
                         backgroundColor: completed ? COLORS.green : 'white',
                         justifyContent: 'center',
                         alignItems: 'center',

@@ -168,18 +168,18 @@ export default function SettingsTab() {
 
                     <View style={STYLES.settingsContainer}>
                         <Pressable
-                            style={[STYLES.settingsButton, { borderColor: '#FFA500', flex: 1 }]}
+                            style={[STYLES.settingsButton, { borderColor: COLORS.warn, flex: 1 }]}
                             onPress={handleResetCount}
                         >
-                            <RotateCcw size={28} color="#FFA500" />
+                            <RotateCcw size={28} color={COLORS.warn} />
                             <Text style={STYLES.settingsButtonText}>Reset Count</Text>
                         </Pressable>
 
                         <Pressable
-                            style={[STYLES.settingsButton, { borderColor: '#28A745', flex: 1 }]}
+                            style={[STYLES.settingsButton, { borderColor: COLORS.green, flex: 1 }]}
                             onPress={handleExportInventory}
                         >
-                            <FileSpreadsheet size={28} color="#28A745" />
+                            <FileSpreadsheet size={28} color={COLORS.green} />
                             <Text style={STYLES.settingsButtonText}>Export Data</Text>
                         </Pressable>
                     </View>

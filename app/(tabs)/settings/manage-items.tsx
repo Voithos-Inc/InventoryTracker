@@ -92,7 +92,6 @@ export default function ManageItemsScreen() {
 
   return (
     <SafeAreaView style={[STYLES.container, {paddingBottom: 0}]}>
-      {/* Header */}
       <View
         style={{
           backgroundColor: COLORS.tabBarBg,
@@ -101,7 +100,7 @@ export default function ManageItemsScreen() {
           flexDirection: 'row',
           alignItems: 'center',
           borderBottomWidth: 3,
-          borderBottomColor: '#5A8CA0'
+          borderBottomColor: COLORS.header_bg
         }}
       >
         <Pressable onPress={() => router.push('/settings')} style={{marginRight: 16}}>
@@ -113,7 +112,7 @@ export default function ManageItemsScreen() {
           style={{
             fontSize: 28,
             fontWeight: '700',
-            color: '#FFFFFF',
+            color: COLORS.textonbg,
             flex: 1
           }}
         >
@@ -229,13 +228,13 @@ export default function ManageItemsScreen() {
                     width: 60,
                     height: 60,
                     borderRadius: 8,
-                    backgroundColor: '#e0e0e0',
+                    backgroundColor: COLORS.textonbg,
                     marginRight: 12,
                     justifyContent: 'center',
                     alignItems: 'center'
                   }}
                 >
-                  <Text style={{fontSize: 10, color: '#999'}}>No Image</Text>
+                  <Text style={{fontSize: 10, color: COLORS.textgray}}>No Image</Text>
                 </View>
               )}
 

@@ -1,6 +1,9 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 export const COLORS = {
+  pure_white: '#fff',
+  pure_black: '#000',
+  transparent: 'transparent',
   header_bg: '#6097AD',
   main_bg: '#A1D7E9',
   cardBg: '#f2eee6',
@@ -13,6 +16,7 @@ export const COLORS = {
   confirm: '#0c575b',
   tintedGreen: '#a5d5a7',
   green: '#28A745',
+  warn: '#FFA500'
 };
 
 const screenWidth = Dimensions.get('window').width;

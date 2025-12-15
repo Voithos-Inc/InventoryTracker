@@ -172,7 +172,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
             padding: 24,
             width: '90%',
             maxHeight: '90%',
-            shadowColor: '#000',
+            shadowColor: COLORS.pure_black,
             shadowOffset: {width: 0, height: 4},
             shadowOpacity: 0.3,
             shadowRadius: 8,
@@ -189,7 +189,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
           >
             <Text style={{fontSize: 28, fontWeight: '700'}}>Add New Item</Text>
             <TouchableOpacity onPress={onClose}>
-              <X size={32} color="#000"/>
+              <X size={32} color={COLORS.pure_white}/>
             </TouchableOpacity>
           </View>
 
@@ -235,12 +235,12 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                         paddingHorizontal: 16,
                         borderRadius: 20,
                         backgroundColor:
-                          formData.category === cat ? COLORS.confirm : '#e0e0e0'
+                          formData.category === cat ? COLORS.confirm : COLORS.textonbg
                       }}
                     >
                       <Text
                         style={{
-                          color: formData.category === cat ? 'white' : '#666',
+                          color: formData.category === cat ? 'white' : COLORS.textgray,
                           fontWeight: '600'
                         }}
                       >
@@ -267,12 +267,12 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                         paddingHorizontal: 12,
                         borderRadius: 16,
                         backgroundColor:
-                          formData.units === unit ? COLORS.confirm : '#e0e0e0'
+                          formData.units === unit ? COLORS.confirm : COLORS.textonbg
                       }}
                     >
                       <Text
                         style={{
-                          color: formData.units === unit ? 'white' : '#666',
+                          color: formData.units === unit ? 'white' : COLORS.textgray,
                           fontSize: 14
                         }}
                       >
@@ -375,11 +375,11 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                   flex: 1,
                   padding: 16,
                   borderRadius: 12,
-                  backgroundColor: '#e0e0e0',
+                  backgroundColor: COLORS.textonbg,
                   alignItems: 'center'
                 }}
               >
-                <Text style={{fontSize: 18, fontWeight: '600', color: '#666'}}>
+                <Text style={{fontSize: 18, fontWeight: '600', color: COLORS.textgray}}>
                   Cancel
                 </Text>
               </TouchableOpacity>
@@ -391,7 +391,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                   flex: 1,
                   padding: 16,
                   borderRadius: 12,
-                  backgroundColor: saving ? '#ccc' : COLORS.confirm,
+                  backgroundColor: saving ? COLORS.textgray : COLORS.confirm,
                   alignItems: 'center'
                 }}
               >

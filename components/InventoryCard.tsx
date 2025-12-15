@@ -35,7 +35,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
             {
               ...STYLES.card,
               borderWidth: 3,
-              borderColor: isLowStock ? '#FF6B00' : 'transparent',
+              borderColor: isLowStock ? COLORS.warn : COLORS.transparent,
               backgroundColor: isCompleted ? COLORS.tintedGreen : COLORS.cardBg,
               position: 'relative',
               flexDirection: 'column',
@@ -54,7 +54,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
               position: 'absolute',
               top: 6,
               right: 6,
-              backgroundColor: '#28A745',
+              backgroundColor: COLORS.confirm,
               borderRadius: 15,
               padding: 3,
               zIndex: 10
@@ -70,7 +70,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
               position: 'absolute',
               top: 6,
               left: 6,
-              backgroundColor: '#FF6B00',
+              backgroundColor: COLORS.warn,
               borderRadius: 15,
               padding: 3,
               zIndex: 10
@@ -122,12 +122,12 @@ export default function InventoryCard({ item }: InventoryCardProps) {
                 width: 80,
                 height: 80,
                 borderRadius: 8,
-                backgroundColor: '#e0e0e0',
+                backgroundColor: COLORS.textonbg,
                 justifyContent: 'center',
                 alignItems: 'center'
               }}
             >
-              <Text style={{ color: '#999', fontSize: 12 }}>No Image</Text>
+              <Text style={{ color: COLORS.textonbg, fontSize: 12 }}>No Image</Text>
             </View>
           )}
 
@@ -136,7 +136,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
               style={{
                 fontSize: 48,
                 fontWeight: '700',
-                color: isLowStock ? '#FF6B00' : COLORS.textoncontrast,
+                color: isLowStock ? COLORS.warn : COLORS.textoncontrast,
                 lineHeight: 52
               }}
             >

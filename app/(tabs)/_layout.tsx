@@ -18,11 +18,11 @@ export default function TabLayout() {
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarActiveTintColor: COLORS.textonbg,
-          tabBarInactiveTintColor: '#FFFFFF',
+          tabBarInactiveTintColor: COLORS.pure_white,
           tabBarStyle: {
             backgroundColor: COLORS.tabBarBg,
             borderTopWidth: 2,
-            borderTopColor: '#000',
+            borderTopColor: COLORS.pure_black,
             position: 'absolute',
             bottom: -12,
             overflow: 'hidden',
@@ -32,7 +32,7 @@ export default function TabLayout() {
           },
           tabBarActiveBackgroundColor: COLORS.tabBarActive,
           tabBarItemStyle: {
-            borderColor: '#000',
+            borderColor: COLORS.pure_black,
             borderRadius: 16,
             marginHorizontal: 0,
           },
