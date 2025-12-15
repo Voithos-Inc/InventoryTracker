@@ -4,7 +4,13 @@ const API_ROUTE = "/github"
 
 export async function addImage(file: ImageUploadData) {
   const arrayBuffer = await file.blob.arrayBuffer();
-  const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+  const bytes = new Uint8Array(arrayBuffer);
+
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  const base64 = btoa(binary);
 
   await fetch(API_ROUTE, {
     method: 'POST',

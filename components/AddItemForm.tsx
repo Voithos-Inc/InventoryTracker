@@ -127,7 +127,6 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
         created_at: new Date().toISOString()
       };
 
-      console.log(newItem)
       await insertItem(newItem, initialData !== null);
       if (Platform.OS === 'web') {
         alert('Item added successfully!')
@@ -189,7 +188,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
           >
             <Text style={{fontSize: 28, fontWeight: '700'}}>Add New Item</Text>
             <TouchableOpacity onPress={onClose}>
-              <X size={32} color={COLORS.pure_white}/>
+              <X size={32} color={COLORS.pure_black}/>
             </TouchableOpacity>
           </View>
 
