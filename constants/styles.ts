@@ -1,22 +1,37 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
+const COLORS_FROM_SITE = {
+  MAXS_TEAL: '#0f575a',
+  MINT: '#a2d3ca',
+  VANILLA: '#f2eee6',
+  WHITE: '#ffffff',
+  SHERBET: '#e88743',
+}
+
 export const COLORS = {
-  pure_white: '#fff',
+  pure_white: COLORS_FROM_SITE.WHITE,
   pure_black: '#000',
   transparent: 'transparent',
-  header_bg: '#6097AD',
-  main_bg: '#A1D7E9',
-  cardBg: '#f2eee6',
+  header_bg: COLORS_FROM_SITE.MAXS_TEAL,
+  main_bg: COLORS_FROM_SITE.MINT,
+  cardBg: COLORS_FROM_SITE.VANILLA,
   textonbg: '#eeeeee',
   textoncontrast: '#111111',
   textgray: "#676767",
-  tabBarBg: '#0c575b',
+  tabBarBg: COLORS_FROM_SITE.MAXS_TEAL,
   tabBarActive: '#6097AD',
   deny: '#d40006',
-  confirm: '#0c575b',
+  confirm: COLORS_FROM_SITE.MAXS_TEAL,
   tintedGreen: '#a5d5a7',
   green: '#28A745',
-  warn: '#FFA500'
+  warn: COLORS_FROM_SITE.SHERBET
+};
+
+export const FONTS = {
+  heading: 'AlternateGothicNo3D-Regular', // For all headings
+  body: 'FuturaPT-Book',                  // For regular body text
+  bodyMedium: 'FuturaPT-Medium',          // For medium weight body text
+  bodyBold: 'FuturaPT-Bold',              // For bold body text
 };
 
 const screenWidth = Dimensions.get('window').width;
@@ -38,8 +53,8 @@ export const STYLES = StyleSheet.create({
     borderBottomColor: '#5A8CA0',
   },
   headerTitle: {
-    fontSize: 48,
-    fontWeight: '700',
+    fontSize: 56,
+    fontFamily: FONTS.heading,
     color: '#FFFFFF',
     textShadowColor: 'rgba(0, 0, 0, .8)',
     textShadowOffset: { width: 2, height: 2 },
@@ -47,13 +62,28 @@ export const STYLES = StyleSheet.create({
     letterSpacing: 1,
   },
   sectionHeader: {
-    paddingVertical: 20,
+    paddingTop: 15,
+    paddingBottom: 30,
     paddingHorizontal: 20,
     alignItems: 'center',
   },
+  sectionHeaderWrapper: {
+    position: 'relative',
+    paddingVertical: 20,
+    alignItems: 'center',
+    backgroundColor: COLORS.main_bg,
+  },
+
+  sectionHeaderGradient: {
+    position: 'absolute',
+    bottom: -30,
+    left: 0,
+    right: 0,
+    height: 40,
+  },
   sectionTitle: {
-    fontSize: 32,
-    fontWeight: '700',
+    fontSize: 40,
+    fontFamily: FONTS.heading,
     color: COLORS.textonbg,
     textShadowColor: 'rgba(0, 0, 0, .75)',
     textShadowOffset: { width: 2, height: 2 },
@@ -104,7 +134,7 @@ export const STYLES = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 28,
-    fontWeight: '600',
+    fontFamily: FONTS.heading,
     paddingLeft: 24,
     color: COLORS.textoncontrast,
     flex: 1,
@@ -133,14 +163,15 @@ export const STYLES = StyleSheet.create({
   modalInnerContent: {
     flex: 1,
     flexDirection: "row",
-    gap: 20,
+    gap: 60,
+    margin: 20,
     width: '100%',
     justifyContent: "space-evenly",
     alignItems: "center"
   },
   modalTitle: {
-    fontSize: 32,
-    fontWeight: '700',
+    fontSize: 40,
+    fontFamily: FONTS.heading,
     color: COLORS.textoncontrast,
     marginTop: 12,
     marginBottom: 4,
@@ -148,7 +179,7 @@ export const STYLES = StyleSheet.create({
   },
   modalSubtext: {
     fontSize: 32,
-    fontWeight: '500',
+    fontFamily: FONTS.heading,
     color: COLORS.textgray,
     marginBottom: 14,
   },
@@ -169,7 +200,7 @@ export const STYLES = StyleSheet.create({
   },
   modalButtonText: {
     fontSize: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.bodyBold,
     color: COLORS.textonbg,
     textAlign: 'center',
   },
@@ -183,7 +214,7 @@ export const STYLES = StyleSheet.create({
   settingsSectionTitle: {
     width: '80%',
     fontSize: 20,
-    fontWeight: '700' as const,
+    fontFamily: FONTS.heading,
     marginBottom: 16,
     color: COLORS.textoncontrast,
     alignSelf: "center",
@@ -202,7 +233,7 @@ export const STYLES = StyleSheet.create({
   settingsButtonText: {
     width: '80%',
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: FONTS.bodyMedium,
     textAlign: 'center',
     color: COLORS.textoncontrast
   },
@@ -213,6 +244,9 @@ export const STYLES = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
   },
-  imagePickerButtonText: { fontSize: 16 },
+  imagePickerButtonText: {
+    fontSize: 16,
+    fontFamily: FONTS.body
+  },
   imagePickerImage: { width: 200, height: 200, borderRadius: 8 },
 });

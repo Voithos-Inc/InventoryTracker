@@ -186,7 +186,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
               marginBottom: 20
             }}
           >
-            <Text style={{fontSize: 28, fontWeight: '700'}}>Add New Item</Text>
+            <Text style={{fontSize: 28, fontWeight: '700'}}>{initialData === null ? "Add New Item" : "Edit Item"}</Text>
             <TouchableOpacity onPress={onClose}>
               <X size={32} color={COLORS.pure_black}/>
             </TouchableOpacity>
@@ -395,7 +395,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                 }}
               >
                 <Text style={{fontSize: 18, fontWeight: '600', color: 'white'}}>
-                  {saving ? 'Saving...' : 'Add Item'}
+                  {saving ? 'Saving...' : 'Save item'}
                 </Text>
               </TouchableOpacity>
             </View>

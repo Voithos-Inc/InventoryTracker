@@ -7,7 +7,7 @@ import {
   Snowflake,
   ClipboardList, Droplets, Sparkles
 } from 'lucide-react-native';
-import { COLORS, STYLES } from '@/constants/styles';
+import {COLORS, FONTS, STYLES} from '@/constants/styles';
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from 'react';
 
@@ -38,8 +38,8 @@ export default function TabLayout() {
           },
           tabBarShowLabel: true,
           tabBarLabelStyle: {
-            fontSize: 26,
-            fontWeight: '400',
+            fontSize: 24,
+            fontFamily: FONTS.body,
             overflow: 'visible',
             marginBottom: 6
           },
