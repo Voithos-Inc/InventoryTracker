@@ -1,21 +1,32 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
+const COLORS_FROM_SITE = {
+  MAXS_TEAL: '#0f575a',
+  MINT: '#a2d3ca',
+  VANILLA: '#f2eee6',
+  WHITE: '#ffffff',
+  SHERBET: '#e88743',
+}
+
 export const COLORS = {
-  header_bg: '#6097AD',
-  main_bg: '#A1D7E9',
-  cardBg: '#f2eee6',
+  pure_white: COLORS_FROM_SITE.WHITE,
+  pure_black: '#000',
+  transparent: 'transparent',
+  header_bg: COLORS_FROM_SITE.MAXS_TEAL,
+  main_bg: COLORS_FROM_SITE.MINT,
+  cardBg: COLORS_FROM_SITE.VANILLA,
   textonbg: '#eeeeee',
   textoncontrast: '#111111',
   textgray: "#676767",
-  tabBarBg: '#0c575b',
+  tabBarBg: COLORS_FROM_SITE.MAXS_TEAL,
   tabBarActive: '#6097AD',
   deny: '#d40006',
-  confirm: '#0c575b',
+  confirm: COLORS_FROM_SITE.MAXS_TEAL,
   tintedGreen: '#a5d5a7',
   green: '#28A745',
+  warn: COLORS_FROM_SITE.SHERBET
 };
 
-// Font families - MUST match the keys in useFonts()
 export const FONTS = {
   heading: 'AlternateGothicNo3D-Regular', // For all headings
   body: 'FuturaPT-Book',                  // For regular body text
@@ -24,6 +35,7 @@ export const FONTS = {
 };
 
 const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height
 
 export const STYLES = StyleSheet.create({
   container: {
@@ -41,7 +53,7 @@ export const STYLES = StyleSheet.create({
     borderBottomColor: '#5A8CA0',
   },
   headerTitle: {
-    fontSize: 48,
+    fontSize: 56,
     fontFamily: FONTS.heading,
     color: '#FFFFFF',
     textShadowColor: 'rgba(0, 0, 0, .8)',
@@ -50,12 +62,27 @@ export const STYLES = StyleSheet.create({
     letterSpacing: 1,
   },
   sectionHeader: {
-    paddingVertical: 20,
+    paddingTop: 15,
+    paddingBottom: 30,
     paddingHorizontal: 20,
     alignItems: 'center',
   },
+  sectionHeaderWrapper: {
+    position: 'relative',
+    paddingVertical: 20,
+    alignItems: 'center',
+    backgroundColor: COLORS.main_bg,
+  },
+
+  sectionHeaderGradient: {
+    position: 'absolute',
+    bottom: -30,
+    left: 0,
+    right: 0,
+    height: 40,
+  },
   sectionTitle: {
-    fontSize: 32,
+    fontSize: 40,
     fontFamily: FONTS.heading,
     color: COLORS.textonbg,
     textShadowColor: 'rgba(0, 0, 0, .75)',
@@ -84,7 +111,7 @@ export const STYLES = StyleSheet.create({
     marginBottom: 30,
   },
   gridItem: {
-    width: (screenWidth * 0.9 - 2 * 32) / 3,
+    width: (screenWidth * 0.9 - 2 * 32) / 3, // 3 columns, same gap
     marginBottom: 32,
   },
   card: {
@@ -121,22 +148,33 @@ export const STYLES = StyleSheet.create({
   modalContent: {
     backgroundColor: COLORS.cardBg,
     borderRadius: 20,
-    padding: 40,
+    padding: 20,
     alignItems: 'center',
-    minWidth: .75 * screenWidth,
+    minWidth: .8 * screenWidth,
+    maxHeight: .9 * screenHeight,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
-    flex: 1
+    flex: 1,
+    justifyContent: "space-around",
+  },
+  modalInnerContent: {
+    flex: 1,
+    flexDirection: "row",
+    gap: 60,
+    margin: 20,
+    width: '100%',
+    justifyContent: "space-evenly",
+    alignItems: "center"
   },
   modalTitle: {
-    fontSize: 32,
+    fontSize: 40,
     fontFamily: FONTS.heading,
     color: COLORS.textoncontrast,
     marginTop: 12,
-    marginBottom: 12,
+    marginBottom: 4,
     textAlign: 'center',
   },
   modalSubtext: {
@@ -208,7 +246,7 @@ export const STYLES = StyleSheet.create({
   },
   imagePickerButtonText: {
     fontSize: 16,
-    fontFamily: FONTS.body,
+    fontFamily: FONTS.body
   },
   imagePickerImage: { width: 200, height: 200, borderRadius: 8 },
 });
