@@ -118,22 +118,32 @@ export const STYLES = StyleSheet.create({
   modalContent: {
     backgroundColor: COLORS.cardBg,
     borderRadius: 20,
-    padding: 40,
+    padding: 20,
     alignItems: 'center',
-    minWidth: .75 * screenWidth,
+    minWidth: .8 * screenWidth,
+    maxHeight: .9 * screenHeight,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
-    flex: 1
+    flex: 1,
+    justifyContent: "space-around",
+  },
+  modalInnerContent: {
+    flex: 1,
+    flexDirection: "row",
+    gap: 20,
+    width: '100%',
+    justifyContent: "space-evenly",
+    alignItems: "center"
   },
   modalTitle: {
     fontSize: 32,
     fontWeight: '700',
     color: COLORS.textoncontrast,
     marginTop: 12,
-    marginBottom: 12,
+    marginBottom: 4,
     textAlign: 'center',
   },
   modalSubtext: {
