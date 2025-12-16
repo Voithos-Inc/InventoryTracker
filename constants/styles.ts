@@ -9,11 +9,12 @@ const COLORS_FROM_SITE = {
 }
 
 export const COLORS = {
+  ...COLORS_FROM_SITE,
   pure_white: COLORS_FROM_SITE.WHITE,
   pure_black: '#000',
   transparent: 'transparent',
   header_bg: COLORS_FROM_SITE.MAXS_TEAL,
-  main_bg: COLORS_FROM_SITE.MINT,
+  main_bg: COLORS_FROM_SITE.VANILLA,
   cardBg: COLORS_FROM_SITE.VANILLA,
   textonbg: '#eeeeee',
   textoncontrast: '#111111',
@@ -41,16 +42,23 @@ export const STYLES = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.main_bg,
-    height: 100
+    height: 100,
+    overscrollBehavior: "none"
+  },
+  headerContainer: {
+    backgroundColor: COLORS.header_bg,
   },
   header: {
     backgroundColor: COLORS.header_bg,
+    position: "absolute",
+    left: 0,
+    top: 0,
+    height: 100,
+    width: '100%',
     paddingVertical: 24,
-    paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomWidth: 3,
-    borderBottomColor: '#5A8CA0',
+    zIndex: 67,
   },
   headerTitle: {
     fontSize: 56,
@@ -61,8 +69,11 @@ export const STYLES = StyleSheet.create({
     textShadowRadius: 4,
     letterSpacing: 1,
   },
+  bodyContainer: {
+    marginTop: 100,
+    overscrollBehavior: "none"
+  },
   sectionHeader: {
-    paddingTop: 15,
     paddingBottom: 30,
     paddingHorizontal: 20,
     alignItems: 'center',
@@ -73,7 +84,6 @@ export const STYLES = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.main_bg,
   },
-
   sectionHeaderGradient: {
     position: 'absolute',
     bottom: -30,
@@ -82,12 +92,12 @@ export const STYLES = StyleSheet.create({
     height: 40,
   },
   sectionTitle: {
-    fontSize: 40,
+    fontSize: 42,
     fontFamily: FONTS.heading,
-    color: COLORS.textonbg,
-    textShadowColor: 'rgba(0, 0, 0, .75)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 2,
+    color: COLORS.MAXS_TEAL,
+    // textShadowColor: 'rgba(0, 0, 0, .75)',
+    // textShadowOffset: { width: 2, height: 2 },
+    // textShadowRadius: 2,
     letterSpacing: 0.5,
   },
   scrollView: {
@@ -138,6 +148,7 @@ export const STYLES = StyleSheet.create({
     paddingLeft: 24,
     color: COLORS.textoncontrast,
     flex: 1,
+    marginTop: 10
   },
   modalOverlay: {
     flex: 1,
@@ -164,10 +175,9 @@ export const STYLES = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     gap: 60,
-    margin: 20,
     width: '100%',
     justifyContent: "space-evenly",
-    alignItems: "center"
+    marginTop: 20
   },
   modalTitle: {
     fontSize: 40,
@@ -203,6 +213,10 @@ export const STYLES = StyleSheet.create({
     fontFamily: FONTS.bodyBold,
     color: COLORS.textonbg,
     textAlign: 'center',
+  },
+  rowAlternatingText: {
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   settingsContainer: {
     width: '80%',

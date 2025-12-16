@@ -116,20 +116,8 @@ export default function InventoryCard({ item }: InventoryCardProps) {
               }}
               resizeMode="cover"
             />
-          ) : (
-            <View
-              style={{
-                width: 80,
-                height: 80,
-                borderRadius: 8,
-                backgroundColor: COLORS.textonbg,
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <Text style={{ color: COLORS.textonbg, fontSize: 12 }}>No Image</Text>
-            </View>
-          )}
+          ) : <View style={{width: 0, height: 0}} />
+          }
 
           <View style={{ alignItems: 'center' }}>
             <Text

@@ -7,7 +7,7 @@ import {
   Pressable,
   TextInput,
   Image,
-  Alert
+  Alert, ScrollView
 } from 'react-native';
 import {COLORS, STYLES} from '@/constants/styles';
 import {InventoryItem} from '@/types/inventory';
@@ -154,11 +154,11 @@ export default function ItemModal({visible, item, onClose, completed, toggleComp
           activeOpacity={1}
           onPress={(e) => e.stopPropagation()}
         >
-          <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 12}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 12, height: 50}}>
             <Text style={STYLES.modalTitle}>{item.name}</Text>
           </View>
-          <View style={STYLES.modalInnerContent}>
-            <View>
+          <ScrollView contentContainerStyle={STYLES.modalInnerContent}>
+            <View style={{marginTop: 50, alignItems: "center"}}>
               {item.image_link && item.image_link !== "about:blank" ? (
                 <Image
                   source={{uri: item.image_link}}
@@ -170,21 +170,8 @@ export default function ItemModal({visible, item, onClose, completed, toggleComp
                   }}
                   resizeMode="cover"
                 />
-              ) : (
-                <View
-                  style={{
-                    width: 300,
-                    height: 300,
-                    borderRadius: 12,
-                    backgroundColor: COLORS.textonbg,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: 16
-                  }}
-                >
-                  <Text style={{color: COLORS.textgray, fontSize: 16}}>No Image</Text>
-                </View>
-              )}
+              ) : <View style={{width: 0, height: 0}} />
+              }
             </View>
             <View>
               {isLowStock && (
@@ -286,35 +273,39 @@ export default function ItemModal({visible, item, onClose, completed, toggleComp
                 </Text>
               </View>
 
-              {/* Total */}
-              <Text style={{fontSize: 24, fontWeight: '600', marginBottom: 16}}>
-                Total: {totalQuantity} {item.units}
-              </Text>
+              <View style={STYLES.rowAlternatingText}>
+                {/* Total */}
+                <View>
+                  <Text style={{fontSize: 24, fontWeight: '600', marginBottom: 16}}>
+                    Total: {totalQuantity} {item.units}
+                  </Text>
+                </View>
 
-              {/* Threshold Editor */}
-              <View style={{marginBottom: 20, width: '100%'}}>
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                  <Text style={{fontSize: 18, marginRight: 8}}>Low Stock Alert at:</Text>
-                  {
-                    <>
-                      <TextInput
-                        style={{
-                          fontSize: 20,
-                          borderWidth: 2,
-                          borderColor: COLORS.header_bg,
-                          borderRadius: 8,
-                          paddingHorizontal: 12,
-                          paddingVertical: 4,
-                          width: 60,
-                          textAlign: 'center',
-                          backgroundColor: 'white'
-                        }}
-                        value={threshold.toString()}
-                        onChangeText={handleThresholdSave}
-                        keyboardType="number-pad"
-                      />
-                    </>
-                  }
+                {/* Threshold Editor */}
+                <View style={{marginBottom: 20}}>
+                  <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                    <Text style={{fontSize: 18, marginRight: 8}}>Low Stock Alert at:</Text>
+                    {
+                      <>
+                        <TextInput
+                          style={{
+                            fontSize: 20,
+                            borderWidth: 2,
+                            borderColor: COLORS.header_bg,
+                            borderRadius: 8,
+                            paddingHorizontal: 12,
+                            paddingVertical: 4,
+                            width: 60,
+                            textAlign: 'center',
+                            backgroundColor: 'white'
+                          }}
+                          value={threshold.toString()}
+                          onChangeText={handleThresholdSave}
+                          keyboardType="number-pad"
+                        />
+                      </>
+                    }
+                  </View>
                 </View>
               </View>
 
@@ -358,7 +349,7 @@ export default function ItemModal({visible, item, onClose, completed, toggleComp
                 <Text style={STYLES.modalButtonText}>Close</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </ScrollView>
           {/*</View>*/}
         </TouchableOpacity>
       </TouchableOpacity>
