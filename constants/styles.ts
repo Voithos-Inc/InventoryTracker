@@ -227,7 +227,7 @@ export const STYLES = StyleSheet.create({
   },
   settingsSectionTitle: {
     width: '80%',
-    fontSize: 20,
+    fontSize: 50,
     fontFamily: FONTS.heading,
     marginBottom: 16,
     color: COLORS.textoncontrast,
@@ -246,7 +246,7 @@ export const STYLES = StyleSheet.create({
   },
   settingsButtonText: {
     width: '80%',
-    fontSize: 18,
+    fontSize: 35,
     fontFamily: FONTS.bodyMedium,
     textAlign: 'center',
     color: COLORS.textoncontrast

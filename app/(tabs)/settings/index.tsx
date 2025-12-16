@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, ScrollView, Alert, Platform} from 'react-native';
+import { View, Text, Pressable, Alert, Platform} from 'react-native';
 import { COLORS, STYLES } from '@/constants/styles';
 import Header from '@/components/header';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -124,8 +124,6 @@ export default function SettingsTab() {
         );
     };
 
-
-
     return (
         <SafeAreaView style={STYLES.container}>
             <Header />
@@ -134,57 +132,103 @@ export default function SettingsTab() {
                 <Text style={STYLES.sectionTitle}>Settings</Text>
             </View>
 
-            <ScrollView
-                style={{ flex: 1 }}
-                contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
-                showsVerticalScrollIndicator={false}
+            {/* Two Column Layout */}
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    padding: 40,
+                    gap: 40,
+                    alignItems: 'flex-start',
+                    justifyContent: 'center'
+                }}
             >
-                {/* Inventory Management Section */}
-                <View style={{ marginBottom: 30 }}>
-                    <Text style={STYLES.settingsSectionTitle}>Inventory Management</Text>
+                {/* Left Column - Inventory Management */}
+                <View style={{ flex: 1, maxWidth: 500 }}>
+                    <Text style={[STYLES.settingsSectionTitle, { width: '100%', textAlign: 'center' }]}>
+                        Inventory Management
+                    </Text>
 
-                    <View style={STYLES.settingsContainer}>
+                    <View style={{ gap: 20 }}>
                         <Pressable
-                            style={[STYLES.settingsButton, { backgroundColor: COLORS.confirm, flex: 1 }]}
+                            style={[
+                                STYLES.settingsButton,
+                                {
+                                    backgroundColor: COLORS.confirm,
+                                    justifyContent: 'center',
+                                    minHeight: 120
+                                }
+                            ]}
                             onPress={handleAddNewItem}
                         >
-                            <BadgePlus size={32} color="white" strokeWidth={2.5} />
-                            <Text style={[STYLES.settingsButtonText, { color: 'white' }]}>Add New Item</Text>
+                            <BadgePlus size={40} color="white" strokeWidth={2.5} />
+                            <Text style={[STYLES.settingsButtonText, { color: 'white', width: 'auto' }]}>
+                                Add New Item
+                            </Text>
                         </Pressable>
 
                         <Pressable
-                            style={[STYLES.settingsButton, { borderColor: COLORS.header_bg, flex: 1 }]}
+                            style={[
+                                STYLES.settingsButton,
+                                {
+                                    borderColor: COLORS.header_bg,
+                                    justifyContent: 'center',
+                                    minHeight: 120
+                                }
+                            ]}
                             onPress={handleEditItems}
                         >
-                            <Edit3 size={28} color={COLORS.header_bg} />
-                            <Text style={STYLES.settingsButtonText}>Edit Items</Text>
+                            <Edit3 size={36} color={COLORS.header_bg} />
+                            <Text style={[STYLES.settingsButtonText, { width: 'auto' }]}>
+                                Edit Items
+                            </Text>
                         </Pressable>
                     </View>
                 </View>
 
-                {/* Export & Reports Section */}
-                <View style={{ marginBottom: 30 }}>
-                    <Text style={STYLES.settingsSectionTitle}>Export & Reports</Text>
+                {/* Right Column - Export & Reports */}
+                <View style={{ flex: 1, maxWidth: 500 }}>
+                    <Text style={[STYLES.settingsSectionTitle, { width: '100%', textAlign: 'center' }]}>
+                        Export & Reports
+                    </Text>
 
-                    <View style={STYLES.settingsContainer}>
+                    <View style={{ gap: 20 }}>
                         <Pressable
-                            style={[STYLES.settingsButton, { borderColor: COLORS.warn, flex: 1 }]}
+                            style={[
+                                STYLES.settingsButton,
+                                {
+                                    borderColor: '#FFA500',
+                                    justifyContent: 'center',
+                                    minHeight: 120
+                                }
+                            ]}
                             onPress={handleResetCount}
                         >
-                            <RotateCcw size={28} color={COLORS.warn} />
-                            <Text style={STYLES.settingsButtonText}>Reset Count</Text>
+                            <RotateCcw size={36} color="#FFA500" />
+                            <Text style={[STYLES.settingsButtonText, { width: 'auto' }]}>
+                                Reset Count
+                            </Text>
                         </Pressable>
 
                         <Pressable
-                            style={[STYLES.settingsButton, { borderColor: COLORS.green, flex: 1 }]}
+                            style={[
+                                STYLES.settingsButton,
+                                {
+                                    borderColor: '#28A745',
+                                    justifyContent: 'center',
+                                    minHeight: 120
+                                }
+                            ]}
                             onPress={handleExportInventory}
                         >
-                            <FileSpreadsheet size={28} color={COLORS.green} />
-                            <Text style={STYLES.settingsButtonText}>Export Data</Text>
+                            <FileSpreadsheet size={36} color="#28A745" />
+                            <Text style={[STYLES.settingsButtonText, { width: 'auto' }]}>
+                                Export Data
+                            </Text>
                         </Pressable>
                     </View>
                 </View>
-            </ScrollView>
+            </View>
 
             {/* Add Item Modal */}
             <AddItemForm
