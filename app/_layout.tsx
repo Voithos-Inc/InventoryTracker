@@ -14,6 +14,7 @@ export let inv: null | InventoryItem[] = null
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     'AlternateGothicNo3D-Regular': require('../assets/fonts/AlternateGothicNo3D-Regular.otf'),
+    'FuturaCyrillicLight': require('../assets/fonts/FuturaCyrillicLight.otf'),
     'FuturaPT-Book': require('../assets/fonts/FuturaPTBook.otf'),
     'FuturaPT-Medium': require('../assets/fonts/FuturaPTMedium.otf'),
     'FuturaPT-Bold': require('../assets/fonts/FuturaPTBold.otf'),

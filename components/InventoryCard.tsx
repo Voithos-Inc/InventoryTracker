@@ -35,7 +35,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
             {
               ...STYLES.card,
               borderWidth: 3,
-              borderColor: isLowStock ? COLORS.warn : COLORS.transparent,
+              borderColor: isLowStock ? COLORS.warn : COLORS.MINT,
               backgroundColor: isCompleted ? COLORS.tintedGreen : COLORS.cardBg,
               position: 'relative',
               flexDirection: 'column',

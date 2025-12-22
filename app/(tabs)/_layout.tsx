@@ -38,8 +38,8 @@ export default function TabLayout() {
           },
           tabBarShowLabel: true,
           tabBarLabelStyle: {
-            fontSize: 24,
-            fontFamily: FONTS.body,
+            fontSize: 20,
+            fontFamily: FONTS.bodyLight,
             overflow: 'visible',
             marginBottom: 6
           },

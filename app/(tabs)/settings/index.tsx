@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, Alert, Platform} from 'react-native';
+import {View, Text, Pressable, Alert, Platform, ScrollView} from 'react-native';
 import { COLORS, STYLES } from '@/constants/styles';
 import Header from '@/components/header';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,6 +16,7 @@ import { useInventory } from '@/store/inventory';
 import { insertItem } from '@/lib/supabase';
 import {InventoryItem} from "@/types/inventory";
 import {saveAndShareCSV} from "@/lib/exportUtils";
+import WaveDivider from "@/components/WaveDivider";
 
 export default function SettingsTab() {
     const router = useRouter();
@@ -126,11 +127,11 @@ export default function SettingsTab() {
 
     return (
         <SafeAreaView style={STYLES.container}>
-            <Header />
+          <Header />
+          <ScrollView style={STYLES.bodyContainer}>
+            <WaveDivider />
 
-            <View style={STYLES.sectionHeader}>
-                <Text style={STYLES.sectionTitle}>Settings</Text>
-            </View>
+            <View style={{height: 0, width: 0, marginVertical: 10}} />
 
             {/* Two Column Layout */}
             <View
@@ -239,6 +240,7 @@ export default function SettingsTab() {
                 }}
                 initialData={null}
             />
+          </ScrollView>
         </SafeAreaView>
     );
 }

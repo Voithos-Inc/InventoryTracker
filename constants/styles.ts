@@ -30,6 +30,7 @@ export const COLORS = {
 
 export const FONTS = {
   heading: 'AlternateGothicNo3D-Regular', // For all headings
+  bodyLight: 'FuturaCyrillicLight',
   body: 'FuturaPT-Book',                  // For regular body text
   bodyMedium: 'FuturaPT-Medium',          // For medium weight body text
   bodyBold: 'FuturaPT-Bold',              // For bold body text
@@ -55,12 +56,15 @@ export const STYLES = StyleSheet.create({
     top: 0,
     height: 100,
     width: '100%',
-    paddingVertical: 24,
+    paddingHorizontal: 50,
+    paddingVertical: 12,
     alignItems: 'center',
-    justifyContent: 'center',
     zIndex: 67,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   headerTitle: {
+    flex: 1,
     fontSize: 56,
     fontFamily: FONTS.heading,
     color: '#FFFFFF',
@@ -68,6 +72,11 @@ export const STYLES = StyleSheet.create({
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
     letterSpacing: 1,
+    textAlign: "center"
+  },
+  headerLogo: {
+    width: '20%',
+    zIndex: 670
   },
   bodyContainer: {
     marginTop: 100,
@@ -127,15 +136,15 @@ export const STYLES = StyleSheet.create({
   card: {
     aspectRatio: 2.2,
     backgroundColor: COLORS.cardBg,
+    borderColor: COLORS.MINT,
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
     elevation: 3,
   },
   cardIcon: {
@@ -227,10 +236,10 @@ export const STYLES = StyleSheet.create({
   },
   settingsSectionTitle: {
     width: '80%',
-    fontSize: 50,
+    fontSize: 42,
     fontFamily: FONTS.heading,
     marginBottom: 16,
-    color: COLORS.textoncontrast,
+    color: COLORS.MAXS_TEAL,
     alignSelf: "center",
     marginLeft: -4
   },
@@ -238,7 +247,7 @@ export const STYLES = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    borderRadius: 12,
+    borderRadius: 50,
     borderWidth: 3,
     padding: 20,
     gap: 20,
@@ -246,7 +255,7 @@ export const STYLES = StyleSheet.create({
   },
   settingsButtonText: {
     width: '80%',
-    fontSize: 35,
+    fontSize: 32,
     fontFamily: FONTS.bodyMedium,
     textAlign: 'center',
     color: COLORS.textoncontrast
