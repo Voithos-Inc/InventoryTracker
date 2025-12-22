@@ -35,7 +35,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
             {
               ...STYLES.card,
               borderWidth: 3,
-              borderColor: isLowStock ? '#FF6B00' : 'transparent',
+              borderColor: isLowStock ? COLORS.warn : COLORS.MINT,
               backgroundColor: isCompleted ? COLORS.tintedGreen : COLORS.cardBg,
               position: 'relative',
               flexDirection: 'column',
@@ -54,7 +54,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
               position: 'absolute',
               top: 6,
               right: 6,
-              backgroundColor: '#28A745',
+              backgroundColor: COLORS.confirm,
               borderRadius: 15,
               padding: 3,
               zIndex: 10
@@ -70,7 +70,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
               position: 'absolute',
               top: 6,
               left: 6,
-              backgroundColor: '#FF6B00',
+              backgroundColor: COLORS.warn,
               borderRadius: 15,
               padding: 3,
               zIndex: 10
@@ -116,27 +116,15 @@ export default function InventoryCard({ item }: InventoryCardProps) {
               }}
               resizeMode="cover"
             />
-          ) : (
-            <View
-              style={{
-                width: 80,
-                height: 80,
-                borderRadius: 8,
-                backgroundColor: '#e0e0e0',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <Text style={{ color: '#999', fontSize: 12 }}>No Image</Text>
-            </View>
-          )}
+          ) : <View style={{width: 0, height: 0}} />
+          }
 
           <View style={{ alignItems: 'center' }}>
             <Text
               style={{
                 fontSize: 48,
                 fontWeight: '700',
-                color: isLowStock ? '#FF6B00' : COLORS.textoncontrast,
+                color: isLowStock ? COLORS.warn : COLORS.textoncontrast,
                 lineHeight: 52
               }}
             >

@@ -1,11 +1,21 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {Image, View, Text} from 'react-native';
 import {STYLES} from '@/constants/styles';
 
 export default function Header() {
   return (
     <View style={STYLES.header}>
-      <Text style={STYLES.headerTitle}>Max&#39;s Best Ice Cream</Text>
+      <Image
+        style={STYLES.headerLogo}
+        source={require("../assets/images/maxs_logo.png")}
+        resizeMode={"contain"}
+      />
+      <Text style={STYLES.headerTitle}>Inventory</Text>
+      <Image
+        style={STYLES.headerLogo}
+        source={require("../assets/images/best_buddies.png")}
+        resizeMode={"contain"}
+      />
     </View>
   );
 }

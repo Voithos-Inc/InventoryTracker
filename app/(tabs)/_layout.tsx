@@ -7,7 +7,7 @@ import {
   Snowflake,
   ClipboardList, Droplets, Sparkles
 } from 'lucide-react-native';
-import { COLORS, STYLES } from '@/constants/styles';
+import {COLORS, FONTS, STYLES} from '@/constants/styles';
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from 'react';
 
@@ -18,11 +18,11 @@ export default function TabLayout() {
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarActiveTintColor: COLORS.textonbg,
-          tabBarInactiveTintColor: '#FFFFFF',
+          tabBarInactiveTintColor: COLORS.pure_white,
           tabBarStyle: {
             backgroundColor: COLORS.tabBarBg,
             borderTopWidth: 2,
-            borderTopColor: '#000',
+            borderTopColor: COLORS.pure_black,
             position: 'absolute',
             bottom: -12,
             overflow: 'hidden',
@@ -32,14 +32,14 @@ export default function TabLayout() {
           },
           tabBarActiveBackgroundColor: COLORS.tabBarActive,
           tabBarItemStyle: {
-            borderColor: '#000',
+            borderColor: COLORS.pure_black,
             borderRadius: 16,
             marginHorizontal: 0,
           },
           tabBarShowLabel: true,
           tabBarLabelStyle: {
-            fontSize: 26,
-            fontWeight: '400',
+            fontSize: 20,
+            fontFamily: FONTS.bodyLight,
             overflow: 'visible',
             marginBottom: 6
           },

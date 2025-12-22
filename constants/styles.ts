@@ -1,18 +1,39 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
+const COLORS_FROM_SITE = {
+  MAXS_TEAL: '#0f575a',
+  MINT: '#a2d3ca',
+  VANILLA: '#f2eee6',
+  WHITE: '#ffffff',
+  SHERBET: '#e88743',
+}
+
 export const COLORS = {
-  header_bg: '#6097AD',
-  main_bg: '#A1D7E9',
-  cardBg: '#f2eee6',
+  ...COLORS_FROM_SITE,
+  pure_white: COLORS_FROM_SITE.WHITE,
+  pure_black: '#000',
+  transparent: 'transparent',
+  header_bg: COLORS_FROM_SITE.MAXS_TEAL,
+  main_bg: COLORS_FROM_SITE.VANILLA,
+  cardBg: COLORS_FROM_SITE.VANILLA,
   textonbg: '#eeeeee',
   textoncontrast: '#111111',
   textgray: "#676767",
-  tabBarBg: '#0c575b',
+  tabBarBg: COLORS_FROM_SITE.MAXS_TEAL,
   tabBarActive: '#6097AD',
   deny: '#d40006',
-  confirm: '#0c575b',
+  confirm: COLORS_FROM_SITE.MAXS_TEAL,
   tintedGreen: '#a5d5a7',
   green: '#28A745',
+  warn: COLORS_FROM_SITE.SHERBET
+};
+
+export const FONTS = {
+  heading: 'AlternateGothicNo3D-Regular', // For all headings
+  bodyLight: 'FuturaCyrillicLight',
+  body: 'FuturaPT-Book',                  // For regular body text
+  bodyMedium: 'FuturaPT-Medium',          // For medium weight body text
+  bodyBold: 'FuturaPT-Bold',              // For bold body text
 };
 
 const screenWidth = Dimensions.get('window').width;
@@ -22,38 +43,70 @@ export const STYLES = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.main_bg,
-    height: 100
+    height: 100,
+    overscrollBehavior: "none"
+  },
+  headerContainer: {
+    backgroundColor: COLORS.header_bg,
   },
   header: {
     backgroundColor: COLORS.header_bg,
-    paddingVertical: 24,
-    paddingHorizontal: 20,
+    position: "absolute",
+    left: 0,
+    top: 0,
+    height: 100,
+    width: '100%',
+    paddingHorizontal: 50,
+    paddingVertical: 12,
     alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomWidth: 3,
-    borderBottomColor: '#5A8CA0',
+    zIndex: 67,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   headerTitle: {
-    fontSize: 48,
-    fontWeight: '700',
+    flex: 1,
+    fontSize: 56,
+    fontFamily: FONTS.heading,
     color: '#FFFFFF',
     textShadowColor: 'rgba(0, 0, 0, .8)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
     letterSpacing: 1,
+    textAlign: "center"
+  },
+  headerLogo: {
+    width: '20%',
+    zIndex: 670
+  },
+  bodyContainer: {
+    marginTop: 100,
+    overscrollBehavior: "none"
   },
   sectionHeader: {
-    paddingVertical: 20,
+    paddingBottom: 30,
     paddingHorizontal: 20,
     alignItems: 'center',
   },
+  sectionHeaderWrapper: {
+    position: 'relative',
+    paddingVertical: 20,
+    alignItems: 'center',
+    backgroundColor: COLORS.main_bg,
+  },
+  sectionHeaderGradient: {
+    position: 'absolute',
+    bottom: -30,
+    left: 0,
+    right: 0,
+    height: 40,
+  },
   sectionTitle: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: COLORS.textonbg,
-    textShadowColor: 'rgba(0, 0, 0, .75)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 2,
+    fontSize: 42,
+    fontFamily: FONTS.heading,
+    color: COLORS.MAXS_TEAL,
+    // textShadowColor: 'rgba(0, 0, 0, .75)',
+    // textShadowOffset: { width: 2, height: 2 },
+    // textShadowRadius: 2,
     letterSpacing: 0.5,
   },
   scrollView: {
@@ -83,15 +136,15 @@ export const STYLES = StyleSheet.create({
   card: {
     aspectRatio: 2.2,
     backgroundColor: COLORS.cardBg,
+    borderColor: COLORS.MINT,
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
     elevation: 3,
   },
   cardIcon: {
@@ -100,10 +153,11 @@ export const STYLES = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 28,
-    fontWeight: '600',
+    fontFamily: FONTS.heading,
     paddingLeft: 24,
     color: COLORS.textoncontrast,
     flex: 1,
+    marginTop: 10
   },
   modalOverlay: {
     flex: 1,
@@ -114,27 +168,37 @@ export const STYLES = StyleSheet.create({
   modalContent: {
     backgroundColor: COLORS.cardBg,
     borderRadius: 20,
-    padding: 40,
+    padding: 20,
     alignItems: 'center',
-    minWidth: .75 * screenWidth,
+    minWidth: .8 * screenWidth,
+    maxHeight: .9 * screenHeight,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
-    flex: 1
+    flex: 1,
+    justifyContent: "space-around",
+  },
+  modalInnerContent: {
+    flex: 1,
+    flexDirection: "row",
+    gap: 60,
+    width: '100%',
+    justifyContent: "space-evenly",
+    marginTop: 20
   },
   modalTitle: {
-    fontSize: 32,
-    fontWeight: '700',
+    fontSize: 40,
+    fontFamily: FONTS.heading,
     color: COLORS.textoncontrast,
     marginTop: 12,
-    marginBottom: 12,
+    marginBottom: 4,
     textAlign: 'center',
   },
   modalSubtext: {
     fontSize: 32,
-    fontWeight: '500',
+    fontFamily: FONTS.heading,
     color: COLORS.textgray,
     marginBottom: 14,
   },
@@ -155,9 +219,13 @@ export const STYLES = StyleSheet.create({
   },
   modalButtonText: {
     fontSize: 24,
-    fontWeight: '600',
+    fontFamily: FONTS.bodyBold,
     color: COLORS.textonbg,
     textAlign: 'center',
+  },
+  rowAlternatingText: {
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   settingsContainer: {
     width: '80%',
@@ -168,10 +236,10 @@ export const STYLES = StyleSheet.create({
   },
   settingsSectionTitle: {
     width: '80%',
-    fontSize: 20,
-    fontWeight: '700' as const,
+    fontSize: 42,
+    fontFamily: FONTS.heading,
     marginBottom: 16,
-    color: COLORS.textoncontrast,
+    color: COLORS.MAXS_TEAL,
     alignSelf: "center",
     marginLeft: -4
   },
@@ -179,7 +247,7 @@ export const STYLES = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    borderRadius: 12,
+    borderRadius: 50,
     borderWidth: 3,
     padding: 20,
     gap: 20,
@@ -187,8 +255,8 @@ export const STYLES = StyleSheet.create({
   },
   settingsButtonText: {
     width: '80%',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 32,
+    fontFamily: FONTS.bodyMedium,
     textAlign: 'center',
     color: COLORS.textoncontrast
   },
@@ -199,6 +267,9 @@ export const STYLES = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
   },
-  imagePickerButtonText: { fontSize: 16 },
+  imagePickerButtonText: {
+    fontSize: 16,
+    fontFamily: FONTS.body
+  },
   imagePickerImage: { width: 200, height: 200, borderRadius: 8 },
 });
