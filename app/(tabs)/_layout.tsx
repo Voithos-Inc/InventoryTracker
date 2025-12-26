@@ -43,8 +43,6 @@ export default function TabLayout() {
             overflow: 'visible',
             marginBottom: 6
           },
-          tabBarLabel:
-            route.name.charAt(0).toUpperCase() + route.name.slice(1),
         })}
       >
         <Tabs.Screen
@@ -66,7 +64,7 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="baked Goods"
+          name="bakedGoods"
           options={{
             title: 'Baked Goods',
             tabBarIcon: ({ color }) => (
