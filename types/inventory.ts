@@ -1,5 +1,3 @@
-// types/inventory.ts - Updated with all new fields
-
 export type CATEGORY =
     | "DAIRY"
     | "REFRIGERATED"
@@ -11,14 +9,15 @@ export type CATEGORY =
 
 export interface InventoryItem {
   id: number;
+  sort_order: number;
   created_at: string;
   updated_at?: string;
   name: string;
-  foh_quantity: number;  // Front of House
-  boh_quantity: number;  // Back of House
-  units: string;  // e.g., "quart container", "topping container", "jar"
+  foh_quantity: number;
+  boh_quantity: number;
+  units: string;
   image_link?: string;
-  low_stock_threshold?: number;  // Alert when quantity <= this value
+  low_stock_threshold?: number;
   category: CATEGORY;
 }
 

@@ -15,11 +15,6 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { upsert, ...rest } = body;
 
-  const payload = upsert ? rest : (() => {
-      const { id, ...noId } = rest;
-      return noId;
-    })();
-
   let result: PostgrestSingleResponse<InventoryItem[]>
 
   if (upsert) {
