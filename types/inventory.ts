@@ -5,7 +5,7 @@ export type CATEGORY =
     | "REFRIGERATED"
     | "BEVERAGES"
     | "SAUCES"
-    | "FROZEN"
+    | "BAKED GOODS"
     | "TOPPINGS"
     | "INGREDIENTS";
 

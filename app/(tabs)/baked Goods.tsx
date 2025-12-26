@@ -15,8 +15,8 @@ export default function FrozenTab() {
       <ScrollView style={STYLES.bodyContainer}>
         <WaveDivider />
         <InventoryGrid
-          items={inv!.filter(i => i.category === "FROZEN")}
-          sectionTitle="Frozen"
+          items={inv!.filter(i => i.category === "BAKED GOODS")}
+          sectionTitle="Baked Goods"
         />
       </ScrollView>
     </View>

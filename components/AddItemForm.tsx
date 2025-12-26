@@ -28,7 +28,7 @@ interface AddItemFormProps {
 const CATEGORIES: CATEGORY[] = [
   'BEVERAGES',
   'DAIRY',
-  'FROZEN',
+  'BAKED GOODS',
   'INGREDIENTS',
   'REFRIGERATED',
   'SAUCES',

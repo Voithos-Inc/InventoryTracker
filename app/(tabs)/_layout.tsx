@@ -30,7 +30,7 @@ export default function TabLayout() {
             height: 100,
             borderRadius: 12,
           },
-          tabBarActiveBackgroundColor: COLORS.tabBarActive,
+        tabBarActiveBackgroundColor: COLORS.tabBarActive,
           tabBarItemStyle: {
             borderColor: COLORS.pure_black,
             borderRadius: 16,
@@ -66,9 +66,9 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="frozen"
+          name="baked Goods"
           options={{
-            title: 'Frozen',
+            title: 'Baked Goods',
             tabBarIcon: ({ color }) => (
               <Snowflake size={32} color={color} strokeWidth={3} />
             ),
