@@ -7,6 +7,7 @@ export const useInventory = create<InventoryState>((set) => ({
   loadInv: async () => { set({
     inv:
       (await getInventory())
+        .sort((a: InventoryItem, b: InventoryItem)=> a.name.localeCompare(b.name))
         .sort((a: InventoryItem, b: InventoryItem) => a.sort_order - b.sort_order)
   })}
 }))

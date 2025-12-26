@@ -6,7 +6,7 @@ import {STYLES} from "@/constants/styles";
 import {inv} from "@/app/_layout";
 import WaveDivider from "@/components/WaveDivider";
 
-export default function FrozenTab() {
+export default function BakedGoodsTab() {
   return (
     <View style={STYLES.container}>
       <View style={STYLES.headerContainer}>
