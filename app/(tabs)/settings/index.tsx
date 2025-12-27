@@ -15,7 +15,7 @@ import AddItemForm from '@/components/AddItemForm';
 import { useInventory } from '@/store/inventory';
 import { insertItem } from '@/lib/supabase';
 import {InventoryItem} from "@/types/inventory";
-import {saveAndShareCSV} from "@/lib/exportUtils";
+import {saveAndShareXLSX} from "@/lib/exportUtils";
 import WaveDivider from "@/components/WaveDivider";
 
 export default function SettingsTab() {
@@ -88,11 +88,11 @@ export default function SettingsTab() {
         // --- Web version ---
         if (Platform.OS === "web") {
             const confirmed = window.confirm(
-                "Export Inventory\n\nDo you want to export the inventory as a CSV file?"
+                "Export Inventory\n\nDo you want to export the inventory as an Excel file?"
             );
 
             if (confirmed) {
-                saveAndShareCSV(inv).catch((error) => {
+                saveAndShareXLSX(inv).catch((error) => {
                     console.error("Export error:", error);
                     window.alert("Export Failed: Could not export inventory.");
                 });
@@ -104,17 +104,17 @@ export default function SettingsTab() {
         // --- Mobile version (iOS/Android) ---
         Alert.alert(
             "Export Inventory",
-            "Export your full inventory as a CSV file?",
+            "Export your full inventory as an Excel file?",
             [
                 {
                     text: "Cancel",
                     style: "cancel",
                 },
                 {
-                    text: "Export CSV",
+                    text: "Export Excel",
                     onPress: async () => {
                         try {
-                            await saveAndShareCSV(inv);
+                            await saveAndShareXLSX(inv);
                         } catch (error) {
                             console.error("Export error:", error);
                             Alert.alert("Export Failed", "Could not export inventory.");
@@ -127,120 +127,120 @@ export default function SettingsTab() {
 
     return (
         <SafeAreaView style={STYLES.container}>
-          <Header />
-          <ScrollView style={STYLES.bodyContainer}>
-            <WaveDivider />
+            <Header />
+            <ScrollView style={STYLES.bodyContainer}>
+                <WaveDivider />
 
-            <View style={{height: 0, width: 0, marginVertical: 10}} />
+                <View style={{height: 0, width: 0, marginVertical: 10}} />
 
-            {/* Two Column Layout */}
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    padding: 40,
-                    gap: 40,
-                    alignItems: 'flex-start',
-                    justifyContent: 'center'
-                }}
-            >
-                {/* Left Column - Inventory Management */}
-                <View style={{ flex: 1, maxWidth: 500 }}>
-                    <Text style={[STYLES.settingsSectionTitle, { width: '100%', textAlign: 'center' }]}>
-                        Inventory Management
-                    </Text>
+                {/* Two Column Layout */}
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        padding: 40,
+                        gap: 40,
+                        alignItems: 'flex-start',
+                        justifyContent: 'center'
+                    }}
+                >
+                    {/* Left Column - Inventory Management */}
+                    <View style={{ flex: 1, maxWidth: 500 }}>
+                        <Text style={[STYLES.settingsSectionTitle, { width: '100%', textAlign: 'center' }]}>
+                            Inventory Management
+                        </Text>
 
-                    <View style={{ gap: 20 }}>
-                        <Pressable
-                            style={[
-                                STYLES.settingsButton,
-                                {
-                                    backgroundColor: COLORS.confirm,
-                                    justifyContent: 'center',
-                                    minHeight: 120
-                                }
-                            ]}
-                            onPress={handleAddNewItem}
-                        >
-                            <BadgePlus size={40} color="white" strokeWidth={2.5} />
-                            <Text style={[STYLES.settingsButtonText, { color: 'white', width: 'auto' }]}>
-                                Add New Item
-                            </Text>
-                        </Pressable>
+                        <View style={{ gap: 20 }}>
+                            <Pressable
+                                style={[
+                                    STYLES.settingsButton,
+                                    {
+                                        backgroundColor: COLORS.confirm,
+                                        justifyContent: 'center',
+                                        minHeight: 120
+                                    }
+                                ]}
+                                onPress={handleAddNewItem}
+                            >
+                                <BadgePlus size={40} color="white" strokeWidth={2.5} />
+                                <Text style={[STYLES.settingsButtonText, { color: 'white', width: 'auto' }]}>
+                                    Add New Item
+                                </Text>
+                            </Pressable>
 
-                        <Pressable
-                            style={[
-                                STYLES.settingsButton,
-                                {
-                                    borderColor: COLORS.header_bg,
-                                    justifyContent: 'center',
-                                    minHeight: 120
-                                }
-                            ]}
-                            onPress={handleEditItems}
-                        >
-                            <Edit3 size={36} color={COLORS.header_bg} />
-                            <Text style={[STYLES.settingsButtonText, { width: 'auto' }]}>
-                                Edit Items
-                            </Text>
-                        </Pressable>
+                            <Pressable
+                                style={[
+                                    STYLES.settingsButton,
+                                    {
+                                        borderColor: COLORS.header_bg,
+                                        justifyContent: 'center',
+                                        minHeight: 120
+                                    }
+                                ]}
+                                onPress={handleEditItems}
+                            >
+                                <Edit3 size={36} color={COLORS.header_bg} />
+                                <Text style={[STYLES.settingsButtonText, { width: 'auto' }]}>
+                                    Edit Items
+                                </Text>
+                            </Pressable>
+                        </View>
+                    </View>
+
+                    {/* Right Column - Export & Reports */}
+                    <View style={{ flex: 1, maxWidth: 500 }}>
+                        <Text style={[STYLES.settingsSectionTitle, { width: '100%', textAlign: 'center' }]}>
+                            Export & Reports
+                        </Text>
+
+                        <View style={{ gap: 20 }}>
+                            <Pressable
+                                style={[
+                                    STYLES.settingsButton,
+                                    {
+                                        borderColor: '#FFA500',
+                                        justifyContent: 'center',
+                                        minHeight: 120
+                                    }
+                                ]}
+                                onPress={handleResetCount}
+                            >
+                                <RotateCcw size={36} color="#FFA500" />
+                                <Text style={[STYLES.settingsButtonText, { width: 'auto' }]}>
+                                    Reset Count
+                                </Text>
+                            </Pressable>
+
+                            <Pressable
+                                style={[
+                                    STYLES.settingsButton,
+                                    {
+                                        borderColor: '#28A745',
+                                        justifyContent: 'center',
+                                        minHeight: 120
+                                    }
+                                ]}
+                                onPress={handleExportInventory}
+                            >
+                                <FileSpreadsheet size={36} color="#28A745" />
+                                <Text style={[STYLES.settingsButtonText, { width: 'auto' }]}>
+                                    Export Excel
+                                </Text>
+                            </Pressable>
+                        </View>
                     </View>
                 </View>
 
-                {/* Right Column - Export & Reports */}
-                <View style={{ flex: 1, maxWidth: 500 }}>
-                    <Text style={[STYLES.settingsSectionTitle, { width: '100%', textAlign: 'center' }]}>
-                        Export & Reports
-                    </Text>
-
-                    <View style={{ gap: 20 }}>
-                        <Pressable
-                            style={[
-                                STYLES.settingsButton,
-                                {
-                                    borderColor: '#FFA500',
-                                    justifyContent: 'center',
-                                    minHeight: 120
-                                }
-                            ]}
-                            onPress={handleResetCount}
-                        >
-                            <RotateCcw size={36} color="#FFA500" />
-                            <Text style={[STYLES.settingsButtonText, { width: 'auto' }]}>
-                                Reset Count
-                            </Text>
-                        </Pressable>
-
-                        <Pressable
-                            style={[
-                                STYLES.settingsButton,
-                                {
-                                    borderColor: '#28A745',
-                                    justifyContent: 'center',
-                                    minHeight: 120
-                                }
-                            ]}
-                            onPress={handleExportInventory}
-                        >
-                            <FileSpreadsheet size={36} color="#28A745" />
-                            <Text style={[STYLES.settingsButtonText, { width: 'auto' }]}>
-                                Export Data
-                            </Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </View>
-
-            {/* Add Item Modal */}
-            <AddItemForm
-                visible={showAddItem}
-                onClose={() => setShowAddItem(false)}
-                onSuccess={() => {
-                    loadInv();
-                }}
-                initialData={null}
-            />
-          </ScrollView>
+                {/* Add Item Modal */}
+                <AddItemForm
+                    visible={showAddItem}
+                    onClose={() => setShowAddItem(false)}
+                    onSuccess={() => {
+                        loadInv();
+                    }}
+                    initialData={null}
+                />
+            </ScrollView>
         </SafeAreaView>
     );
 }
