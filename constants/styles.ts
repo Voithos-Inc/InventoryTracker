@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 
 const COLORS_FROM_SITE = {
   MAXS_TEAL: '#0f575a',
@@ -44,7 +44,7 @@ export const STYLES = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.main_bg,
     height: 100,
-    overscrollBehavior: "none"
+    ...(Platform.OS === 'web' && { overscrollBehavior: 'none' as any }),
   },
   headerContainer: {
     backgroundColor: COLORS.header_bg,
@@ -80,7 +80,7 @@ export const STYLES = StyleSheet.create({
   },
   bodyContainer: {
     marginTop: 100,
-    overscrollBehavior: "none"
+    ...(Platform.OS === 'web' && { overscrollBehavior: 'none' as any }),
   },
   sectionHeader: {
     paddingBottom: 30,

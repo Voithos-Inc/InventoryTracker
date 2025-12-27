@@ -1,6 +1,17 @@
-// lib/exportUtils.ts - Export inventory to XLSX with formatting
 import { InventoryItem, CATEGORY } from '@/types/inventory';
 import { Platform } from 'react-native';
+
+let FileSystem: any = null;
+let Sharing: any = null;
+
+if (Platform.OS !== 'web') {
+    try {
+        FileSystem = require('expo-file-system');
+        Sharing = require('expo-sharing');
+    } catch (e) {
+        console.warn('FileSystem or Sharing not available');
+    }
+}
 
 /**
  * Export inventory to XLSX format with formatting
@@ -83,7 +94,6 @@ export async function exportToXLSX(items: InventoryItem[]): Promise<string> {
         <tbody>
 `;
 
-    // Process each category
     for (const category of categories) {
         const categoryItems = items
             .filter(item => item.category === category)
@@ -91,7 +101,6 @@ export async function exportToXLSX(items: InventoryItem[]): Promise<string> {
 
         if (categoryItems.length === 0) continue;
 
-        // Category header row - with FOH/BOH or Fridge/Freezer labels
         const isFridgeFreezer = category === 'SAUCES' || category === 'BAKED GOODS';
         const label1 = isFridgeFreezer ? 'Fridge' : 'FOH';
         const label2 = isFridgeFreezer ? 'Freezer' : 'BOH';
@@ -106,7 +115,6 @@ export async function exportToXLSX(items: InventoryItem[]): Promise<string> {
             </tr>
 `;
 
-        // Add items in this category
         for (const item of categoryItems) {
             const totalCount = item.foh_quantity + item.boh_quantity;
             const itemName = item.name;
@@ -139,13 +147,11 @@ export async function saveAndShareXLSX(items: InventoryItem[]): Promise<void> {
     try {
         const xlsxContent = await exportToXLSX(items);
 
-        // Generate filename with timestamp
         const now = new Date();
         const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
         const filename = `inventory_${dateStr}.xls`; // Use .xls extension for HTML-based Excel file
 
         if (Platform.OS === 'web') {
-            // Create blob and trigger download
             const blob = new Blob([xlsxContent], {
                 type: 'application/vnd.ms-excel'
             });
@@ -164,9 +170,28 @@ export async function saveAndShareXLSX(items: InventoryItem[]): Promise<void> {
 
             window.alert(`✓ Successfully exported ${items.length} items to ${filename}`);
         } else {
-            // Mobile: Log content
-            console.log('XLSX Export created');
-            alert(`Export ready with ${items.length} items.\n\nUse the web version for full file download with formatting.`);
+            if (!FileSystem || !Sharing) {
+                alert('File system not available. Please install expo-file-system and expo-sharing.');
+                return;
+            }
+
+            const fileUri = `${FileSystem.documentDirectory}${filename}`;
+
+            await FileSystem.writeAsStringAsync(fileUri, xlsxContent, {
+                encoding: FileSystem.EncodingType.UTF8,
+            });
+
+            const isAvailable = await Sharing.isAvailableAsync();
+
+            if (isAvailable) {
+                await Sharing.shareAsync(fileUri, {
+                    mimeType: 'application/vnd.ms-excel',
+                    dialogTitle: 'Export Inventory',
+                    UTI: 'com.microsoft.excel.xls'
+                });
+            } else {
+                alert(`Export saved to: ${fileUri}\n\nYou can find it in your Files app.`);
+            }
         }
     } catch (error) {
         console.error('Error exporting XLSX:', error);
