@@ -4,7 +4,7 @@
     "slug": "InventoryTracker",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/maxs_logo.png",
     "scheme": "inventorytracker",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
