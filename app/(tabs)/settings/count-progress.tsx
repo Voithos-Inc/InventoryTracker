@@ -48,7 +48,7 @@ export default function CountProgressScreen() {
   }, [inv]);
 
   const getStatusText = () => {
-    if (stats.percentage === 0) return 'In Progress';
+    if (stats.percentage === 0) return 'Not Started';
     if (stats.percentage === 100) return 'Complete';
     return 'In Progress';
   };
