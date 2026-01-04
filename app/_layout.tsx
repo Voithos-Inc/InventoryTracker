@@ -1,5 +1,5 @@
-import { Stack } from 'expo-router';
-import { useFonts } from 'expo-font';
+import {Stack} from 'expo-router';
+import {useFonts} from 'expo-font';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {STYLES} from "@/constants/styles";
 import {useInventory} from "@/store/inventory";
@@ -55,7 +55,7 @@ export default function RootLayout() {
 
   return (
       <SafeAreaView style={STYLES.container}>
-        <Stack screenOptions={{ headerShown: false }} />
+        <Stack screenOptions={{headerShown: false}}/>
       </SafeAreaView>
   );
 }
