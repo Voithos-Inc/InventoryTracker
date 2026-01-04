@@ -9,7 +9,8 @@ import {
   BadgePlus,
   FileSpreadsheet,
   Edit3,
-  RotateCcw
+  RotateCcw,
+  ClipboardCheck
 } from 'lucide-react-native';
 import AddItemForm from '@/components/AddItemForm';
 import {useInventory} from '@/store/inventory';
@@ -30,6 +31,10 @@ export default function SettingsTab() {
 
   const handleEditItems = () => {
     router.push('/settings/manage-items' as any);
+  };
+
+  const handleViewProgress = () => {
+    router.push('/settings/count-progress' as any);
   };
 
   const handleResetCount = async () => {
@@ -61,7 +66,7 @@ export default function SettingsTab() {
 
       // Reset all items to not completed
       for (const item of inv) {
-        await insertItem({...item, foh_quantity: 0, boh_quantity: 0} as InventoryItem);
+        await insertItem({...item, foh_quantity: 0, boh_quantity: 0, completed: false} as InventoryItem);
       }
 
       // Reload inventory
@@ -101,7 +106,6 @@ export default function SettingsTab() {
       return;
     }
 
-    // --- Mobile version (iOS/Android) ---
     Alert.alert(
         "Export Inventory",
         "Export your full inventory as an Excel file?",
@@ -131,56 +135,33 @@ export default function SettingsTab() {
         <ScrollView style={STYLES.bodyContainer}>
           <WaveDivider/>
 
-          <View style={{height: 0, width: 0, marginVertical: 10}}/>
+          <View style={STYLES.settingsSpacer}/>
 
           {/* Two Column Layout */}
-          <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                padding: 40,
-                gap: 40,
-                alignItems: 'flex-start',
-                justifyContent: 'center'
-              }}
-          >
+          <View style={STYLES.settingsTwoColumnContainer}>
             {/* Left Column - Inventory Management */}
-            <View style={{flex: 1, maxWidth: 500}}>
-              <Text style={[STYLES.settingsSectionTitle, {width: '100%', textAlign: 'center'}]}>
+            <View style={STYLES.settingsColumn}>
+              <Text style={STYLES.settingsSectionTitle}>
                 Inventory Management
               </Text>
 
-              <View style={{gap: 20}}>
+              <View style={STYLES.settingsButtonGroup}>
                 <Pressable
-                    style={[
-                      STYLES.settingsButton,
-                      {
-                        backgroundColor: COLORS.confirm,
-                        justifyContent: 'center',
-                        minHeight: 120
-                      }
-                    ]}
+                    style={[STYLES.settingsButton, STYLES.settingsButtonPrimary]}
                     onPress={handleAddNewItem}
                 >
                   <BadgePlus size={40} color="white" strokeWidth={2.5}/>
-                  <Text style={[STYLES.settingsButtonText, {color: 'white', width: 'auto'}]}>
+                  <Text style={STYLES.settingsButtonTextPrimary}>
                     Add New Item
                   </Text>
                 </Pressable>
 
                 <Pressable
-                    style={[
-                      STYLES.settingsButton,
-                      {
-                        borderColor: COLORS.header_bg,
-                        justifyContent: 'center',
-                        minHeight: 120
-                      }
-                    ]}
+                    style={[STYLES.settingsButton, STYLES.settingsButtonSecondary]}
                     onPress={handleEditItems}
                 >
                   <Edit3 size={36} color={COLORS.header_bg}/>
-                  <Text style={[STYLES.settingsButtonText, {width: 'auto'}]}>
+                  <Text style={STYLES.settingsButtonText}>
                     Edit Items
                   </Text>
                 </Pressable>
@@ -188,42 +169,28 @@ export default function SettingsTab() {
             </View>
 
             {/* Right Column - Export & Reports */}
-            <View style={{flex: 1, maxWidth: 500}}>
-              <Text style={[STYLES.settingsSectionTitle, {width: '100%', textAlign: 'center'}]}>
+            <View style={STYLES.settingsColumn}>
+              <Text style={STYLES.settingsSectionTitle}>
                 Export & Reports
               </Text>
 
-              <View style={{gap: 20}}>
+              <View style={STYLES.settingsButtonGroup}>
                 <Pressable
-                    style={[
-                      STYLES.settingsButton,
-                      {
-                        borderColor: '#FFA500',
-                        justifyContent: 'center',
-                        minHeight: 120
-                      }
-                    ]}
+                    style={[STYLES.settingsButton, STYLES.settingsButtonWarning]}
                     onPress={handleResetCount}
                 >
                   <RotateCcw size={36} color="#FFA500"/>
-                  <Text style={[STYLES.settingsButtonText, {width: 'auto'}]}>
+                  <Text style={STYLES.settingsButtonText}>
                     Reset Count
                   </Text>
                 </Pressable>
 
                 <Pressable
-                    style={[
-                      STYLES.settingsButton,
-                      {
-                        borderColor: '#28A745',
-                        justifyContent: 'center',
-                        minHeight: 120
-                      }
-                    ]}
+                    style={[STYLES.settingsButton, STYLES.settingsButtonSuccess]}
                     onPress={handleExportInventory}
                 >
                   <FileSpreadsheet size={36} color="#28A745"/>
-                  <Text style={[STYLES.settingsButtonText, {width: 'auto'}]}>
+                  <Text style={STYLES.settingsButtonText}>
                     Export Excel
                   </Text>
                 </Pressable>
@@ -231,7 +198,19 @@ export default function SettingsTab() {
             </View>
           </View>
 
-          {/* Add Item Modal */}
+          {/* Centered View Progress Button */}
+          <View style={STYLES.settingsProgressContainer}>
+            <Pressable
+                style={[STYLES.settingsButton, STYLES.settingsButtonProgress]}
+                onPress={handleViewProgress}
+            >
+              <ClipboardCheck size={56} color="#2196F3" strokeWidth={2.5}/>
+              <Text style={STYLES.settingsButtonTextProgress}>
+                View Count Progress
+              </Text>
+            </Pressable>
+          </View>
+
           <AddItemForm
               visible={showAddItem}
               onClose={() => setShowAddItem(false)}

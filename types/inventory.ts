@@ -19,20 +19,19 @@ export interface InventoryItem {
   image_link?: string;
   low_stock_threshold?: number;
   category: CATEGORY;
+  completed?: boolean; // Track if item has been counted
 }
 
 export interface InventoryExport {
   id: number;
   export_date: string;
   exported_by: string;
-  file_url?: string;  // Google Drive link or local file path
-  category_filter?: CATEGORY;  // If exporting specific category
+  file_url?: string;
+  category_filter?: CATEGORY;
   total_items: number;
   created_at: string;
 }
 
-
-// Utility types for forms
 export interface AddItemFormData {
   name: string;
   category: CATEGORY;
