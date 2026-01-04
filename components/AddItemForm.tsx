@@ -10,13 +10,14 @@ import {
   Pressable, Platform
 } from 'react-native';
 import {COLORS} from '@/constants/styles';
-import {CATEGORY, AddItemFormData, InventoryItem} from '@/types/inventory';
+import {AddItemFormData, InventoryItem} from '@/types/inventory';
 import {X} from 'lucide-react-native';
 import {insertItem} from '@/lib/supabase';
 import {getPositiveFloat} from "@/lib/utils";
 import {useInventory} from "@/store/inventory";
 import ImagePickerBox, {ImageUploadData} from './ImagePickerBox';
 import {addImage} from "@/lib/github";
+import { categories } from '@/app/_layout';
 
 interface AddItemFormProps {
   visible: boolean;
@@ -107,6 +108,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
     try {
       const newItem: InventoryItem = {
         id: initialData?.id ?? inv[inv.length - 1].id + 2,
+        sort_order: initialData?.sort_order ?? 0,
         name: formData.name.trim(),
         category: formData.category,
         units: formData.units,
@@ -215,7 +217,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={{flexDirection: 'row', gap: 8}}>
-                  {CATEGORIES.map((cat) => (
+                  {categories?.map((cat) => (
                     <Pressable
                       key={cat}
                       onPress={() => setFormData({...formData, category: cat})}

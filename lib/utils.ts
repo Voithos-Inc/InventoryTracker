@@ -22,4 +22,7 @@ export function camelCaseToTitleWithSpaces(text: string) : string {
   return result.charAt(0).toUpperCase() + result.slice(1);
 }
 
-export function allCapsToTitleCase(text: string) { return titleCase(text); }
+export function anyToTitleCase(text: string) { 
+  const t = text.toLowerCase();
+  return titleCase(t);
+}

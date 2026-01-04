@@ -1,15 +1,3 @@
-/*export type CATEGORY =
-    | "DAIRY"
-    | "REFRIGERATED"
-    | "BEVERAGES"
-    | "SAUCES"
-    | "BAKED GOODS"
-    | "TOPPINGS"
-    | "INGREDIENTS";
-*/
-
-export let CATEGORY: string[] = []
-
 export interface InventoryItem {
   id: number;
   sort_order: number;

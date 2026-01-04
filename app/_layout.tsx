@@ -10,6 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 SplashScreen.preventAutoHideAsync();
 
 export let inv: null | InventoryItem[] = null
+export let categories: null | string[] = null
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -22,6 +23,7 @@ export default function RootLayout() {
 
   const loadInv = useInventory((state) => state.loadInv);
   inv = useInventory((state) => state.inv);
+  categories = useInventory((state) => state.categories);
 
   useEffect(() => {
     loadInv();

@@ -1,12 +1,12 @@
 import Header from '@/components/header';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import InventoryGrid from '../../components/InventoryGrid';
+import InventoryGrid from '@/components/InventoryGrid';
 import {STYLES} from "@/constants/styles";
 import {inv} from "@/app/_layout";
 import WaveDivider from "@/components/WaveDivider";
 import { useLocalSearchParams } from 'expo-router';
-import { camelCaseToTitleWithSpaces } from '@/lib/utils';
+import { titleCase } from 'title-case';
 
 export default function CategoryTab() {
   const params = useLocalSearchParams();
@@ -21,7 +21,7 @@ export default function CategoryTab() {
         <WaveDivider />
         <InventoryGrid
           items={inv!.filter(i => i.category === category)}
-          sectionTitle={camelCaseToTitleWithSpaces(category)}
+          sectionTitle={titleCase(category)}
         />
       </ScrollView>
     </View>

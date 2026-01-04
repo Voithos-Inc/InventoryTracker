@@ -4,9 +4,9 @@ import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { COLORS, FONTS, STYLES } from '@/constants/styles';
 import { useInventory } from '@/store/inventory';
-import { allCapsToTitleCase } from '@/lib/utils';
+import { anyToTitleCase } from '@/lib/utils';
 
-export default function Layout() {
+export default function TabLayout() {
   const { categories, loadInv } = useInventory();
   const pathname = usePathname();
   const router = useRouter();
@@ -24,7 +24,6 @@ export default function Layout() {
         <Slot />
       </View>
 
-      {/* Bottom bar — mirrors Tabs tabBarStyle */}
       <View
         style={{
           position: 'absolute',
@@ -33,6 +32,7 @@ export default function Layout() {
           bottom: -12,
           height: 100,
           paddingVertical: 12,
+          paddingHorizontal: 10,
 
           backgroundColor: COLORS.tabBarBg,
           borderTopWidth: 2,
@@ -44,12 +44,12 @@ export default function Layout() {
         }}
       >
         {categories.map((c) => {
-          const isActive = pathname === `/${c}`;
+          const isActive = pathname === `/c/${c}`;
 
           return (
             <Pressable
               key={c}
-              onPress={() => router.push(`/${c}`)}
+              onPress={() => router.push(`/c/${c}`)}
               style={{
                 flex: 1,
 
@@ -69,25 +69,21 @@ export default function Layout() {
             >
               <Text
                 style={{
-                  // tabBarLabelStyle
                   fontSize: 20,
                   fontFamily: FONTS.bodyLight,
                   overflow: 'visible',
                   marginBottom: 6,
-
-                  // active / inactive tint
                   color: isActive
                     ? COLORS.textonbg
                     : COLORS.pure_white,
                 }}
               >
-                {allCapsToTitleCase(c)}
+                {anyToTitleCase(c)}
               </Text>
             </Pressable>
           );
         })}
 
-        {/* Settings tab */}
         <Pressable
           onPress={() => router.push('/settings')}
           style={{
