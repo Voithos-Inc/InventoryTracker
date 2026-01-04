@@ -6,12 +6,18 @@ let Sharing: any = null;
 
 if (Platform.OS !== 'web') {
     try {
-        FileSystem = require('expo-file-system');
-        Sharing = require('expo-sharing');
+        // Use the legacy entrypoint so writeAsStringAsync is available and doesn't throw
+        // (avoids the runtime "deprecated" error)
+        const fsModule = require('expo-file-system/legacy');
+        FileSystem = fsModule && fsModule.default ? fsModule.default : fsModule;
+
+        const sharingModule = require('expo-sharing');
+        Sharing = sharingModule && sharingModule.default ? sharingModule.default : sharingModule;
     } catch (e) {
-        console.warn('FileSystem or Sharing not available');
+        console.warn('FileSystem (legacy) or Sharing not available', e);
     }
 }
+
 
 /**
  * Export inventory to XLSX format with formatting
@@ -175,11 +181,16 @@ export async function saveAndShareXLSX(items: InventoryItem[]): Promise<void> {
                 return;
             }
 
-            const fileUri = `${FileSystem.documentDirectory}${filename}`;
+            const fileUri = `${(FileSystem && (FileSystem.documentDirectory || FileSystem.cacheDirectory)) || ''}${filename}`;
 
-            await FileSystem.writeAsStringAsync(fileUri, xlsxContent, {
-                encoding: FileSystem.EncodingType.UTF8,
-            });
+            const encoding =
+                FileSystem && FileSystem.EncodingType && (FileSystem.EncodingType.UTF8 ?? FileSystem.EncodingType.UTF_8)
+                    ? (FileSystem.EncodingType.UTF8 ?? FileSystem.EncodingType.UTF_8)
+                    : 'utf8';
+
+            await FileSystem.writeAsStringAsync(fileUri, xlsxContent, { encoding });
+
+
 
             const isAvailable = await Sharing.isAvailableAsync();
 
