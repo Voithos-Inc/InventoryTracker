@@ -12,7 +12,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Link, useRouter} from 'expo-router';
 import {COLORS, STYLES} from '@/constants/styles';
 import {useInventory} from '@/store/inventory';
-import {InventoryItem, CATEGORY} from '@/types/inventory';
+import {InventoryItem } from '@/types/inventory';
 import {deleteItem} from '@/lib/supabase';
 import {
   ArrowLeft,
@@ -21,6 +21,8 @@ import {
   Trash2,
 } from 'lucide-react-native';
 import AddItemForm from "@/components/AddItemForm";
+import { categories } from '@/app/_layout';
+import WaveDivider from '@/components/WaveDivider';
 
 export default function ManageItemsScreen() {
   const router = useRouter();
@@ -28,7 +30,7 @@ export default function ManageItemsScreen() {
   const loadInv = useInventory((state) => state.loadInv);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<CATEGORY | 'ALL'>('ALL');
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [showAddItem, setShowEditItem] = useState(false);
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null)
 
@@ -47,17 +49,6 @@ export default function ManageItemsScreen() {
       return matchesSearch && matchesCategory;
     });
   }, [inv, searchQuery, selectedCategory]);
-
-  const categories: (CATEGORY | 'ALL')[] = [
-    'ALL',
-    'BEVERAGES',
-    'DAIRY',
-    'FROZEN',
-    'INGREDIENTS',
-    'REFRIGERATED',
-    'SAUCES',
-    'TOPPINGS'
-  ];
 
   const handleDeleteItem = (item: InventoryItem) => {
     if (Platform.OS === "web") {
@@ -95,7 +86,7 @@ export default function ManageItemsScreen() {
       <View
         style={{
           backgroundColor: COLORS.tabBarBg,
-          paddingVertical: 16,
+          paddingVertical: 20,
           paddingHorizontal: 20,
           flexDirection: 'row',
           alignItems: 'center',
@@ -119,6 +110,8 @@ export default function ManageItemsScreen() {
           Manage Items
         </Text>
       </View>
+      
+      <WaveDivider />
 
       {/* Search Bar */}
       <View style={{padding: 16, backgroundColor: COLORS.main_bg}}>
@@ -157,7 +150,7 @@ export default function ManageItemsScreen() {
         style={{maxHeight: 60, backgroundColor: COLORS.main_bg}}
         contentContainerStyle={{paddingHorizontal: 16, gap: 8}}
       >
-        {categories.map((cat) => (
+        {categories?.map((cat) => (
           <Pressable
             key={cat}
             onPress={() => setSelectedCategory(cat)}

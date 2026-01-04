@@ -45,7 +45,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
 
   const [formData, setFormData] = useState<AddItemFormData>({
     name: initialData?.name ?? '',
-    category: initialData?.category ?? 'BEVERAGES',
+    category: initialData?.category ?? (categories ? categories[0] : "BEVERAGES"),
     units: initialData?.units ?? 'quart container',
     foh_quantity: initialData?.foh_quantity ?? 0,
     boh_quantity: initialData?.boh_quantity ?? 0,
@@ -53,7 +53,8 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
   });
 
   const [imageData, setImageData] = useState<ImageUploadData | null>(null)
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState(false)
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
 
   useEffect(() => {
     async function loadExisting() {
@@ -239,6 +240,43 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                       </Text>
                     </Pressable>
                   ))}
+                  {isAddingCategory ? (
+                    <TextInput
+                      style={{
+                        paddingVertical: 10,
+                        paddingHorizontal: 16,
+                        borderRadius: 20,
+                        backgroundColor: COLORS.textonbg,
+                        minWidth: 120
+                      }}
+                      onChangeText={(text) => setFormData({...formData, category: text.toUpperCase()})}
+                      onEndEditing={(e) => {
+                        const text = e.nativeEvent.text.trim();
+                        if (text) {
+                          categories?.push(text.toUpperCase());
+                          setFormData({...formData, category: text.toUpperCase()});
+                        }
+                        setIsAddingCategory(false);
+                      }}
+                      placeholder="Type category"
+                      autoCapitalize='characters'
+                      autoFocus
+                    />
+                  ) : (
+                    <Pressable
+                      onPress={() => setIsAddingCategory(true)}
+                      style={{
+                        paddingVertical: 10,
+                        paddingHorizontal: 16,
+                        borderRadius: 20,
+                        backgroundColor: COLORS.textonbg
+                      }}
+                    >
+                      <Text style={{color: COLORS.textgray, fontWeight: '600'}}>
+                        + Add category
+                      </Text>
+                    </Pressable>
+                  )}
                 </View>
               </ScrollView>
             </View>

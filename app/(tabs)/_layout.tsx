@@ -19,7 +19,6 @@ export default function TabLayout() {
 
   return (
     <SafeAreaView style={STYLES.container}>
-      {/* Screen content */}
       <View style={{ flex: 1 }}>
         <Slot />
       </View>
@@ -30,8 +29,8 @@ export default function TabLayout() {
           left: 0,
           right: 0,
           bottom: -12,
-          height: 100,
-          paddingVertical: 12,
+          height: 90,
+          paddingBottom: 12,
           paddingHorizontal: 10,
 
           backgroundColor: COLORS.tabBarBg,
@@ -52,17 +51,12 @@ export default function TabLayout() {
               onPress={() => router.push(`/c/${c}`)}
               style={{
                 flex: 1,
-
-                // tabBarItemStyle
                 borderColor: COLORS.pure_black,
                 borderRadius: 16,
                 marginHorizontal: 0,
-
-                // tabBarActiveBackgroundColor
                 backgroundColor: isActive
                   ? COLORS.tabBarActive
                   : 'transparent',
-
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
@@ -72,7 +66,6 @@ export default function TabLayout() {
                   fontSize: 20,
                   fontFamily: FONTS.bodyLight,
                   overflow: 'visible',
-                  marginBottom: 6,
                   color: isActive
                     ? COLORS.textonbg
                     : COLORS.pure_white,
@@ -93,6 +86,9 @@ export default function TabLayout() {
             marginHorizontal: 0,
             justifyContent: 'center',
             alignItems: 'center',
+            backgroundColor: pathname === `/settings`
+              ? COLORS.tabBarActive
+              : 'transparent',
           }}
         >
           <Text
@@ -100,8 +96,9 @@ export default function TabLayout() {
               fontSize: 20,
               fontFamily: FONTS.bodyLight,
               overflow: 'visible',
-              marginBottom: 6,
-              color: COLORS.pure_white,
+              color: pathname === `/settings`
+                ? COLORS.textonbg
+                : COLORS.pure_white,
             }}
           >
             Settings
