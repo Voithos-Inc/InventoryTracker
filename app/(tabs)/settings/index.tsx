@@ -9,7 +9,8 @@ import {
   BadgePlus,
   FileSpreadsheet,
   Edit3,
-  RotateCcw
+  RotateCcw,
+  ClipboardCheck
 } from 'lucide-react-native';
 import AddItemForm from '@/components/AddItemForm';
 import {useInventory} from '@/store/inventory';
@@ -30,6 +31,10 @@ export default function SettingsTab() {
 
   const handleEditItems = () => {
     router.push('/settings/manage-items' as any);
+  };
+
+  const handleViewProgress = () => {
+    router.push('/settings/count-progress' as any);
   };
 
   const handleResetCount = async () => {
@@ -61,7 +66,7 @@ export default function SettingsTab() {
 
       // Reset all items to not completed
       for (const item of inv) {
-        await insertItem({...item, foh_quantity: 0, boh_quantity: 0} as InventoryItem);
+        await insertItem({...item, foh_quantity: 0, boh_quantity: 0, completed: false} as InventoryItem);
       }
 
       // Reload inventory
@@ -229,6 +234,35 @@ export default function SettingsTab() {
                 </Pressable>
               </View>
             </View>
+          </View>
+
+          {/* Centered View Progress Button */}
+          <View
+              style={{
+                paddingHorizontal: 40,
+                marginTop: 40,
+                marginBottom: 40,
+                alignItems: 'center'
+              }}
+          >
+            <Pressable
+                style={[
+                  STYLES.settingsButton,
+                  {
+                    borderColor: '#2196F3',
+                    justifyContent: 'center',
+                    minHeight: 160,
+                    width: '60%',
+                    maxWidth: 700
+                  }
+                ]}
+                onPress={handleViewProgress}
+            >
+              <ClipboardCheck size={56} color="#2196F3" strokeWidth={2.5}/>
+              <Text style={[STYLES.settingsButtonText, {width: 'auto', fontSize: 38}]}>
+                View Count Progress
+              </Text>
+            </Pressable>
           </View>
 
           {/* Add Item Modal */}
