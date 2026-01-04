@@ -25,16 +25,6 @@ interface AddItemFormProps {
   initialData: InventoryItem | null;
 }
 
-const CATEGORIES: CATEGORY[] = [
-  'BEVERAGES',
-  'DAIRY',
-  'BAKED GOODS',
-  'INGREDIENTS',
-  'REFRIGERATED',
-  'SAUCES',
-  'TOPPINGS'
-];
-
 const COMMON_UNITS = [
   'quart container',
   'pint container',

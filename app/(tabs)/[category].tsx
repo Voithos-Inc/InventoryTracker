@@ -5,8 +5,13 @@ import InventoryGrid from '../../components/InventoryGrid';
 import {STYLES} from "@/constants/styles";
 import {inv} from "@/app/_layout";
 import WaveDivider from "@/components/WaveDivider";
+import { useLocalSearchParams } from 'expo-router';
+import { camelCaseToTitleWithSpaces } from '@/lib/utils';
 
-export default function SaucesTab() {
+export default function CategoryTab() {
+  const params = useLocalSearchParams();
+  const category = Array.isArray(params.category) ? params.category[0] : params.category
+
   return (
     <View style={STYLES.container}>
       <View style={STYLES.headerContainer}>
@@ -15,8 +20,8 @@ export default function SaucesTab() {
       <ScrollView style={STYLES.bodyContainer}>
         <WaveDivider />
         <InventoryGrid
-          items={inv!.filter(i => i.category === "SAUCES")}
-          sectionTitle="Sauces"
+          items={inv!.filter(i => i.category === category)}
+          sectionTitle={camelCaseToTitleWithSpaces(category)}
         />
       </ScrollView>
     </View>

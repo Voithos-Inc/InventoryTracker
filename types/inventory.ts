@@ -1,4 +1,4 @@
-export type CATEGORY =
+/*export type CATEGORY =
     | "DAIRY"
     | "REFRIGERATED"
     | "BEVERAGES"
@@ -6,6 +6,9 @@ export type CATEGORY =
     | "BAKED GOODS"
     | "TOPPINGS"
     | "INGREDIENTS";
+*/
+
+export let CATEGORY: string[] = []
 
 export interface InventoryItem {
   id: number;
@@ -18,7 +21,7 @@ export interface InventoryItem {
   units: string;
   image_link?: string;
   low_stock_threshold?: number;
-  category: CATEGORY;
+  category: string;
 }
 
 export interface InventoryExport {
@@ -26,7 +29,7 @@ export interface InventoryExport {
   export_date: string;
   exported_by: string;
   file_url?: string;  // Google Drive link or local file path
-  category_filter?: CATEGORY;  // If exporting specific category
+  category_filter?: string;  // If exporting specific category
   total_items: number;
   created_at: string;
 }
@@ -35,7 +38,7 @@ export interface InventoryExport {
 // Utility types for forms
 export interface AddItemFormData {
   name: string;
-  category: CATEGORY;
+  category: string;
   units: string;
   foh_quantity: number;
   boh_quantity: number;

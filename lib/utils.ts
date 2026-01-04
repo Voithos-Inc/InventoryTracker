@@ -1,3 +1,5 @@
+import { titleCase } from 'title-case';
+
 export const stringIsNumeric = (s: string): boolean => { return /^\d*[.,]?\d*$/.test(s) }
 
 export function getPositiveFloat(text: string) : number | undefined {
@@ -14,3 +16,10 @@ export function getPositiveFloat(text: string) : number | undefined {
   // else if (!isNaN(parseFloat(text.substring(0, text.length - 1))) && text.at(text.length - 1) === ".") return num /// CODE HERE is attempt to return if decimal, doesnt work
   else if (text === "" || text === ".") return 0
 }
+
+export function camelCaseToTitleWithSpaces(text: string) : string {
+  const result = text.replace(/([A-Z])/g, ' $1');
+  return result.charAt(0).toUpperCase() + result.slice(1);
+}
+
+export function allCapsToTitleCase(text: string) { return titleCase(text); }
