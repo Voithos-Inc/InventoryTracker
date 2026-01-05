@@ -55,6 +55,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
   const [imageData, setImageData] = useState<ImageUploadData | null>(null)
   const [saving, setSaving] = useState(false)
   const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [customCategory, setCustomCategory] = useState<string>('')
 
   useEffect(() => {
     async function loadExisting() {
@@ -246,17 +247,30 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                         paddingVertical: 10,
                         paddingHorizontal: 16,
                         borderRadius: 20,
-                        backgroundColor: COLORS.textonbg,
-                        minWidth: 120
+                        backgroundColor: formData.category === customCategory ? COLORS.confirm : COLORS.textonbg,
+                        color: formData.category === customCategory ? COLORS.pure_white : COLORS.textgray,
+                        fontWeight: '600',
+                        textAlign: 'center',
+                        minWidth: 80,
+                        width: 'auto',
                       }}
-                      onChangeText={(text) => setFormData({...formData, category: text.toUpperCase()})}
+                      onPressIn={() => {
+                        setFormData({...formData, category: customCategory.toUpperCase()})
+                      }}
+                      onChangeText={(text) => {
+                        setFormData({...formData, category: text.toUpperCase()})
+                        setCustomCategory(text.toUpperCase())
+                      }}
                       onEndEditing={(e) => {
                         const text = e.nativeEvent.text.trim();
                         if (text) {
                           categories?.push(text.toUpperCase());
                           setFormData({...formData, category: text.toUpperCase()});
                         }
-                        setIsAddingCategory(false);
+                        setCustomCategory(text.toUpperCase())
+                      }}
+                      onFocus={() => {
+                        setFormData({...formData, category: customCategory.toUpperCase()})
                       }}
                       placeholder="Type category"
                       autoCapitalize='characters'
@@ -264,15 +278,22 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                     />
                   ) : (
                     <Pressable
-                      onPress={() => setIsAddingCategory(true)}
+                      onPress={() => {
+                        setIsAddingCategory(true)
+                      }}
                       style={{
                         paddingVertical: 10,
                         paddingHorizontal: 16,
                         borderRadius: 20,
-                        backgroundColor: COLORS.textonbg
+                        backgroundColor: formData.category.toUpperCase() === customCategory.toUpperCase() ? COLORS.confirm : COLORS.textonbg,
                       }}
                     >
-                      <Text style={{color: COLORS.textgray, fontWeight: '600'}}>
+                      <Text 
+                        style={{
+                          color: formData.category.toUpperCase() === customCategory.toUpperCase() ? COLORS.pure_white : COLORS.textgray,
+                          fontWeight: '600'
+                        }}
+                      >
                         + Add category
                       </Text>
                     </Pressable>
