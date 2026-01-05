@@ -1,5 +1,5 @@
-import { Stack } from 'expo-router';
-import { useFonts } from 'expo-font';
+import {Stack} from 'expo-router';
+import {useFonts} from 'expo-font';
 import {SafeAreaView} from "react-native-safe-area-context";
 import {STYLES} from "@/constants/styles";
 import {useInventory} from "@/store/inventory";
@@ -7,7 +7,13 @@ import React, {useEffect} from "react";
 import {InventoryItem} from "@/types/inventory";
 import * as SplashScreen from 'expo-splash-screen';
 
-SplashScreen.preventAutoHideAsync();
+// Prevent auto-hide with error handling for Expo Go
+try {
+  SplashScreen.preventAutoHideAsync();
+} catch (e) {
+  // Ignore errors in Expo Go - this is expected
+  console.log('SplashScreen not available in Expo Go');
+}
 
 export let inv: null | InventoryItem[] = null
 export let categories: null | string[] = null
@@ -31,7 +37,13 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (fontsLoaded || fontError) {
-      SplashScreen.hideAsync();
+      // Hide splash screen with error handling for Expo Go
+      try {
+        SplashScreen.hideAsync();
+      } catch (e) {
+        // Ignore errors in Expo Go
+        console.log('SplashScreen.hideAsync not available');
+      }
     }
   }, [fontsLoaded, fontError]);
 
@@ -44,8 +56,8 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaView style={STYLES.container}>
-      <Stack screenOptions={{ headerShown: false }} />
-    </SafeAreaView>
+      <SafeAreaView style={STYLES.container}>
+        <Stack screenOptions={{headerShown: false}}/>
+      </SafeAreaView>
   );
 }

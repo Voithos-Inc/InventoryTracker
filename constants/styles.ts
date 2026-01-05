@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 
 const COLORS_FROM_SITE = {
   MAXS_TEAL: '#0f575a',
@@ -44,7 +44,7 @@ export const STYLES = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.main_bg,
     height: 100,
-    overscrollBehavior: "none"
+    ...(Platform.OS === 'web' && { overscrollBehavior: 'none' as any }),
   },
   headerContainer: {
     backgroundColor: COLORS.header_bg,
@@ -80,7 +80,7 @@ export const STYLES = StyleSheet.create({
   },
   bodyContainer: {
     marginTop: 100,
-    overscrollBehavior: "none"
+    ...(Platform.OS === 'web' && { overscrollBehavior: 'none' as any }),
   },
   sectionHeader: {
     paddingBottom: 30,
@@ -104,9 +104,6 @@ export const STYLES = StyleSheet.create({
     fontSize: 42,
     fontFamily: FONTS.heading,
     color: COLORS.MAXS_TEAL,
-    // textShadowColor: 'rgba(0, 0, 0, .75)',
-    // textShadowOffset: { width: 2, height: 2 },
-    // textShadowRadius: 2,
     letterSpacing: 0.5,
   },
   scrollView: {
@@ -227,40 +224,99 @@ export const STYLES = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  settingsContainer: {
-    width: '80%',
-    alignSelf: 'center',
-    flexDirection: 'column',
-    gap: 12,
-    marginBottom: 12,
+  // Settings Page Styles
+  settingsSpacer: {
+    height: 0,
+    width: 0,
+    marginVertical: 10,
+  },
+  settingsTwoColumnContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 40,
+    gap: 40,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  settingsColumn: {
+    flex: 1,
+    maxWidth: 500,
   },
   settingsSectionTitle: {
-    width: '80%',
+    width: '100%',
     fontSize: 42,
     fontFamily: FONTS.heading,
     marginBottom: 16,
     color: COLORS.MAXS_TEAL,
-    alignSelf: "center",
-    marginLeft: -4
+    textAlign: 'center',
+  },
+  settingsButtonGroup: {
+    gap: 20,
   },
   settingsButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     borderRadius: 50,
     borderWidth: 3,
     padding: 20,
     gap: 20,
     width: '100%',
+    minHeight: 120,
+  },
+  settingsButtonPrimary: {
+    backgroundColor: COLORS.confirm,
+    borderColor: COLORS.confirm,
+  },
+  settingsButtonSecondary: {
+    borderColor: COLORS.header_bg,
+    backgroundColor: 'transparent',
+  },
+  settingsButtonWarning: {
+    borderColor: '#FFA500',
+    backgroundColor: 'transparent',
+  },
+  settingsButtonSuccess: {
+    borderColor: '#28A745',
+    backgroundColor: 'transparent',
+  },
+  settingsButtonProgress: {
+    borderColor: '#2196F3',
+    backgroundColor: 'transparent',
+    minHeight: 160,
+    width: '60%',
+    maxWidth: 700,
   },
   settingsButtonText: {
-    width: '80%',
     fontSize: 32,
     fontFamily: FONTS.bodyMedium,
     textAlign: 'center',
-    color: COLORS.textoncontrast
+    color: COLORS.textoncontrast,
+    width: 'auto',
   },
-  imagePickerContainer: { alignItems: 'center' },
+  settingsButtonTextPrimary: {
+    fontSize: 32,
+    fontFamily: FONTS.bodyMedium,
+    textAlign: 'center',
+    color: 'white',
+    width: 'auto',
+  },
+  settingsButtonTextProgress: {
+    fontSize: 38,
+    fontFamily: FONTS.bodyMedium,
+    textAlign: 'center',
+    color: COLORS.textoncontrast,
+    width: 'auto',
+  },
+  settingsProgressContainer: {
+    paddingHorizontal: 40,
+    marginTop: 40,
+    marginBottom: 40,
+    alignItems: 'center',
+  },
+  imagePickerContainer: {
+    alignItems: 'center'
+  },
   imagePickerButton: {
     padding: 12,
     backgroundColor: '#ddd',
@@ -271,5 +327,9 @@ export const STYLES = StyleSheet.create({
     fontSize: 16,
     fontFamily: FONTS.body
   },
-  imagePickerImage: { width: 200, height: 200, borderRadius: 8 },
+  imagePickerImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 8
+  },
 });

@@ -10,20 +10,19 @@ export interface InventoryItem {
   image_link?: string;
   low_stock_threshold?: number;
   category: string;
+  completed?: boolean;
 }
 
 export interface InventoryExport {
   id: number;
   export_date: string;
   exported_by: string;
-  file_url?: string;  // Google Drive link or local file path
-  category_filter?: string;  // If exporting specific category
+  file_url?: string;
+  category_filter?: string;
   total_items: number;
   created_at: string;
 }
 
-
-// Utility types for forms
 export interface AddItemFormData {
   name: string;
   category: string;
