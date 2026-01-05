@@ -17,11 +17,6 @@ export function getPositiveFloat(text: string) : number | undefined {
   else if (text === "" || text === ".") return 0
 }
 
-export function camelCaseToTitleWithSpaces(text: string) : string {
-  const result = text.replace(/([A-Z])/g, ' $1');
-  return result.charAt(0).toUpperCase() + result.slice(1);
-}
-
 export function anyToTitleCase(text: string) { 
   const t = text.toLowerCase();
   return titleCase(t);

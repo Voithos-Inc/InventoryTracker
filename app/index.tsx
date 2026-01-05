@@ -7,7 +7,6 @@ import { categories } from './_layout';
 
 export default function Index() {
   const router = useRouter();
-  
 
   useEffect(() => {
     if (categories === null) return;
