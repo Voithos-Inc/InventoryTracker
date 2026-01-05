@@ -1,4 +1,5 @@
-import {InventoryItem, CATEGORY} from '@/types/inventory';
+import { categories } from '@/app/_layout';
+import {InventoryItem } from '@/types/inventory';
 import {Platform} from 'react-native';
 
 let FileSystem: any = null;
@@ -24,16 +25,6 @@ if (Platform.OS !== 'web') {
  * Creates an HTML table that Excel can open as .xlsx with preserved formatting
  */
 export async function exportToXLSX(items: InventoryItem[]): Promise<string> {
-  const categories: CATEGORY[] = [
-    'DAIRY',
-    'REFRIGERATED',
-    'BEVERAGES',
-    'SAUCES',
-    'BAKED GOODS',
-    'TOPPINGS',
-    'INGREDIENTS'
-  ];
-
   let html = `
 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
 <head>
@@ -100,7 +91,7 @@ export async function exportToXLSX(items: InventoryItem[]): Promise<string> {
         <tbody>
 `;
 
-  for (const category of categories) {
+  for (const category of categories ?? []) {
     const categoryItems = items
         .filter(item => item.category === category)
         .sort((a, b) => a.name.localeCompare(b.name));

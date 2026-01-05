@@ -1,12 +1,3 @@
-export type CATEGORY =
-    | "DAIRY"
-    | "REFRIGERATED"
-    | "BEVERAGES"
-    | "SAUCES"
-    | "BAKED GOODS"
-    | "TOPPINGS"
-    | "INGREDIENTS";
-
 export interface InventoryItem {
   id: number;
   sort_order: number;
@@ -18,8 +9,8 @@ export interface InventoryItem {
   units: string;
   image_link?: string;
   low_stock_threshold?: number;
-  category: CATEGORY;
-  completed?: boolean; // Track if item has been counted
+  category: string;
+  completed?: boolean;
 }
 
 export interface InventoryExport {
@@ -27,14 +18,14 @@ export interface InventoryExport {
   export_date: string;
   exported_by: string;
   file_url?: string;
-  category_filter?: CATEGORY;
+  category_filter?: string;
   total_items: number;
   created_at: string;
 }
 
 export interface AddItemFormData {
   name: string;
-  category: CATEGORY;
+  category: string;
   units: string;
   foh_quantity: number;
   boh_quantity: number;

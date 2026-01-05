@@ -10,13 +10,14 @@ import {
   Pressable, Platform
 } from 'react-native';
 import {COLORS} from '@/constants/styles';
-import {CATEGORY, AddItemFormData, InventoryItem} from '@/types/inventory';
+import {AddItemFormData, InventoryItem} from '@/types/inventory';
 import {X} from 'lucide-react-native';
 import {insertItem} from '@/lib/supabase';
 import {getPositiveFloat} from "@/lib/utils";
 import {useInventory} from "@/store/inventory";
 import ImagePickerBox, {ImageUploadData} from './ImagePickerBox';
 import {addImage} from "@/lib/github";
+import { categories } from '@/app/_layout';
 
 interface AddItemFormProps {
   visible: boolean;
@@ -24,16 +25,6 @@ interface AddItemFormProps {
   onSuccess: () => void;
   initialData: InventoryItem | null;
 }
-
-const CATEGORIES: CATEGORY[] = [
-  'BEVERAGES',
-  'DAIRY',
-  'BAKED GOODS',
-  'INGREDIENTS',
-  'REFRIGERATED',
-  'SAUCES',
-  'TOPPINGS'
-];
 
 const COMMON_UNITS = [
   'quart container',
@@ -54,7 +45,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
 
   const [formData, setFormData] = useState<AddItemFormData>({
     name: initialData?.name ?? '',
-    category: initialData?.category ?? 'BEVERAGES',
+    category: initialData?.category ?? (categories ? categories[0] : "BEVERAGES"),
     units: initialData?.units ?? 'quart container',
     foh_quantity: initialData?.foh_quantity ?? 0,
     boh_quantity: initialData?.boh_quantity ?? 0,
@@ -62,7 +53,9 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
   });
 
   const [imageData, setImageData] = useState<ImageUploadData | null>(null)
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState(false)
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [customCategory, setCustomCategory] = useState<string>('')
 
   useEffect(() => {
     async function loadExisting() {
@@ -117,6 +110,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
     try {
       const newItem: InventoryItem = {
         id: initialData?.id ?? inv[inv.length - 1].id + 2,
+        sort_order: initialData?.sort_order ?? 0,
         name: formData.name.trim(),
         category: formData.category,
         units: formData.units,
@@ -225,7 +219,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={{flexDirection: 'row', gap: 8}}>
-                  {CATEGORIES.map((cat) => (
+                  {categories?.map((cat) => (
                     <Pressable
                       key={cat}
                       onPress={() => setFormData({...formData, category: cat})}
@@ -247,6 +241,63 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                       </Text>
                     </Pressable>
                   ))}
+                  {isAddingCategory ? (
+                    <TextInput
+                      style={{
+                        paddingVertical: 10,
+                        paddingHorizontal: 16,
+                        borderRadius: 20,
+                        backgroundColor: formData.category === customCategory ? COLORS.confirm : COLORS.textonbg,
+                        color: formData.category === customCategory ? COLORS.pure_white : COLORS.textgray,
+                        fontWeight: '600',
+                        textAlign: 'center',
+                        minWidth: 80,
+                        width: 'auto',
+                      }}
+                      onPressIn={() => {
+                        setFormData({...formData, category: customCategory.toUpperCase()})
+                      }}
+                      onChangeText={(text) => {
+                        setFormData({...formData, category: text.toUpperCase()})
+                        setCustomCategory(text.toUpperCase())
+                      }}
+                      onEndEditing={(e) => {
+                        const text = e.nativeEvent.text.trim();
+                        if (text) {
+                          categories?.push(text.toUpperCase());
+                          setFormData({...formData, category: text.toUpperCase()});
+                        }
+                        setCustomCategory(text.toUpperCase())
+                      }}
+                      onFocus={() => {
+                        setFormData({...formData, category: customCategory.toUpperCase()})
+                      }}
+                      placeholder="Type category"
+                      autoCapitalize='characters'
+                      autoFocus
+                    />
+                  ) : (
+                    <Pressable
+                      onPress={() => {
+                        setIsAddingCategory(true)
+                      }}
+                      style={{
+                        paddingVertical: 10,
+                        paddingHorizontal: 16,
+                        borderRadius: 20,
+                        backgroundColor: formData.category.toUpperCase() === customCategory.toUpperCase() ? COLORS.confirm : COLORS.textonbg,
+                      }}
+                    >
+                      <Text 
+                        style={{
+                          color: formData.category.toUpperCase() === customCategory.toUpperCase() ? COLORS.pure_white : COLORS.textgray,
+                          fontWeight: '600'
+                        }}
+                      >
+                        + Add category
+                      </Text>
+                    </Pressable>
+                  )}
                 </View>
               </ScrollView>
             </View>
