@@ -332,4 +332,11 @@ export const STYLES = StyleSheet.create({
     height: 200,
     borderRadius: 8
   },
+  itemFormTextInput: {
+    borderRadius: 20,
+    fontWeight: '600',
+    textAlign: 'center',
+    minWidth: 80,
+    width: 'auto',
+  }
 });

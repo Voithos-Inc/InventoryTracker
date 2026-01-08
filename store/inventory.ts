@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import {getInventory} from "@/lib/supabase";
-import {CATEGORY, InventoryItem} from "@/types/inventory";
+import {InventoryItem} from "@/types/inventory";
 
 export const useInventory = create<InventoryState>((set) => ({
   inv: null as InventoryItem[] | null,
@@ -8,7 +8,7 @@ export const useInventory = create<InventoryState>((set) => ({
   loadInv: async () => { 
     let recieved = (await getInventory())
       .sort((a, b) => a.name.localeCompare(b.name))
-      .sort((a, b) => a.sort_order - b.sort_order);
+      .sort((a, b) => (a.sort_order ?? Number.MIN_SAFE_INTEGER) - (b.sort_order ?? Number.MIN_SAFE_INTEGER));
 
     const cats = Array.from(new Set(recieved.map(u => u.category))).sort();
 
