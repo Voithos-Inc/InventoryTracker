@@ -331,4 +331,25 @@ export const STYLES = StyleSheet.create({
     height: 200,
     borderRadius: 8
   },
+  itemFormTextInput: {
+    borderRadius: 20,
+    fontWeight: '600',
+    textAlign: 'center',
+    minWidth: 80,
+    width: 'auto',
+  },
+  gridShelfHeaderContainer: {
+    width: '100%',
+    height: 42,
+    borderBottomColor: COLORS.textgray,
+    borderBottomWidth: 3,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    marginBottom: 20,
+  },
+  gridShelfHeader: {
+    color: COLORS.textgray,
+    fontSize: 20,
+    fontWeight: '500',
+  }
 });

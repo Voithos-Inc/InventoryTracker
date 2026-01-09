@@ -12,7 +12,7 @@ export async function getInventory(): Promise<InventoryItem[]> {
   const response = await fetch(API_ROUTE);
   checkResponse(response);
   const { data } = await response.json();
-  return data as InventoryItem[];
+  return data ?? [] as InventoryItem[];
 }
 
 export async function insertItem(item: InventoryItem, upsert: boolean = true): Promise<void> {

@@ -51,7 +51,7 @@ export default function RootLayout() {
     return null;
   }
 
-  if (inv === null) {
+  if (inv?.length === 0) {
     return null;
   }
 

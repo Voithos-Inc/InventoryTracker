@@ -1,6 +1,6 @@
 export interface InventoryItem {
   id: number;
-  sort_order: number;
+  sort_order?: number;
   created_at: string;
   updated_at?: string;
   name: string;
@@ -27,6 +27,7 @@ export interface AddItemFormData {
   name: string;
   category: string;
   units: string;
+  sort_order?: number;
   foh_quantity: number;
   boh_quantity: number;
   low_stock_threshold: number;

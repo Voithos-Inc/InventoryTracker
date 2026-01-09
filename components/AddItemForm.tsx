@@ -9,11 +9,11 @@ import {
   Modal,
   Pressable, Platform
 } from 'react-native';
-import {COLORS} from '@/constants/styles';
+import {COLORS, STYLES} from '@/constants/styles';
 import {AddItemFormData, InventoryItem} from '@/types/inventory';
 import {X} from 'lucide-react-native';
 import {insertItem} from '@/lib/supabase';
-import {getPositiveFloat} from "@/lib/utils";
+import {getPositiveFloat, getPositiveInteger} from "@/lib/utils";
 import {useInventory} from "@/store/inventory";
 import ImagePickerBox, {ImageUploadData} from './ImagePickerBox';
 import {addImage} from "@/lib/github";
@@ -47,6 +47,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
     name: initialData?.name ?? '',
     category: initialData?.category ?? (categories ? categories[0] : "BEVERAGES"),
     units: initialData?.units ?? 'quart container',
+    sort_order: initialData?.sort_order,
     foh_quantity: initialData?.foh_quantity ?? 0,
     boh_quantity: initialData?.boh_quantity ?? 0,
     low_stock_threshold: initialData?.low_stock_threshold ?? 1,
@@ -217,121 +218,146 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
               <Text style={{fontSize: 18, fontWeight: '600', marginBottom: 8}}>
                 Category *
               </Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={{flexDirection: 'row', gap: 8}}>
-                  {categories?.map((cat) => (
-                    <Pressable
-                      key={cat}
-                      onPress={() => setFormData({...formData, category: cat})}
+
+              <View style={{flexDirection: 'row', gap: 8, flexWrap: 'wrap'}}>
+                {categories?.map((cat) => (
+                  <Pressable
+                    key={cat}
+                    onPress={() => setFormData({...formData, category: cat})}
+                    style={{
+                      paddingVertical: 10,
+                      paddingHorizontal: 16,
+                      borderRadius: 20,
+                      backgroundColor:
+                        formData.category === cat ? COLORS.confirm : COLORS.textonbg
+                    }}
+                  >
+                    <Text
                       style={{
-                        paddingVertical: 10,
-                        paddingHorizontal: 16,
-                        borderRadius: 20,
-                        backgroundColor:
-                          formData.category === cat ? COLORS.confirm : COLORS.textonbg
+                        color: formData.category === cat ? 'white' : COLORS.textgray,
+                        fontWeight: '600'
                       }}
                     >
-                      <Text
-                        style={{
-                          color: formData.category === cat ? 'white' : COLORS.textgray,
-                          fontWeight: '600'
-                        }}
-                      >
-                        {cat}
-                      </Text>
-                    </Pressable>
-                  ))}
-                  {isAddingCategory ? (
-                    <TextInput
+                      {cat}
+                    </Text>
+                  </Pressable>
+                ))}
+                {isAddingCategory ? (
+                  <TextInput
+                    style={{
+                      ...STYLES.itemFormTextInput,
+                      paddingVertical: 10,
+                      paddingHorizontal: 16,
+                      backgroundColor: formData.category === customCategory ? COLORS.confirm : COLORS.textonbg,
+                      color: formData.category === customCategory ? COLORS.pure_white : COLORS.textgray,
+                    }}
+                    onPressIn={() => {
+                      setFormData({...formData, category: customCategory.toUpperCase()})
+                    }}
+                    onChangeText={(text) => {
+                      setFormData({...formData, category: text.toUpperCase()})
+                      setCustomCategory(text.toUpperCase())
+                    }}
+                    onEndEditing={(e) => {
+                      const text = e.nativeEvent.text.trim();
+                      if (text) {
+                        categories?.push(text.toUpperCase());
+                        setFormData({...formData, category: text.toUpperCase()});
+                      }
+                      setCustomCategory(text.toUpperCase())
+                    }}
+                    onFocus={() => {
+                      setFormData({...formData, category: customCategory.toUpperCase()})
+                    }}
+                    placeholder="Type category"
+                    autoCapitalize='characters'
+                    autoFocus
+                  />
+                ) : (
+                  <Pressable
+                    onPress={() => {
+                      setIsAddingCategory(true)
+                    }}
+                    style={{
+                      paddingVertical: 10,
+                      paddingHorizontal: 16,
+                      borderRadius: 20,
+                      backgroundColor: formData.category.toUpperCase() === customCategory.toUpperCase() ? COLORS.confirm : COLORS.textonbg,
+                    }}
+                  >
+                    <Text 
                       style={{
-                        paddingVertical: 10,
-                        paddingHorizontal: 16,
-                        borderRadius: 20,
-                        backgroundColor: formData.category === customCategory ? COLORS.confirm : COLORS.textonbg,
-                        color: formData.category === customCategory ? COLORS.pure_white : COLORS.textgray,
-                        fontWeight: '600',
-                        textAlign: 'center',
-                        minWidth: 80,
-                        width: 'auto',
-                      }}
-                      onPressIn={() => {
-                        setFormData({...formData, category: customCategory.toUpperCase()})
-                      }}
-                      onChangeText={(text) => {
-                        setFormData({...formData, category: text.toUpperCase()})
-                        setCustomCategory(text.toUpperCase())
-                      }}
-                      onEndEditing={(e) => {
-                        const text = e.nativeEvent.text.trim();
-                        if (text) {
-                          categories?.push(text.toUpperCase());
-                          setFormData({...formData, category: text.toUpperCase()});
-                        }
-                        setCustomCategory(text.toUpperCase())
-                      }}
-                      onFocus={() => {
-                        setFormData({...formData, category: customCategory.toUpperCase()})
-                      }}
-                      placeholder="Type category"
-                      autoCapitalize='characters'
-                      autoFocus
-                    />
-                  ) : (
-                    <Pressable
-                      onPress={() => {
-                        setIsAddingCategory(true)
-                      }}
-                      style={{
-                        paddingVertical: 10,
-                        paddingHorizontal: 16,
-                        borderRadius: 20,
-                        backgroundColor: formData.category.toUpperCase() === customCategory.toUpperCase() ? COLORS.confirm : COLORS.textonbg,
+                        color: formData.category.toUpperCase() === customCategory.toUpperCase() ? COLORS.pure_white : COLORS.textgray,
+                        fontWeight: '600'
                       }}
                     >
-                      <Text 
-                        style={{
-                          color: formData.category.toUpperCase() === customCategory.toUpperCase() ? COLORS.pure_white : COLORS.textgray,
-                          fontWeight: '600'
-                        }}
-                      >
-                        + Add category
-                      </Text>
-                    </Pressable>
-                  )}
-                </View>
-              </ScrollView>
+                      + Add category
+                    </Text>
+                  </Pressable>
+                )}
+              </View>
+            </View>
+
+            <View style={{marginBottom: 20, flexDirection: "row", alignContent: 'center', height: 40}}>
+              <Text style={{fontSize: 18, fontWeight: '600', alignContent: "center"}}>
+                Shelf&nbsp;
+              </Text>
+
+              <Text style={{fontSize: 18, fontWeight: '200', alignContent: "center", marginRight: 12}}>
+                (optional)
+              </Text>
+
+              <View style={{width: 120}}>
+                <TextInput
+                  style={{
+                    ...STYLES.itemFormTextInput,
+                    borderRadius: 12,
+                    borderWidth: 2,
+                    borderColor: COLORS.MINT,
+                    padding: 8,
+                    paddingLeft: 12,
+                    color: formData.sort_order ? COLORS.pure_black : COLORS.textgray,
+                    textAlign: 'left'
+                  }}
+                  onChangeText={(text) => {
+                    setFormData({...formData, sort_order: getPositiveInteger(text)})
+                  }}
+                  keyboardType="number-pad"
+                  placeholder="2"
+                />
+              </View>
             </View>
 
             <View style={{marginBottom: 20}}>
               <Text style={{fontSize: 18, fontWeight: '600', marginBottom: 8}}>
                 Units *
               </Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={{flexDirection: 'row', gap: 8, marginBottom: 12}}>
-                  {COMMON_UNITS.map((unit) => (
-                    <Pressable
-                      key={unit}
-                      onPress={() => setFormData({...formData, units: unit})}
+
+              <View style={{flexDirection: 'row', gap: 8, marginBottom: 12, flexWrap: 'wrap'}}>
+                {COMMON_UNITS.map((unit) => (
+                  <Pressable
+                    key={unit}
+                    onPress={() => setFormData({...formData, units: unit})}
+                    style={{
+                      paddingVertical: 8,
+                      paddingHorizontal: 12,
+                      borderRadius: 16,
+                      backgroundColor:
+                        formData.units === unit ? COLORS.confirm : COLORS.textonbg
+                    }}
+                  >
+                    <Text
                       style={{
-                        paddingVertical: 8,
-                        paddingHorizontal: 12,
-                        borderRadius: 16,
-                        backgroundColor:
-                          formData.units === unit ? COLORS.confirm : COLORS.textonbg
+                        color: formData.units === unit ? 'white' : COLORS.textgray,
+                        fontSize: 14
                       }}
                     >
-                      <Text
-                        style={{
-                          color: formData.units === unit ? 'white' : COLORS.textgray,
-                          fontSize: 14
-                        }}
-                      >
-                        {unit}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-              </ScrollView>
+                      {unit}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+
               <TextInput
                 style={{
                   borderWidth: 2,
