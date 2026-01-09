@@ -3,7 +3,7 @@ import {getInventory} from "@/lib/supabase";
 import {InventoryItem} from "@/types/inventory";
 
 export const useInventory = create<InventoryState>((set) => ({
-  inv: null as InventoryItem[] | null,
+  inv: [] as InventoryItem[],
   categories: [] as string[],
   loadInv: async () => { 
     let recieved = (await getInventory())
