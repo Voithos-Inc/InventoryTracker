@@ -132,7 +132,11 @@ export default function SettingsTab() {
   return (
       <SafeAreaView style={STYLES.container}>
         <Header/>
-        <ScrollView style={STYLES.bodyContainer}>
+        <ScrollView
+            style={STYLES.bodyContainer}
+            contentContainerStyle={{paddingBottom: 50}}
+            showsVerticalScrollIndicator={false}
+        >
           <WaveDivider/>
 
           <View style={STYLES.settingsSpacer}/>

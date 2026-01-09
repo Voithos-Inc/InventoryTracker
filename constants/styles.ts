@@ -43,7 +43,6 @@ export const STYLES = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.main_bg,
-    height: 100,
     ...(Platform.OS === 'web' && { overscrollBehavior: 'none' as any }),
   },
   headerContainer: {
