@@ -111,7 +111,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
     try {
       const newItem: InventoryItem = {
         id: initialData?.id ?? inv[inv.length - 1].id + 2,
-        sort_order: initialData?.sort_order ?? 0,
+        sort_order: formData.sort_order,
         name: formData.name.trim(),
         category: formData.category,
         units: formData.units,
@@ -323,7 +323,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                     setFormData({...formData, sort_order: getPositiveInteger(text)})
                   }}
                   keyboardType="number-pad"
-                  placeholder="2"
+                  placeholder="number"
                 />
               </View>
             </View>

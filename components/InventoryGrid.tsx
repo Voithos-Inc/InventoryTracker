@@ -33,9 +33,9 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
         </View>
 
         {[...shelved_item_map.entries()].map(([shelf, items]) => (
-          <View>
+          <View key={shelf}>
             <View key={shelf} style={STYLES.gridShelfHeaderContainer}>
-              <Text key={shelf} style={STYLES.gridShelfHeader}>Shelf {shelf}</Text>
+              <Text key={shelf} style={STYLES.gridShelfHeader}>Rack {Math.floor(shelf / 10) + 1}, Shelf {shelf % 10}</Text>
             </View>
 
             <View style={STYLES.grid}>
@@ -49,6 +49,10 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
             </View>
           </View>
         ))}
+
+        <View style={STYLES.gridShelfHeaderContainer}>
+          <Text style={STYLES.gridShelfHeader}>Unshelved items</Text>
+        </View>
 
         <View style={STYLES.grid}>
           {unshelved_items.map(item => (
