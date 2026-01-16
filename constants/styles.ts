@@ -114,6 +114,11 @@ export const STYLES = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 100,
   },
+  gridScrollContent: {
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 100,
+  },
   scrollContainer: {
     flex: 1,
     backgroundColor: COLORS.main_bg
@@ -128,6 +133,10 @@ export const STYLES = StyleSheet.create({
   gridItem: {
     width: (screenWidth * 0.9 - 2 * 32) / 3, // 3 columns, same gap
     marginBottom: 32,
+  },
+  draggableGridItem: {
+    width: 320,
+    height: 200
   },
   card: {
     aspectRatio: 2.2,
