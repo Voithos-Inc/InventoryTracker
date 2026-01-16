@@ -18,7 +18,12 @@ import {useInventory} from "@/store/inventory";
 import ImagePickerBox, {ImageUploadData} from './ImagePickerBox';
 import {addImage} from "@/lib/github";
 import { categories } from '@/app/_layout';
-import {SORT_ORDER_RACK_OFFSET, SORT_ORDER_SHELF_OFFSET, sortOrderToRack} from "@/constants/constants";
+import {
+  SORT_ORDER_RACK_OFFSET,
+  SORT_ORDER_SHELF_OFFSET,
+  sortOrderToRack,
+  sortOrderToShelf
+} from "@/constants/constants";
 
 interface AddItemFormProps {
   visible: boolean;
@@ -322,6 +327,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                     color: formData.sort_order ? COLORS.pure_black : COLORS.textgray,
                     textAlign: 'left'
                   }}
+                  value={formData.sort_order ? sortOrderToRack(formData.sort_order).toString() : ""}
                   onChangeText={(text) => {
                     setFormData({...formData, sort_order:
                         (getPositiveInteger(text) ?? 0) * SORT_ORDER_RACK_OFFSET +
@@ -329,7 +335,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                     })
                   }}
                   keyboardType="number-pad"
-                  placeholder="2"
+                  placeholder="number"
                 />
               </View>
 
@@ -353,6 +359,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                     color: formData.sort_order ? COLORS.pure_black : COLORS.textgray,
                     textAlign: 'left'
                   }}
+                  value={formData.sort_order ? sortOrderToShelf(formData.sort_order).toString() : ""}
                   onChangeText={(text) => {
                     setFormData({...formData, sort_order:
                         sortOrderToRack(formData.sort_order ?? 0) * SORT_ORDER_RACK_OFFSET +

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import {View, Text, ScrollView, Pressable} from 'react-native';
 import InventoryCard from './InventoryCard';
 import { InventoryItem } from '@/types/inventory';
-import {STYLES} from "@/constants/styles";
+import {COLORS, STYLES} from "@/constants/styles";
 import {DndProvider, Draggable, DraggableGrid, DraggableGridProps} from "@mgcrea/react-native-dnd";
 import {SORT_ORDER_SHELF_OFFSET, sortOrderToRack, sortOrderToShelf} from "@/constants/constants";
 import {insertItem} from "@/lib/supabase";
@@ -13,7 +13,14 @@ interface InventoryGridProps {
 }
 
 export default function InventoryGrid({ items, sectionTitle }: InventoryGridProps) {
-  const shelved_items = items.filter(i => i.sort_order !== undefined && Math.floor(i.sort_order / SORT_ORDER_SHELF_OFFSET) > 0)
+  const [isDraggable, setIsDraggable] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  React.useEffect(() => {
+    setRefreshKey(prev => prev + 1)
+  }, [])
+
+  const shelved_items = items.filter(i => Math.floor((i.sort_order ?? 0) / SORT_ORDER_SHELF_OFFSET) > 0)
   const unshelved_items = items.filter(i => !shelved_items.includes(i))
 
   const shelved_item_map = new Map<number, InventoryItem[]>([])
@@ -61,9 +68,15 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
         style={STYLES.scrollView}
         contentContainerStyle={STYLES.gridScrollContent}
       >
-        <View style={{alignItems: "center"}}>
+        <View style={{alignItems: "center"}} key={refreshKey}>
           <View style={STYLES.sectionHeader}>
             <Text style={STYLES.sectionTitle}>{sectionTitle}</Text>
+          </View>
+
+          <View style={{width: '100%', alignItems: 'flex-end'}}>
+            <Pressable onPress={() => setIsDraggable(!isDraggable)} style={{...STYLES.draggableButton, backgroundColor: isDraggable ? COLORS.MAXS_TEAL : COLORS.main_bg}}>
+              <Text style={{...STYLES.draggableButtonText, color: isDraggable ? COLORS.pure_white : COLORS.MAXS_TEAL}}>{isDraggable ? "Disable rearrangement" : "Enable rearrangement"}</Text>
+            </Pressable>
           </View>
 
           {[...shelved_item_map.entries()].map(([sort_order, items]) => (
@@ -74,7 +87,34 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
 
               <DndProvider>
                 <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
-                  {items.map((item) => (
+                  {items.map((item) =>
+                    isDraggable ? (
+                    <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
+                      <View style={STYLES.gridItem}>
+                        <InventoryCard item={item}/>
+                      </View>
+                    </Draggable>
+                  ) : (
+                    <View key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
+                      <View style={STYLES.gridItem}>
+                        <InventoryCard item={item}/>
+                      </View>
+                    </View>
+                  ))}
+                </DraggableGrid>
+              </DndProvider>
+            </View>
+          ))}
+
+          {(unshelved_items.length > 0 || true) &&
+            <View style={{width: '95%'}}>
+              <View style={{...STYLES.gridShelfHeaderContainer, width: '95%'}}>
+                <Text style={STYLES.gridShelfHeader}>Unshelved items</Text>
+              </View>
+
+              <DndProvider>
+                <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
+                  {unshelved_items.map((item) => (
                     <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
                       <View style={STYLES.gridItem}>
                         <InventoryCard item={item}/>
@@ -84,25 +124,7 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
                 </DraggableGrid>
               </DndProvider>
             </View>
-          ))}
-
-          <View style={{...STYLES.gridShelfHeaderContainer, width: '95%'}}>
-            <Text style={STYLES.gridShelfHeader}>Unshelved items</Text>
-          </View>
-
-          <View style={{width: '95%'}}>
-            <DndProvider>
-              <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
-                {unshelved_items.map((item) => (
-                  <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
-                    <View style={STYLES.gridItem}>
-                      <InventoryCard item={item}/>
-                    </View>
-                  </Draggable>
-                ))}
-              </DraggableGrid>
-            </DndProvider>
-          </View>
+          }
         </View>
       </ScrollView>
     </View>

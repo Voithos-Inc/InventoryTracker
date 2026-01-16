@@ -105,6 +105,17 @@ export const STYLES = StyleSheet.create({
     color: COLORS.MAXS_TEAL,
     letterSpacing: 0.5,
   },
+  draggableButton: {
+    marginVertical: -4,
+    padding: 6,
+    borderRadius: 8,
+    borderColor: COLORS.MAXS_TEAL,
+    borderWidth: 3,
+  },
+  draggableButtonText: {
+    fontSize: 24,
+    fontFamily: FONTS.body,
+  },
   scrollView: {
     flex: 1,
   },
