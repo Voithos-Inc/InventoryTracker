@@ -67,7 +67,7 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
           </View>
 
           {[...shelved_item_map.entries()].map(([sort_order, items]) => (
-            <View key={sort_order}>
+            <View key={sort_order} style={{width: '95%'}}>
               <View key={sort_order} style={STYLES.gridShelfHeaderContainer}>
                 <Text key={sort_order} style={STYLES.gridShelfHeader}>Rack {sortOrderToRack(sort_order)}, Shelf {sortOrderToShelf(sort_order)}</Text>
               </View>
@@ -86,7 +86,7 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
             </View>
           ))}
 
-          <View style={STYLES.gridShelfHeaderContainer}>
+          <View style={{...STYLES.gridShelfHeaderContainer, width: '95%'}}>
             <Text style={STYLES.gridShelfHeader}>Unshelved items</Text>
           </View>
 
