@@ -124,10 +124,10 @@ export const STYLES = StyleSheet.create({
     backgroundColor: COLORS.main_bg
   },
   grid: {
-    // width: '90%',
+    width: '100%',
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
     marginBottom: 30,
   },

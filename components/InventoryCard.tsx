@@ -41,7 +41,6 @@ export default function InventoryCard({ item }: InventoryCardProps) {
               minHeight: 180,
             }
           ]}
-          delayPressIn={500}
           onPress={() => handleCardPress()}
           activeOpacity={0.7}
       >
@@ -89,7 +88,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
             }}
             numberOfLines={2}
         >
-          {item.name} DEBUG {item.sort_order}
+          {item.name}
         </Text>
 
         <View

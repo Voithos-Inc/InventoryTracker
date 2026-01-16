@@ -90,17 +90,19 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
             <Text style={STYLES.gridShelfHeader}>Unshelved items</Text>
           </View>
 
-          <DndProvider>
-            <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
-              {unshelved_items.map((item) => (
-                <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
-                  <View style={STYLES.gridItem}>
-                    <InventoryCard item={item}/>
-                  </View>
-                </Draggable>
-              ))}
-            </DraggableGrid>
-          </DndProvider>
+          <View style={{width: '95%'}}>
+            <DndProvider>
+              <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
+                {unshelved_items.map((item) => (
+                  <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
+                    <View style={STYLES.gridItem}>
+                      <InventoryCard item={item}/>
+                    </View>
+                  </Draggable>
+                ))}
+              </DraggableGrid>
+            </DndProvider>
+          </View>
         </View>
       </ScrollView>
     </View>
