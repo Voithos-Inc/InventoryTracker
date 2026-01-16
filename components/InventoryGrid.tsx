@@ -4,6 +4,8 @@ import InventoryCard from './InventoryCard';
 import { InventoryItem } from '@/types/inventory';
 import {STYLES} from "@/constants/styles";
 import {DndProvider, Draggable, DraggableGrid, DraggableGridProps} from "@mgcrea/react-native-dnd";
+import {SORT_ORDER_SHELF_OFFSET, sortOrderToRack, sortOrderToShelf} from "@/constants/constants";
+import {insertItem} from "@/lib/supabase";
 
 interface InventoryGridProps {
   items: InventoryItem[];
@@ -16,7 +18,6 @@ type InventoryGridItem = {
 };
 
 export default function InventoryGrid({ items, sectionTitle }: InventoryGridProps) {
-  const gridItems: InventoryGridItem[] = items.map((item: InventoryItem) => ({key: item.id, item}))
 
   const shelved_items = items.filter(i => i.sort_order != undefined)
   const unshelved_items = items.filter(i => i.sort_order == undefined)
@@ -25,24 +26,40 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
 
   shelved_items.map((i: InventoryItem) => {
     shelved_item_map.set(
-      i.sort_order!!,
-      [...(shelved_item_map.get(i.sort_order!!) ?? []), i]
+      i.sort_order!,
+      [...(shelved_item_map.get(i.sort_order!) ?? []), i]
     )
   })
 
-  function renderItem(gridItem : InventoryGridItem) {
-    return (
-      <View key={gridItem.key} style={STYLES.draggableGridItem}>
-        <InventoryCard
-          item={gridItem.item}
-        />
-      </View>
-    )
+  function getItemCategory(item: InventoryItem) {
+    return Math.floor((item.sort_order ?? 0) / SORT_ORDER_SHELF_OFFSET)
   }
 
   const onGridOrderChange: DraggableGridProps["onOrderChange"] = (value) => {
-    console.log("onGridOrderChange", value);
-  };
+    const newSorted = value.map((id) => items.find((item: InventoryItem) => item.id.toString() === id.toString())!);
+    console.log("newSorted", newSorted)
+
+    if (newSorted.length === 0) return
+
+    let currentCat = getItemCategory(newSorted[0])
+    let currentColNum = 0
+    let newItemList: InventoryItem[] = []
+
+    for (const item of newSorted) {
+      if (getItemCategory(item) !== currentCat) {
+        currentColNum = 0
+        currentCat = getItemCategory(item)
+      }
+      newItemList.push({...item, sort_order: currentCat * SORT_ORDER_SHELF_OFFSET + currentColNum})
+      currentColNum++
+    }
+
+    console.log(newItemList)
+
+    for (const newItem of newItemList) {
+      insertItem(newItem)
+    }
+  }
 
   return (
     <View style={STYLES.scrollContainer}>
@@ -55,48 +72,53 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
             <Text style={STYLES.sectionTitle}>{sectionTitle}</Text>
           </View>
 
+          {/*
+          <View style={{alignContent: "center",}}>
+            <DndProvider>
+              <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
+                {items.map((item) => (
+                  <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
+                    <View style={STYLES.gridItem}>
+                      <InventoryCard item={item}/>
+                    </View>
+                  </Draggable>
+                ))}
+              </DraggableGrid>
+            </DndProvider>
+          </View>
+          */}
+
+          {[...shelved_item_map.entries()].map(([sort_order, items]) => (
+            <View key={sort_order}>
+              <View key={sort_order} style={STYLES.gridShelfHeaderContainer}>
+                <Text key={sort_order} style={STYLES.gridShelfHeader}>Rack {sortOrderToRack(sort_order)}, Shelf {sortOrderToShelf(sort_order)}</Text>
+              </View>
+
+              <DndProvider>
+                <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
+                  {items.map((item) => (
+                    <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
+                      <View style={STYLES.gridItem}>
+                        <InventoryCard item={item}/>
+                      </View>
+                    </Draggable>
+                  ))}
+                </DraggableGrid>
+              </DndProvider>
+            </View>
+          ))}
+
           <DndProvider>
             <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
-              {items.map((item) => (
-                <Draggable key={item.id} id={item.id.toString()} style={STYLES.draggableGridItem}>
-                  <View >
+              {unshelved_items.map((item) => (
+                <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
+                  <View style={STYLES.gridItem}>
                     <InventoryCard item={item}/>
                   </View>
                 </Draggable>
               ))}
             </DraggableGrid>
           </DndProvider>
-
-          {/*
-
-          {[...shelved_item_map.entries()].map(([shelf, items]) => (
-            <View key={shelf}>
-              <View key={shelf} style={STYLES.gridShelfHeaderContainer}>
-                <Text key={shelf} style={STYLES.gridShelfHeader}>Shelf {shelf}</Text>
-              </View>
-
-              <View style={STYLES.grid}>
-                {items.map((item: InventoryItem) => (
-                  <View key={item.id} style={STYLES.gridItem}>
-                    <InventoryCard
-                      item={item}
-                    />
-                  </View>
-                ))}
-              </View>
-            </View>
-          ))}
-
-          <View style={STYLES.grid}>
-            {unshelved_items.map(item => (
-              <View key={item.id} style={STYLES.gridItem}>
-                <InventoryCard
-                  item={item}
-                />
-              </View>
-            ))}
-          </View>
-          */}
         </View>
       </ScrollView>
     </View>

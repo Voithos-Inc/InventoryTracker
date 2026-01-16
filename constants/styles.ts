@@ -124,19 +124,19 @@ export const STYLES = StyleSheet.create({
     backgroundColor: COLORS.main_bg
   },
   grid: {
-    width: screenWidth * 0.9,
+    // width: '90%',
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 30,
   },
   gridItem: {
-    width: (screenWidth * 0.9 - 2 * 32) / 3, // 3 columns, same gap
     marginBottom: 32,
+    marginHorizontal: 20,
   },
   draggableGridItem: {
-    width: 320,
-    height: 200
+    width: `${100.0 / 3.0}%`,
   },
   card: {
     aspectRatio: 2.2,

@@ -89,10 +89,9 @@ export default function InventoryCard({ item }: InventoryCardProps) {
             }}
             numberOfLines={2}
         >
-          {item.name}
+          {item.name} DEBUG {item.sort_order}
         </Text>
 
-        {/* Image and Total Side by Side - Centered */}
         <View
             style={{
               flexDirection: 'row',
