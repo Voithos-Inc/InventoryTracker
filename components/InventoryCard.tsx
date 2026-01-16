@@ -88,7 +88,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
             }}
             numberOfLines={2}
         >
-          {item.name} {item.sort_order}
+          {item.name}
         </Text>
 
         <View

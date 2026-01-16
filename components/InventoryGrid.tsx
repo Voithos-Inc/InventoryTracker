@@ -77,9 +77,9 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
           </View>
 
           {[...shelved_item_map.entries()].map(([sortCat, items]) => (
-            <View key={sortCat} style={{width: '95%'}}>
-              <View key={sortCat} style={STYLES.gridShelfHeaderContainer}>
-                <Text key={sortCat} style={STYLES.gridShelfHeader}>Rack {Math.floor(sortCat / SORT_ORDER_SHELF_OFFSET)}, Shelf {sortCat % SORT_ORDER_SHELF_OFFSET}</Text>
+            <View key={sortCat ^ 17} style={{width: '95%'}}>
+              <View key={sortCat ^ 31} style={STYLES.gridShelfHeaderContainer}>
+                <Text key={sortCat ^ 67} style={STYLES.gridShelfHeader}>Rack {Math.floor(sortCat / SORT_ORDER_SHELF_OFFSET)}, Shelf {sortCat % SORT_ORDER_SHELF_OFFSET}</Text>
               </View>
 
               <DndProvider>
