@@ -343,7 +343,7 @@ export default function ItemModal({visible, item, onClose}: ItemModalProps) {
                     {completed && <Check size={24} color="white" strokeWidth={3}/>}
                   </View>
                   <Text style={{fontSize: 20, fontWeight: '600'}}>
-                    {completed ? 'Count Completed ✓' : 'Mark as Counted'}
+                    {completed ? 'Count Completed' : 'Mark as Counted'}
                   </Text>
                 </TouchableOpacity>
 
