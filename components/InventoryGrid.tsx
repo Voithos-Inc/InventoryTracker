@@ -81,25 +81,30 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
               <View key={sortCat ^ 31} style={STYLES.gridShelfHeaderContainer}>
                 <Text key={sortCat ^ 67} style={STYLES.gridShelfHeader}>Rack {Math.floor(sortCat / SORT_ORDER_SHELF_OFFSET)}, Shelf {sortCat % SORT_ORDER_SHELF_OFFSET}</Text>
               </View>
+              {isDraggable ? (
 
               <DndProvider>
                 <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
-                  {items.map((item) =>
-                    isDraggable ? (
+                  {items.map((item) => (
                     <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
                       <View style={STYLES.gridItem}>
                         <InventoryCard item={item}/>
                       </View>
                     </Draggable>
+                  ))}
+                </DraggableGrid>
+              </DndProvider>
                   ) : (
+                <View style={{flex: 1, flexDirection: "row", flexWrap: "wrap"}}>
+                {items.map((item) => (
                     <View key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
                       <View style={STYLES.gridItem}>
                         <InventoryCard item={item}/>
                       </View>
                     </View>
                   ))}
-                </DraggableGrid>
-              </DndProvider>
+                </View>
+                )}
             </View>
           ))}
 
@@ -111,12 +116,18 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
 
               <DndProvider>
                 <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
-                  {unshelved_items.map((item) => (
+                  {unshelved_items.map((item) => isDraggable ? (
                     <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
                       <View style={STYLES.gridItem}>
                         <InventoryCard item={item}/>
                       </View>
                     </Draggable>
+                  ) : (
+                    <View key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
+                      <View style={STYLES.gridItem}>
+                        <InventoryCard item={item}/>
+                      </View>
+                    </View>
                   ))}
                 </DraggableGrid>
               </DndProvider>
