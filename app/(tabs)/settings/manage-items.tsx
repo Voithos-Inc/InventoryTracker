@@ -17,7 +17,6 @@ import {deleteItem} from '@/lib/supabase';
 import {
   ArrowLeft,
   Search,
-  Pencil,
   Trash2,
 } from 'lucide-react-native';
 import AddItemForm from "@/components/AddItemForm";
@@ -50,7 +49,10 @@ export default function ManageItemsScreen() {
     });
   }, [inv, searchQuery, selectedCategory]);
 
-  const handleDeleteItem = (item: InventoryItem) => {
+  const handleDeleteItem = (item: InventoryItem, event: any) => {
+    // Stop the event from propagating to the parent Pressable
+    event.stopPropagation();
+
     if (Platform.OS === "web") {
       const confirmed = confirm(`Delete item\nAre you sure you want to delete "${item.name}"? This cannot be undone.`)
       if (confirmed) onDeleteItem(item)
@@ -110,7 +112,7 @@ export default function ManageItemsScreen() {
           Manage Items
         </Text>
       </View>
-      
+
       <WaveDivider />
 
       {/* Search Bar */}
@@ -191,8 +193,9 @@ export default function ManageItemsScreen() {
           </View>
         ) : (
           filteredItems.map((item) => (
-            <View
+            <Pressable
               key={item.id}
+              onPress={() => handleEditItem(item)}
               style={{
                 backgroundColor: 'white',
                 borderRadius: 12,
@@ -262,31 +265,18 @@ export default function ManageItemsScreen() {
                 </Text>
               </View>
 
-              {/* Action Buttons */}
-              <View style={{gap: 8}}>
-                <Pressable
-                  onPress={() => handleEditItem(item)}
-                  style={{
-                    padding: 8,
-                    borderRadius: 8,
-                    backgroundColor: COLORS.header_bg
-                  }}
-                >
-                  <Pencil size={20} color="white"/>
-                </Pressable>
-
-                <Pressable
-                  onPress={() => handleDeleteItem(item)}
-                  style={{
-                    padding: 8,
-                    borderRadius: 8,
-                    backgroundColor: COLORS.deny
-                  }}
-                >
-                  <Trash2 size={20} color="white"/>
-                </Pressable>
-              </View>
-            </View>
+              {/* Delete Button */}
+              <Pressable
+                onPress={(e) => handleDeleteItem(item, e)}
+                style={{
+                  padding: 8,
+                  borderRadius: 8,
+                  backgroundColor: COLORS.deny
+                }}
+              >
+                <Trash2 size={20} color="white"/>
+              </Pressable>
+            </Pressable>
           ))
         )}
       </ScrollView>
