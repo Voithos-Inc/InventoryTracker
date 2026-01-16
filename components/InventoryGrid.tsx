@@ -12,22 +12,16 @@ interface InventoryGridProps {
   sectionTitle: string;
 }
 
-type InventoryGridItem = {
-  key: string | number;
-  item: InventoryItem;
-};
-
 export default function InventoryGrid({ items, sectionTitle }: InventoryGridProps) {
-
-  const shelved_items = items.filter(i => i.sort_order != undefined)
-  const unshelved_items = items.filter(i => i.sort_order == undefined)
+  const shelved_items = items.filter(i => i.sort_order !== undefined && Math.floor(i.sort_order / SORT_ORDER_SHELF_OFFSET) > 0)
+  const unshelved_items = items.filter(i => !shelved_items.includes(i))
 
   const shelved_item_map = new Map<number, InventoryItem[]>([])
 
   shelved_items.map((i: InventoryItem) => {
     shelved_item_map.set(
-      i.sort_order!,
-      [...(shelved_item_map.get(i.sort_order!) ?? []), i]
+      Math.floor(i.sort_order!  / SORT_ORDER_SHELF_OFFSET),
+      [...(shelved_item_map.get(Math.floor(i.sort_order!  / SORT_ORDER_SHELF_OFFSET),) ?? []), i]
     )
   })
 
@@ -72,22 +66,6 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
             <Text style={STYLES.sectionTitle}>{sectionTitle}</Text>
           </View>
 
-          {/*
-          <View style={{alignContent: "center",}}>
-            <DndProvider>
-              <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
-                {items.map((item) => (
-                  <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
-                    <View style={STYLES.gridItem}>
-                      <InventoryCard item={item}/>
-                    </View>
-                  </Draggable>
-                ))}
-              </DraggableGrid>
-            </DndProvider>
-          </View>
-          */}
-
           {[...shelved_item_map.entries()].map(([sort_order, items]) => (
             <View key={sort_order}>
               <View key={sort_order} style={STYLES.gridShelfHeaderContainer}>
@@ -107,6 +85,10 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
               </DndProvider>
             </View>
           ))}
+
+          <View style={STYLES.gridShelfHeaderContainer}>
+            <Text style={STYLES.gridShelfHeader}>Unshelved items</Text>
+          </View>
 
           <DndProvider>
             <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
