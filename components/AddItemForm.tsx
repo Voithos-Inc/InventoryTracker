@@ -18,6 +18,12 @@ import {useInventory} from "@/store/inventory";
 import ImagePickerBox, {ImageUploadData} from './ImagePickerBox';
 import {addImage} from "@/lib/github";
 import { categories } from '@/app/_layout';
+import {
+  SORT_ORDER_RACK_OFFSET,
+  SORT_ORDER_SHELF_OFFSET,
+  sortOrderToRack,
+  sortOrderToShelf
+} from "@/constants/constants";
 
 interface AddItemFormProps {
   visible: boolean;
@@ -97,6 +103,8 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
       Alert.alert('Error', 'Please enter units');
       return;
     }
+
+    console.log(formData)
 
     setSaving(true);
 
@@ -300,6 +308,38 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
 
             <View style={{marginBottom: 20, flexDirection: "row", alignContent: 'center', height: 40}}>
               <Text style={{fontSize: 18, fontWeight: '600', alignContent: "center"}}>
+                Rack&nbsp;
+              </Text>
+
+              <Text style={{fontSize: 18, fontWeight: '200', alignContent: "center", marginRight: 12}}>
+                (optional)
+              </Text>
+
+              <View style={{width: 120, marginRight: 100}}>
+                <TextInput
+                  style={{
+                    ...STYLES.itemFormTextInput,
+                    borderRadius: 12,
+                    borderWidth: 2,
+                    borderColor: COLORS.MINT,
+                    padding: 8,
+                    paddingLeft: 12,
+                    color: formData.sort_order ? COLORS.pure_black : COLORS.textgray,
+                    textAlign: 'left'
+                  }}
+                  value={formData.sort_order ? sortOrderToRack(formData.sort_order).toString() : ""}
+                  onChangeText={(text) => {
+                    setFormData({...formData, sort_order:
+                        (getPositiveInteger(text) ?? 0) * SORT_ORDER_RACK_OFFSET +
+                        (formData.sort_order ?? 0) % SORT_ORDER_RACK_OFFSET
+                    })
+                  }}
+                  keyboardType="number-pad"
+                  placeholder="number"
+                />
+              </View>
+
+              <Text style={{fontSize: 18, fontWeight: '600', alignContent: "center"}}>
                 Shelf&nbsp;
               </Text>
 
@@ -319,8 +359,13 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                     color: formData.sort_order ? COLORS.pure_black : COLORS.textgray,
                     textAlign: 'left'
                   }}
+                  value={formData.sort_order ? sortOrderToShelf(formData.sort_order).toString() : ""}
                   onChangeText={(text) => {
-                    setFormData({...formData, sort_order: getPositiveInteger(text)})
+                    setFormData({...formData, sort_order:
+                        sortOrderToRack(formData.sort_order ?? 0) * SORT_ORDER_RACK_OFFSET +
+                        (getPositiveInteger(text) ?? 0) * SORT_ORDER_SHELF_OFFSET +
+                        (formData.sort_order ?? 0) % SORT_ORDER_SHELF_OFFSET
+                    })
                   }}
                   keyboardType="number-pad"
                   placeholder="number"

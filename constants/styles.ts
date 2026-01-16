@@ -105,6 +105,17 @@ export const STYLES = StyleSheet.create({
     color: COLORS.MAXS_TEAL,
     letterSpacing: 0.5,
   },
+  draggableButton: {
+    marginVertical: -4,
+    padding: 6,
+    borderRadius: 8,
+    borderColor: COLORS.MAXS_TEAL,
+    borderWidth: 3,
+  },
+  draggableButtonText: {
+    fontSize: 24,
+    fontFamily: FONTS.body,
+  },
   scrollView: {
     flex: 1,
   },
@@ -114,20 +125,29 @@ export const STYLES = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 100,
   },
+  gridScrollContent: {
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 100,
+  },
   scrollContainer: {
     flex: 1,
     backgroundColor: COLORS.main_bg
   },
   grid: {
-    width: screenWidth * 0.9,
+    width: '100%',
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
+    alignItems: "center",
     marginBottom: 30,
   },
   gridItem: {
-    width: (screenWidth * 0.9 - 2 * 32) / 3, // 3 columns, same gap
     marginBottom: 32,
+    marginHorizontal: 20,
+  },
+  draggableGridItem: {
+    width: `${100.0 / 3.0}%`,
   },
   card: {
     aspectRatio: 2.2,

@@ -25,6 +25,7 @@ export default function InventoryCard({ item }: InventoryCardProps) {
   const isCompleted = item.completed || false;
 
   return (
+    <View>
       <TouchableOpacity
           style={[
             {
@@ -90,7 +91,6 @@ export default function InventoryCard({ item }: InventoryCardProps) {
           {item.name}
         </Text>
 
-        {/* Image and Total Side by Side - Centered */}
         <View
             style={{
               flexDirection: 'row',
@@ -143,9 +143,9 @@ export default function InventoryCard({ item }: InventoryCardProps) {
         <ItemModal
             visible={modalVisible}
             item={item}
-            onClose={handleCloseModal} completed={false} toggleCompleted={function (): void {
-          throw new Error('Function not implemented.');
-        }}        />
+            onClose={handleCloseModal}
+        />
       </TouchableOpacity>
+    </View>
   );
 }
