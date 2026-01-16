@@ -4,7 +4,7 @@ import InventoryCard from './InventoryCard';
 import { InventoryItem } from '@/types/inventory';
 import {COLORS, STYLES} from "@/constants/styles";
 import {DndProvider, Draggable, DraggableGrid, DraggableGridProps} from "@mgcrea/react-native-dnd";
-import {SORT_ORDER_SHELF_OFFSET, sortOrderToRack, sortOrderToShelf} from "@/constants/constants";
+import {SORT_ORDER_SHELF_OFFSET} from "@/constants/constants";
 import {insertItem} from "@/lib/supabase";
 
 interface InventoryGridProps {
@@ -28,7 +28,7 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
   shelved_items.map((i: InventoryItem) => {
     shelved_item_map.set(
       Math.floor(i.sort_order!  / SORT_ORDER_SHELF_OFFSET),
-      [...(shelved_item_map.get(Math.floor(i.sort_order!  / SORT_ORDER_SHELF_OFFSET),) ?? []), i]
+      [...(shelved_item_map.get(Math.floor(i.sort_order!  / SORT_ORDER_SHELF_OFFSET)) ?? []), i]
     )
   })
 
@@ -38,7 +38,6 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
 
   const onGridOrderChange: DraggableGridProps["onOrderChange"] = (value) => {
     const newSorted = value.map((id) => items.find((item: InventoryItem) => item.id.toString() === id.toString())!);
-    console.log("newSorted", newSorted)
 
     if (newSorted.length === 0) return
 
@@ -49,13 +48,11 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
     for (const item of newSorted) {
       if (getItemCategory(item) !== currentCat) {
         currentColNum = 0
-        currentCat = getItemCategory(item)
+        currentCat =  getItemCategory(item)
       }
       newItemList.push({...item, sort_order: currentCat * SORT_ORDER_SHELF_OFFSET + currentColNum})
       currentColNum++
     }
-
-    console.log(newItemList)
 
     for (const newItem of newItemList) {
       insertItem(newItem)
@@ -79,10 +76,10 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
             </Pressable>
           </View>
 
-          {[...shelved_item_map.entries()].map(([sort_order, items]) => (
-            <View key={sort_order} style={{width: '95%'}}>
-              <View key={sort_order} style={STYLES.gridShelfHeaderContainer}>
-                <Text key={sort_order} style={STYLES.gridShelfHeader}>Rack {sortOrderToRack(sort_order)}, Shelf {sortOrderToShelf(sort_order)}</Text>
+          {[...shelved_item_map.entries()].map(([sortCat, items]) => (
+            <View key={sortCat} style={{width: '95%'}}>
+              <View key={sortCat} style={STYLES.gridShelfHeaderContainer}>
+                <Text key={sortCat} style={STYLES.gridShelfHeader}>Rack {Math.floor(sortCat / SORT_ORDER_SHELF_OFFSET)}, Shelf {sortCat % SORT_ORDER_SHELF_OFFSET}</Text>
               </View>
 
               <DndProvider>
@@ -106,7 +103,7 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
             </View>
           ))}
 
-          {(unshelved_items.length > 0 || true) &&
+          {(unshelved_items.length > 0) &&
             <View style={{width: '95%'}}>
               <View style={{...STYLES.gridShelfHeaderContainer, width: '95%'}}>
                 <Text style={STYLES.gridShelfHeader}>Unshelved items</Text>

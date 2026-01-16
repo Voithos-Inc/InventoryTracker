@@ -150,7 +150,7 @@ export default function ManageItemsScreen() {
         style={{maxHeight: 60, backgroundColor: COLORS.main_bg}}
         contentContainerStyle={{paddingHorizontal: 16, gap: 8}}
       >
-        {categories?.map((cat) => (
+        {["ALL", ...categories ?? []].map((cat) => (
           <Pressable
             key={cat}
             onPress={() => setSelectedCategory(cat)}
