@@ -4,7 +4,6 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import {STYLES} from "@/constants/styles";
 import {useInventory} from "@/store/inventory";
 import React, {useEffect} from "react";
-import {InventoryItem} from "@/types/inventory";
 import * as SplashScreen from 'expo-splash-screen';
 
 // Prevent auto-hide with error handling for Expo Go
@@ -15,7 +14,6 @@ try {
   console.log('SplashScreen not available in Expo Go');
 }
 
-export let inv: null | InventoryItem[] = null
 export let categories: null | string[] = null
 
 export default function RootLayout() {
@@ -28,7 +26,7 @@ export default function RootLayout() {
   });
 
   const loadInv = useInventory((state) => state.loadInv);
-  inv = useInventory((state) => state.inv);
+  let inv = useInventory((state) => state.inv);
   categories = useInventory((state) => state.categories);
 
   useEffect(() => {

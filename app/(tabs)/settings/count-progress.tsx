@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useRouter} from 'expo-router';
 import {COLORS, STYLES} from '@/constants/styles';
 import {useInventory} from '@/store/inventory';
-import {CATEGORY, InventoryItem} from '@/types/inventory';
+import {InventoryItem} from '@/types/inventory';
 import {ArrowLeft, Clock} from 'lucide-react-native';
 
 export default function CountProgressScreen() {
