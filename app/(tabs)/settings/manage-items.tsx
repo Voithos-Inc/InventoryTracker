@@ -17,7 +17,6 @@ import {deleteItem} from '@/lib/supabase';
 import {
   ArrowLeft,
   Search,
-  Pencil,
   Trash2,
 } from 'lucide-react-native';
 import AddItemForm from "@/components/AddItemForm";
@@ -50,22 +49,25 @@ export default function ManageItemsScreen() {
     });
   }, [inv, searchQuery, selectedCategory]);
 
-  const handleDeleteItem = (item: InventoryItem) => {
+  const handleDeleteItem = (item: InventoryItem, event: any) => {
+    // Stop the event from propagating to the parent Pressable
+    event.stopPropagation();
+
     if (Platform.OS === "web") {
       const confirmed = confirm(`Delete item\nAre you sure you want to delete "${item.name}"? This cannot be undone.`)
       if (confirmed) onDeleteItem(item)
     } else {
       Alert.alert(
-        'Delete Item',
-        `Are you sure you want to delete "${item.name}"? This cannot be undone.`,
-        [
-          {text: 'Cancel', style: 'cancel'},
-          {
-            text: 'Delete',
-            style: 'destructive',
-            onPress: () => onDeleteItem(item)
-          }
-        ]
+          'Delete Item',
+          `Are you sure you want to delete "${item.name}"? This cannot be undone.`,
+          [
+            {text: 'Cancel', style: 'cancel'},
+            {
+              text: 'Delete',
+              style: 'destructive',
+              onPress: () => onDeleteItem(item)
+            }
+          ]
       );
     }
   };
@@ -82,224 +84,212 @@ export default function ManageItemsScreen() {
   }
 
   return (
-    <SafeAreaView style={[STYLES.container, {paddingBottom: 0}]}>
-      <View
-        style={{
-          backgroundColor: COLORS.tabBarBg,
-          paddingVertical: 20,
-          paddingHorizontal: 20,
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderBottomWidth: 3,
-          borderBottomColor: COLORS.header_bg
-        }}
-      >
-        <Pressable onPress={() => router.push('/settings')} style={{marginRight: 16}}>
-          <Link href="/settings" asChild>
-            <ArrowLeft size={32} color="white"/>
-          </Link>
-        </Pressable>
-        <Text
-          style={{
-            fontSize: 28,
-            fontWeight: '700',
-            color: COLORS.textonbg,
-            flex: 1
-          }}
-        >
-          Manage Items
-        </Text>
-      </View>
-      
-      <WaveDivider />
-
-      {/* Search Bar */}
-      <View style={{padding: 16, backgroundColor: COLORS.main_bg}}>
+      <SafeAreaView style={[STYLES.container, {paddingBottom: 0}]}>
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            borderRadius: 12,
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            borderWidth: 2,
-            borderColor: COLORS.header_bg
-          }}
+            style={{
+              backgroundColor: COLORS.tabBarBg,
+              paddingVertical: 20,
+              paddingHorizontal: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderBottomWidth: 3,
+              borderBottomColor: COLORS.header_bg
+            }}
         >
-          <Search size={24} color={COLORS.textgray}/>
-          <TextInput
-            style={{
-              flex: 1,
-              marginLeft: 12,
-              fontSize: 18,
-              color: COLORS.textoncontrast
-            }}
-            placeholder="Search items..."
-            placeholderTextColor={COLORS.textgray}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
-      </View>
-
-      {/* Category Filter */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={{maxHeight: 60, backgroundColor: COLORS.main_bg}}
-        contentContainerStyle={{paddingHorizontal: 16, gap: 8}}
-      >
-        {categories?.map((cat) => (
-          <Pressable
-            key={cat}
-            onPress={() => setSelectedCategory(cat)}
-            style={{
-              height: 45,
-              justifyContent: "center",
-              paddingHorizontal: 16,
-              borderRadius: 20,
-              backgroundColor:
-                selectedCategory === cat ? COLORS.tabBarBg : 'white',
-              borderWidth: 2,
-              borderColor: COLORS.header_bg
-            }}
-          >
-            <Text
-              style={{
-                color: selectedCategory === cat ? 'white' : COLORS.header_bg,
-                fontWeight: '600',
-                fontSize: 14
-              }}
-            >
-              {cat}
-            </Text>
+          <Pressable onPress={() => router.push('/settings')} style={{marginRight: 16}}>
+            <Link href="/settings" asChild>
+              <ArrowLeft size={32} color="white"/>
+            </Link>
           </Pressable>
-        ))}
-      </ScrollView>
-
-      {/* Items List */}
-      <ScrollView
-        style={{flex: 1}}
-        contentContainerStyle={{padding: 16, paddingBottom: 100}}
-      >
-        {filteredItems.length === 0 ? (
-          <View style={{alignItems: 'center', marginTop: 40}}>
-            <Text style={{fontSize: 18, color: COLORS.textgray}}>
-              No items found
-            </Text>
-          </View>
-        ) : (
-          filteredItems.map((item) => (
-            <View
-              key={item.id}
+          <Text
               style={{
+                fontSize: 28,
+                fontWeight: '700',
+                color: COLORS.textonbg,
+                flex: 1
+              }}
+          >
+            Manage Items
+          </Text>
+        </View>
+
+        <WaveDivider />
+
+        {/* Search Bar */}
+        <View style={{padding: 16, backgroundColor: COLORS.main_bg}}>
+          <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
                 backgroundColor: 'white',
                 borderRadius: 12,
-                padding: 16,
-                marginBottom: 12,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
                 borderWidth: 2,
-                borderColor: COLORS.header_bg,
-                flexDirection: 'row',
-                alignItems: 'center'
+                borderColor: COLORS.header_bg
               }}
-            >
-              {/* Item Image */}
-              {item.image_link && item.image_link !== "about:blank" ? (
-                <Image
-                  source={{uri: item.image_link}}
-                  style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 8,
-                    marginRight: 12
-                  }}
-                />
-              ) : (
-                <View
-                  style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 8,
-                    backgroundColor: COLORS.textonbg,
-                    marginRight: 12,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                >
-                  <Text style={{fontSize: 10, color: COLORS.textgray}}>No Image</Text>
-                </View>
-              )}
+          >
+            <Search size={24} color={COLORS.textgray}/>
+            <TextInput
+                style={{
+                  flex: 1,
+                  marginLeft: 12,
+                  fontSize: 18,
+                  color: COLORS.textoncontrast
+                }}
+                placeholder="Search items..."
+                placeholderTextColor={COLORS.textgray}
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+            />
+          </View>
+        </View>
 
-              {/* Item Info */}
-              <View style={{flex: 1}}>
-                <Text
+        {/* Category Filter */}
+        <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={{maxHeight: 60, backgroundColor: COLORS.main_bg}}
+            contentContainerStyle={{paddingHorizontal: 16, gap: 8}}
+        >
+          {categories?.map((cat) => (
+              <Pressable
+                  key={cat}
+                  onPress={() => setSelectedCategory(cat)}
                   style={{
-                    fontSize: 18,
-                    fontWeight: '600',
-                    color: COLORS.textoncontrast,
-                    marginBottom: 4
+                    height: 45,
+                    justifyContent: "center",
+                    paddingHorizontal: 16,
+                    borderRadius: 20,
+                    backgroundColor:
+                        selectedCategory === cat ? COLORS.tabBarBg : 'white',
+                    borderWidth: 2,
+                    borderColor: COLORS.header_bg
                   }}
+              >
+                <Text
+                    style={{
+                      color: selectedCategory === cat ? 'white' : COLORS.header_bg,
+                      fontWeight: '600',
+                      fontSize: 14
+                    }}
                 >
-                  {item.name}
+                  {cat}
                 </Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: COLORS.textgray,
-                    marginBottom: 2
-                  }}
-                >
-                  {item.category} • {item.units}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: COLORS.textgray
-                  }}
-                >
-                  Total: {item.foh_quantity + item.boh_quantity}
+              </Pressable>
+          ))}
+        </ScrollView>
+
+        {/* Items List */}
+        <ScrollView
+            style={{flex: 1}}
+            contentContainerStyle={{padding: 16, paddingBottom: 100}}
+        >
+          {filteredItems.length === 0 ? (
+              <View style={{alignItems: 'center', marginTop: 40}}>
+                <Text style={{fontSize: 18, color: COLORS.textgray}}>
+                  No items found
                 </Text>
               </View>
+          ) : (
+              filteredItems.map((item) => (
+                  <Pressable
+                      key={item.id}
+                      onPress={() => handleEditItem(item)}
+                      style={{
+                        backgroundColor: 'white',
+                        borderRadius: 12,
+                        padding: 16,
+                        marginBottom: 12,
+                        borderWidth: 2,
+                        borderColor: COLORS.header_bg,
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                      }}
+                  >
+                    {/* Item Image */}
+                    {item.image_link && item.image_link !== "about:blank" ? (
+                        <Image
+                            source={{uri: item.image_link}}
+                            style={{
+                              width: 60,
+                              height: 60,
+                              borderRadius: 8,
+                              marginRight: 12
+                            }}
+                        />
+                    ) : (
+                        <View
+                            style={{
+                              width: 60,
+                              height: 60,
+                              borderRadius: 8,
+                              backgroundColor: COLORS.textonbg,
+                              marginRight: 12,
+                              justifyContent: 'center',
+                              alignItems: 'center'
+                            }}
+                        >
+                          <Text style={{fontSize: 10, color: COLORS.textgray}}>No Image</Text>
+                        </View>
+                    )}
 
-              {/* Action Buttons */}
-              <View style={{gap: 8}}>
-                <Pressable
-                  onPress={() => handleEditItem(item)}
-                  style={{
-                    padding: 8,
-                    borderRadius: 8,
-                    backgroundColor: COLORS.header_bg
-                  }}
-                >
-                  <Pencil size={20} color="white"/>
-                </Pressable>
+                    {/* Item Info */}
+                    <View style={{flex: 1}}>
+                      <Text
+                          style={{
+                            fontSize: 18,
+                            fontWeight: '600',
+                            color: COLORS.textoncontrast,
+                            marginBottom: 4
+                          }}
+                      >
+                        {item.name}
+                      </Text>
+                      <Text
+                          style={{
+                            fontSize: 14,
+                            color: COLORS.textgray,
+                            marginBottom: 2
+                          }}
+                      >
+                        {item.category} • {item.units}
+                      </Text>
+                      <Text
+                          style={{
+                            fontSize: 14,
+                            color: COLORS.textgray
+                          }}
+                      >
+                        Total: {item.foh_quantity + item.boh_quantity}
+                      </Text>
+                    </View>
 
-                <Pressable
-                  onPress={() => handleDeleteItem(item)}
-                  style={{
-                    padding: 8,
-                    borderRadius: 8,
-                    backgroundColor: COLORS.deny
-                  }}
-                >
-                  <Trash2 size={20} color="white"/>
-                </Pressable>
-              </View>
-            </View>
-          ))
+                    {/* Delete Button */}
+                    <Pressable
+                        onPress={(e) => handleDeleteItem(item, e)}
+                        style={{
+                          padding: 8,
+                          borderRadius: 8,
+                          backgroundColor: COLORS.deny
+                        }}
+                    >
+                      <Trash2 size={20} color="white"/>
+                    </Pressable>
+                  </Pressable>
+              ))
+          )}
+        </ScrollView>
+        {selectedItem && (
+            <AddItemForm
+                visible={showAddItem}
+                onClose={() => {setShowEditItem(false); setSelectedItem(null)}}
+                onSuccess={() => {
+                  loadInv();
+                }}
+                initialData={selectedItem}
+            />
         )}
-      </ScrollView>
-      {selectedItem && (
-        <AddItemForm
-          visible={showAddItem}
-          onClose={() => {setShowEditItem(false); setSelectedItem(null)}}
-          onSuccess={() => {
-            loadInv();
-          }}
-          initialData={selectedItem}
-        />
-      )}
-    </SafeAreaView>
+      </SafeAreaView>
   );
 }
