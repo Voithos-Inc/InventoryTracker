@@ -361,7 +361,7 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
                     })
                   }}
                   keyboardType="number-pad"
-                  placeholder="2"
+                  placeholder="number"
                 />
               </View>
             </View>
