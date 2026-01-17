@@ -49,7 +49,7 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
       setPendingItems([])
     }
     setIsDraggable(!isDraggable)
-  }g
+  }
 
   const onGridOrderChange: DraggableGridProps["onOrderChange"] = async (value) => {
     const newSorted = value.map((id) => items.find((item: InventoryItem) => item.id.toString() === id.toString())!);
@@ -104,7 +104,7 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
               {isDraggable ? (
                 <DndProvider>
                   <DraggableGrid direction="row" size={3} style={STYLES.grid} onOrderChange={onGridOrderChange}>
-                    {unshelved_items.map((item) => (
+                    {items.map((item) => (
                       <Draggable key={item.sort_order} id={item.id.toString()} style={STYLES.draggableGridItem}>
                         <View style={STYLES.gridItem}>
                           <InventoryCard item={item}/>
@@ -115,7 +115,7 @@ export default function InventoryGrid({ items, sectionTitle }: InventoryGridProp
                 </DndProvider>
               ) : (
                 <View style={{flex: 1, flexDirection: "row", flexWrap: "wrap"}}>
-                  {unshelved_items.map((item) => (
+                  {items.map((item) => (
                     <View key={item.sort_order} style={STYLES.draggableGridItem}>
                       <View style={STYLES.gridItem}>
                         <InventoryCard item={item}/>
