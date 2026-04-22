@@ -106,6 +106,10 @@ export const STYLES = StyleSheet.create({
     letterSpacing: 0.5,
   },
   draggableButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
     marginVertical: -4,
     padding: 6,
     borderRadius: 8,
