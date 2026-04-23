@@ -4,8 +4,7 @@ export interface InventoryItem {
   created_at: string;
   updated_at?: string;
   name: string;
-  foh_quantity: number;
-  boh_quantity: number;
+  quantities: Record<string, number>;
   units: string;
   image_link?: string;
   low_stock_threshold?: number;
@@ -28,7 +27,6 @@ export interface AddItemFormData {
   category: string;
   units: string;
   sort_order?: number;
-  foh_quantity: number;
-  boh_quantity: number;
+  quantities: Record<string, number>;
   low_stock_threshold: number;
 }
