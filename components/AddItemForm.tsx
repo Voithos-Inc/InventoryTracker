@@ -54,10 +54,15 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
     category: initialData?.category ?? (categories ? categories[0] : "BEVERAGES"),
     units: initialData?.units ?? 'quart container',
     sort_order: initialData?.sort_order,
-    foh_quantity: initialData?.foh_quantity ?? 0,
-    boh_quantity: initialData?.boh_quantity ?? 0,
+    quantities: initialData?.quantities ?? {},
     low_stock_threshold: initialData?.low_stock_threshold ?? 1,
   });
+
+  const [locationRows, setLocationRows] = useState<{ loc: string; qty: number }[]>(
+    initialData?.quantities && Object.keys(initialData.quantities).length > 0
+      ? Object.entries(initialData.quantities).map(([loc, qty]) => ({ loc, qty }))
+      : [{ loc: '', qty: 0 }]
+  );
 
   const [imageData, setImageData] = useState<ImageUploadData | null>(null)
   const [saving, setSaving] = useState(false)
@@ -98,23 +103,25 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
       Alert.alert('Error', 'Please enter an item name');
       return;
     }
-
     if (!formData.units.trim()) {
       Alert.alert('Error', 'Please enter units');
       return;
     }
 
-    console.log(formData)
+    const quantities: Record<string, number> = {};
+    for (const { loc, qty } of locationRows) {
+      if (loc.trim()) quantities[loc.trim()] = qty;
+    }
 
+    console.log(formData);
     setSaving(true);
 
-    const image_filename = imageData?.name
+    const image_filename = imageData?.name;
+    if (imageData) await addImage(imageData);
 
-    if (imageData) await addImage(imageData)
-
-    const image_uri = image_filename ?
-      `https://cdn.jsdelivr.net/gh/Voithos-Inc/InventoryTracker@main/assets/images/items/${image_filename}` :
-      'about:blank'
+    const image_uri = image_filename
+      ? `https://cdn.jsdelivr.net/gh/Voithos-Inc/InventoryTracker@main/assets/images/items/${image_filename}`
+      : 'about:blank';
 
     try {
       const newItem: InventoryItem = {
@@ -123,16 +130,15 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
         name: formData.name.trim(),
         category: formData.category,
         units: formData.units,
-        foh_quantity: formData.foh_quantity,
-        boh_quantity: formData.boh_quantity,
+        quantities,
         low_stock_threshold: formData.low_stock_threshold,
         image_link: image_uri,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
 
       await insertItem(newItem, initialData !== null);
       if (Platform.OS === 'web') {
-        alert('Item added successfully!')
+        alert('Item added successfully!');
       } else {
         Alert.alert('Success', 'Item added successfully!');
       }
@@ -141,14 +147,14 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
         name: '',
         category: 'BEVERAGES',
         units: 'quart container',
-        foh_quantity: 0,
-        boh_quantity: 0,
+        quantities: {},
         low_stock_threshold: 1,
       });
+      setLocationRows([{ loc: '', qty: 0 }]);
 
       onSuccess();
       onClose();
-      setImageData(null)
+      setImageData(null);
     } catch (error) {
       Alert.alert('Error', 'Failed to add item. Please try again.');
       console.error(error);
@@ -417,48 +423,75 @@ export default function AddItemForm({visible, onClose, onSuccess, initialData}: 
               />
             </View>
 
-            <View style={{marginBottom: 20}}>
-              <Text style={{fontSize: 18, fontWeight: '600', marginBottom: 8}}>
-                Initial Quantities
+            <View style={{ marginBottom: 20 }}>
+              <Text style={{ fontSize: 18, fontWeight: '600', marginBottom: 8 }}>
+                Quantities
               </Text>
-              <View style={{flexDirection: 'row', gap: 12}}>
-                <View style={{flex: 1}}>
-                  <Text style={{marginBottom: 4, color: COLORS.textgray}}>FOH</Text>
+
+              {locationRows.map((row, index) => (
+                <View key={index} style={{ flexDirection: 'row', gap: 8, marginBottom: 10, alignItems: 'center' }}>
                   <TextInput
                     style={{
+                      flex: 2,
                       borderWidth: 2,
                       borderColor: COLORS.header_bg,
                       borderRadius: 12,
-                      padding: 14,
-                      fontSize: 16,
-                      textAlign: 'center'
+                      padding: 12,
+                      fontSize: 15,
                     }}
-                    value={formData.foh_quantity.toString()}
-                    onChangeText={(text) =>
-                      setFormData({...formData, foh_quantity: getPositiveFloat(text) ?? formData.foh_quantity})
-                    }
-                    keyboardType="number-pad"
+                    value={row.loc}
+                    onChangeText={(text) => {
+                      const updated = [...locationRows];
+                      updated[index] = { ...updated[index], loc: text };
+                      setLocationRows(updated);
+                    }}
+                    placeholder="Location name"
                   />
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={{marginBottom: 4, color: COLORS.textgray}}>BOH</Text>
                   <TextInput
                     style={{
+                      flex: 1,
                       borderWidth: 2,
                       borderColor: COLORS.header_bg,
                       borderRadius: 12,
-                      padding: 14,
-                      fontSize: 16,
-                      textAlign: 'center'
+                      padding: 12,
+                      fontSize: 15,
+                      textAlign: 'center',
                     }}
-                    value={formData.boh_quantity.toString()}
-                    onChangeText={(text) =>
-                      setFormData({...formData, boh_quantity: getPositiveFloat(text) ?? formData.boh_quantity})
-                    }
-                    keyboardType="number-pad"
+                    value={row.qty.toString()}
+                    onChangeText={(text) => {
+                      const updated = [...locationRows];
+                      updated[index] = { ...updated[index], qty: getPositiveFloat(text) ?? 0 };
+                      setLocationRows(updated);
+                    }}
+                    keyboardType="decimal-pad"
+                    placeholder="0"
                   />
+                  <TouchableOpacity
+                    onPress={() => setLocationRows(locationRows.filter((_, i) => i !== index))}
+                    style={{
+                      padding: 8,
+                      borderRadius: 8,
+                      backgroundColor: COLORS.textonbg,
+                    }}
+                  >
+                    <X size={18} color={COLORS.deny} />
+                  </TouchableOpacity>
                 </View>
-              </View>
+              ))}
+
+              <Pressable
+                onPress={() => setLocationRows([...locationRows, { loc: '', qty: 0 }])}
+                style={{
+                  paddingVertical: 10,
+                  paddingHorizontal: 16,
+                  borderRadius: 20,
+                  backgroundColor: COLORS.textonbg,
+                  alignSelf: 'flex-start',
+                  marginTop: 4,
+                }}
+              >
+                <Text style={{ color: COLORS.textgray, fontWeight: '600' }}>+ Add location</Text>
+              </Pressable>
             </View>
 
             <View style={{marginBottom: 20}}>
