@@ -1,6 +1,6 @@
 import {ImageUploadData} from "@/components/ImagePickerBox";
 
-const API_ROUTE = "/github"
+const API_ROUTE = "/api/github"
 
 export async function addImage(file: ImageUploadData) {
   const arrayBuffer = await file.blob.arrayBuffer();
