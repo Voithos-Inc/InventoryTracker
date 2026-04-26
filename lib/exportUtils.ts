@@ -25,6 +25,11 @@ if (Platform.OS !== 'web') {
  * Creates an HTML table that Excel can open as .xlsx with preserved formatting
  */
 export async function exportToXLSX(items: InventoryItem[]): Promise<string> {
+  // Collect all unique location keys across every item, preserving insertion order
+  const allLocations = Array.from(
+    new Set(items.flatMap(item => Object.keys(item.quantities)))
+  );
+
   let html = `
 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
 <head>
@@ -85,7 +90,8 @@ export async function exportToXLSX(items: InventoryItem[]): Promise<string> {
                 <th class="header">ITEM</th>
                 <th class="header">COUNT</th>
                 <th class="header">SIZE/UNIT</th>
-                <th class="header" colspan="2">INVENTORY NOTES</th>
+                ${allLocations.map(loc => `<th class="header">${loc}</th>`).join('\n                ')}
+                <th class="header">INVENTORY NOTES</th>
             </tr>
         </thead>
         <tbody>
@@ -93,39 +99,31 @@ export async function exportToXLSX(items: InventoryItem[]): Promise<string> {
 
   for (const category of categories ?? []) {
     const categoryItems = items
-        .filter(item => item.category === category)
-        .sort((a, b) => a.name.localeCompare(b.name));
+      .filter(item => item.category === category)
+      .sort((a, b) => a.name.localeCompare(b.name));
 
     if (categoryItems.length === 0) continue;
-
-    const isFridgeFreezer = category === 'SAUCES' || category === 'BAKED GOODS';
-    const label1 = isFridgeFreezer ? 'Fridge' : 'FOH';
-    const label2 = isFridgeFreezer ? 'Freezer' : 'BOH';
 
     html += `
             <tr class="category-row">
                 <td><strong>${category}</strong></td>
                 <td></td>
                 <td></td>
-                <td class="category-header">${label1}</td>
-                <td class="category-header">${label2}</td>
+                ${allLocations.map(() => '<td></td>').join('\n                ')}
+                <td></td>
             </tr>
 `;
 
     for (const item of categoryItems) {
-      const totalCount = item.foh_quantity + item.boh_quantity;
-      const itemName = item.name;
-      const units = item.units || '';
-      const foh = item.foh_quantity;
-      const boh = item.boh_quantity;
+      const totalCount = Object.values(item.quantities).reduce((sum, qty) => sum + qty, 0);
 
       html += `
             <tr>
-                <td>${itemName}</td>
+                <td>${item.name}</td>
                 <td class="number">${totalCount}</td>
-                <td>${units}</td>
-                <td class="number">${foh}</td>
-                <td class="number">${boh}</td>
+                <td>${item.units || ''}</td>
+                ${allLocations.map(loc => `<td class="number">${item.quantities[loc] ?? ''}</td>`).join('\n                ')}
+                <td></td>
             </tr>
 `;
     }
