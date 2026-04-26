@@ -7,7 +7,7 @@ const branch = 'main';
 const basePath = 'assets/images/items/';
 
 export const config = {
-  runtime: 'edge',
+  runtime: 'nodejs',
 };
 
 export default async function handler(req: Request) {
@@ -25,7 +25,7 @@ export default async function handler(req: Request) {
       owner, repo,
       path: basePath + name,
       message: `Add ${name}`,
-      content: data,
+      content: data, // already base64
       branch,
     });
     return Response.json({ data });
